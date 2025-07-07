@@ -2,9 +2,11 @@
 
 import { matchIntent } from "./intents.js";
 import { services, randomReply, matchService, emoji } from "./responses.js";
-import { lastInput, setLastInput, foxyMood }     from "./state.js";
-import { setLastIntent, setLastService, lastIntent, lastService } from "./state.js";
-import { addMessage, clearButtons, getReactions }              from "./dom.js";
+import {
+  lastInput, setLastInput, foxyMood,
+  setLastIntent, setLastService, lastIntent, lastService
+} from "./state.js";
+import { addMessage, clearButtons, getReactions } from "./dom.js";
 import { renderServiceList, renderReactions, renderBookingOptions } from "./ui.js";
 
 export function handleUserInput(message) {
@@ -16,9 +18,31 @@ export function handleUserInput(message) {
 
   addMessage(`Вы: ${message}`);
 
+  // 🧠 0) Попытка отреагировать на продолжение разговора
+  if (/(сколько.*стоит|это с|а где|а когда|можно|подойдет|подойдёт)/i.test(input)) {
+    if (lastService) {
+      const text = services[lastService];
+      if (text) {
+        addMessage(`${emoji(foxyMood)} Это про «${lastService}»? Вот что входит:\n${text}`);
+        renderBookingOptions();
+        return;
+      }
+    } else if (lastIntent === "design") {
+      addMessage(`${emoji()} Если про дизайн — могу показать примеры или тренды! 🎨`);
+      renderReactions([
+        { text: "📌 Примеры", callback: () => addMessage(randomReply("design"), true) },
+        { text: "🔥 Что модно", callback: () => showTrendyOptions() }
+      ]);
+      return;
+    }
+  }
+
   // 1) Услуга?
   const svc = matchService(input);
   if (svc) {
+    setLastService(svc.name);
+    setLastIntent("service");
+
     const text = services[svc.name];
     if (text) {
       addMessage(`${emoji(foxyMood)} ${text}`);
@@ -31,11 +55,14 @@ export function handleUserInput(message) {
 
   // 2) Интент
   const intent = matchIntent(input.toLowerCase());
+  setLastIntent(intent);
+
   switch (intent) {
     case "design":
       addMessage(randomReply("design"), true);
       return;
-          case "abilities":
+
+    case "abilities":
       addMessage(`${emoji()} Я умею подбирать дизайн, рассказывать про услуги и помогать с записью на маникюр.`);
 
       clearButtons();
@@ -43,9 +70,9 @@ export function handleUserInput(message) {
       if (!reactions) return;
 
       const options = [
-        { text: "💅 Прайс",       handler: () => renderServiceList(handleUserInput) },
-        { text: "🎨 Дизайн",      handler: () => addMessage(randomReply("design"), true) },
-        { text: "🔥 Что модно",   handler: () => showTrendyOptions() }
+        { text: "💅 Прайс", handler: () => renderServiceList(handleUserInput) },
+        { text: "🎨 Дизайн", handler: () => addMessage(randomReply("design"), true) },
+        { text: "🔥 Что модно", handler: () => showTrendyOptions() }
       ];
 
       const wrap = document.createElement("div");
@@ -76,15 +103,18 @@ export function handleUserInput(message) {
     case "about":
       addMessage(randomReply(intent));
       return;
+
     case "showServices":
     case "help":
       renderServiceList(handleUserInput);
       return;
+
     default:
       addMessage(randomReply("fallback"));
       renderServiceList(handleUserInput);
   }
 }
+
 function showTrendyOptions() {
   addMessage(`${emoji()} Сейчас в моде:`);
 
@@ -112,4 +142,3 @@ function showTrendyOptions() {
     true
   );
 }
-
