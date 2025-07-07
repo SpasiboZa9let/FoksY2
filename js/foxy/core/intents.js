@@ -21,8 +21,12 @@ const intentMatchers = {
 
 export function matchIntent(input) {
   const normalized = normalize(input);
+
   for (const [intent, patterns] of Object.entries(intentMatchers)) {
-    if (patterns.some(p => normalized.includes(p))) return intent;
+    if (patterns.some(p => new RegExp(`\\b${p}\\b`, "i").test(normalized))) {
+      return intent;
+    }
   }
+
   return null;
 }
