@@ -23,14 +23,6 @@ export function handleUserInput(message) {
 
   addMessage(`Вы: ${message}`);
 
-  // 💬 Уточнение цены, подробностей
-  if (/сколько.*стоит|цена|подробн|узна|это с|можно|а где|а когда|подойдет|уточни|покажи|ясно/i.test(input)) {
-    if (lastService && services[lastService]) {
-      addMessage(`${emoji()} Ага, это «${lastService}» 💅\n${services[lastService]}`);
-      renderBookingOptions();
-      return;
-    }
-  }
 
   // 🔍 Попытка угадать услугу напрямую
   const svc = matchService(input);
@@ -47,6 +39,21 @@ export function handleUserInput(message) {
 
   // 🦊 Smalltalk-интенты
   if (handleSmalltalk(intent)) return;
+
+уточняющие вопросы (цена, подробности)
+ if (intent === "inquireDetails") {
+  if (lastService && services[lastService]) {
+    addMessage(
+      `${emoji()} Ага, это «${lastService}» 💅\n${services[lastService]}`
+    );
+    renderBookingOptions();
+  } else {
+    addMessage(randomReply("fallback"));
+    renderServiceList();
+  }
+  return;
+   }
+  
 
   // 🎯 Остальные интенты
   switch (intent) {
