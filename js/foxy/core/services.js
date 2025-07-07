@@ -1,4 +1,4 @@
-import { normalize } from "./utils.js";
+import { normalize } from "../core/utils.js";
 
 // 💅 Услуги и описание
 export const services = {
