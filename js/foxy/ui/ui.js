@@ -1,13 +1,13 @@
-// foxy/ui/ui.js
-
 import { services, emoji } from "../core/services.js";
 import { addMessage, clearButtons, getReactions } from "./dom.js";
+import { handleServiceInput } from "../handlers/servicesHandler.js"; // ✅ добавили
+import { capitalize } from "./utils.js"; // ✅ добавили
 
 /**
  * Рендер списка услуг кнопками
  * @param {Function} onClick — callback при выборе услуги
  */
-export function renderServiceList(onClick) {
+export function renderServiceList(onClick = handleServiceInput) {
   clearButtons();
   addMessage(`${emoji()} Выберите услугу:`);
 
@@ -73,7 +73,6 @@ export function renderReactions(options = []) {
 }
 
 export function showTrendyOptions() {
-  addMessage(`${emoji()} Сейчас в моде:`); // можно вставить свои тренды
+  addMessage(`${emoji()} Сейчас в моде:`);
   addMessage("✨ Нюд с блёстками<br>🌈 Кошачий глаз<br>🦊 Абстракция с втиркой", true);
 }
-
