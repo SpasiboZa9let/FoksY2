@@ -7,3 +7,8 @@ export function normalize(text) {
     .replace(/[^\w\sа-яё]/gi, "")
     .trim();
 }
+
+// 🔠 Делает первую букву заглавной
+export function capitalize(text) {
+  return text.charAt(0).toUpperCase() + text.slice(1);
+}
