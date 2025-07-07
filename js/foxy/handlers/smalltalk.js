@@ -8,6 +8,11 @@ export function handleSmalltalk(intent) {
     addMessage(randomReply("thanks"));
     return true;
   }
+  if (intent === "abilities") {
+  addMessage("🦊 Вот чем могу быть полезна прямо сейчас:");
+  renderServiceList(); // ← показать кнопки
+  return true;
+}
 
   if (intent === "greeting") {
     addMessage(randomReply("greeting"));
