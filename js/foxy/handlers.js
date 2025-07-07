@@ -19,19 +19,13 @@ export function handleUserInput(message) {
 
   addMessage(`Вы: ${message}`);
 
-  // 🧠 0) Попытка отреагировать на уточнение
-  if (/(сколько.*стоит|это с|а где|а когда|можно|под[оо]йд[её]т)/i.test(input)) {
+  // 🧠 0) Уточнение
+  if (/(сколько.*стоит|цена|это с|а где|а когда|можно|под[оо]йд[её]т)/i.test(input)) {
     if (lastService) {
       const text = services[lastService];
-
-      if (lastReplyType === "fullService") {
-        addMessage(`${emoji(foxyMood)} Ага, уточняешь! Это всё про «${lastService}» 💅\n${text}`);
-        // не повторяем booking, просто даём фоллоу-ап
-      } else {
-        addMessage(`${emoji(foxyMood)} Это про «${lastService}»? Вот что входит:\n${text}`);
-        renderBookingOptions();
-        setLastReplyType("fullService");
-      }
+      addMessage(`${emoji(foxyMood)} Ага, это «${lastService}» 💅\n${text}`);
+      renderBookingOptions();
+      setLastReplyType("fullService");
       return;
     } else if (lastIntent === "design") {
       addMessage(`${emoji()} Если про дизайн — могу показать примеры или тренды! 🎨`);
@@ -43,100 +37,94 @@ export function handleUserInput(message) {
     }
   }
 
-  // 1) Услуга?
+  // 🧩 1) Услуга
   const svc = matchService(input);
   if (svc) {
     setLastService(svc.name);
     setLastIntent("service");
 
-    const text = services[svc.name];
-    if (text) {
-      addMessage(`${emoji(foxyMood)} ${text}`);
-      renderBookingOptions();
-      setLastReplyType("fullService");
-    } else {
-      addMessage(`${emoji(foxyMood)} Упс… информации по услуге нет 😥`);
-    }
+    addMessage(`${emoji(foxyMood)} Отличный выбор — «${svc.name}» 💅`);
+    addMessage(`Хочешь узнать подробнее или записаться? 😉`);
+    setLastReplyType("serviceSelected");
     return;
   }
 
-  // 2) ИНТЕНТЫ!!!///////
-  
+  // 🧠 2) Интенты
   const intent = matchIntent(input.toLowerCase());
-setLastIntent(intent);
+  setLastIntent(intent);
 
-switch (intent) {
-  case "design":
-    addMessage(randomReply("design"), true);
-    return;
-
-  case "confirmBooking":
-    if (lastService) {
-      addMessage(`${emoji()} Отлично! Открываю запись на «${lastService}» ✨`);
-      renderBookingOptions();
-    } else {
-      addMessage(`${emoji()} Давай сначала выберем услугу 💅`);
-      renderServiceList(handleUserInput);
-    }
-    return;
-
-  case "showSomething":
-    if (lastIntent === "design") {
-      addMessage(`${emoji()} Лови вдохновение ✨`);
+  switch (intent) {
+    case "design":
       addMessage(randomReply("design"), true);
-    } else if (lastService) {
-      addMessage(`${emoji()} Это «${lastService}»: ${services[lastService]}`);
-    } else {
-      addMessage(`${emoji()} Что именно хочешь увидеть? 💅`);
-      renderReactions([
-        { text: "💅 Прайс", callback: () => renderServiceList(handleUserInput) },
-        { text: "🎨 Примеры дизайна", callback: () => addMessage(randomReply("design"), true) }
-      ]);
-    }
-    return;
+      return;
 
-  case "confirm":
-    if (lastIntent === "service" && lastService) {
-      addMessage(`${emoji()} Отлично! Хочешь, запишу тебя на «${lastService}»?`);
-      renderBookingOptions();
-    } else if (lastIntent === "design") {
-      addMessage(`${emoji()} Покажу тогда ещё примеры? 😉`);
-      renderReactions([
-        { text: "📌 Давай", callback: () => addMessage(randomReply("design"), true) },
-        { text: "🔥 Что модно", callback: () => showTrendyOptions() }
-      ]);
-    } else {
-      addMessage(`${emoji()} Класс! Чем могу помочь ещё?`);
-    }
-    return;
+    case "confirmBooking":
+      if (lastService) {
+        addMessage(`${emoji()} Отлично! Открываю запись на «${lastService}» ✨`);
+        renderBookingOptions();
+      } else {
+        addMessage(`${emoji()} Давай сначала выберем услугу 💅`);
+        renderServiceList(handleUserInput);
+      }
+      return;
 
-  case "abilities":
-    addMessage(`${emoji()} Я умею подбирать дизайн, рассказывать про услуги и помогать с записью на маникюр.`);
+    case "showSomething":
+      if (lastIntent === "design") {
+        addMessage(`${emoji()} Лови вдохновение ✨`);
+        addMessage(randomReply("design"), true);
+      } else if (lastService) {
+        const text = services[lastService];
+        addMessage(`${emoji()} Это «${lastService}»: ${text}`);
+      } else {
+        addMessage(`${emoji()} Что именно хочешь увидеть? 💅`);
+        renderReactions([
+          { text: "💅 Прайс", callback: () => renderServiceList(handleUserInput) },
+          { text: "🎨 Примеры дизайна", callback: () => addMessage(randomReply("design"), true) }
+        ]);
+      }
+      return;
 
-    clearButtons();
-    const reactions = getReactions();
-    if (!reactions) return;
+    case "confirm":
+      if (lastIntent === "service" && lastService) {
+        addMessage(`${emoji()} Отлично! Хочешь, запишу тебя на «${lastService}»?`);
+        renderBookingOptions();
+      } else if (lastIntent === "design") {
+        addMessage(`${emoji()} Покажу тогда ещё примеры? 😉`);
+        renderReactions([
+          { text: "📌 Давай", callback: () => addMessage(randomReply("design"), true) },
+          { text: "🔥 Что модно", callback: () => showTrendyOptions() }
+        ]);
+      } else {
+        addMessage(`${emoji()} Класс! Чем могу помочь ещё?`);
+      }
+      return;
 
-    const options = [
-      { text: "💅 Прайс", handler: () => renderServiceList(handleUserInput) },
-      { text: "🎨 Дизайн", handler: () => addMessage(randomReply("design"), true) },
-      { text: "🔥 Что модно", handler: () => showTrendyOptions() }
-    ];
+    case "abilities":
+      addMessage(`${emoji()} Я умею подбирать дизайн, рассказывать про услуги и помогать с записью на маникюр.`);
+      clearButtons();
+      const reactions = getReactions();
+      if (!reactions) return;
 
-    const wrap = document.createElement("div");
-    wrap.className = "flex gap-2 flex-wrap";
+      const options = [
+        { text: "💅 Прайс", handler: () => renderServiceList(handleUserInput) },
+        { text: "🎨 Дизайн", handler: () => addMessage(randomReply("design"), true) },
+        { text: "🔥 Что модно", handler: () => showTrendyOptions() }
+      ];
 
-    options.forEach(({ text, handler }) => {
-      const btn = document.createElement("button");
-      btn.textContent = text;
-      btn.className = "bg-pink-100 text-pink-700 px-3 py-1 rounded-xl text-sm";
-      btn.onclick = handler;
-      wrap.appendChild(btn);
-    });
+      const wrap = document.createElement("div");
+      wrap.className = "flex gap-2 flex-wrap";
 
-    reactions.appendChild(wrap);
-    return;
-    
+      options.forEach(({ text, handler }) => {
+        const btn = document.createElement("button");
+        btn.textContent = text;
+        btn.className = "bg-pink-100 text-pink-700 px-3 py-1 rounded-xl text-sm";
+        btn.onclick = handler;
+        wrap.appendChild(btn);
+      });
+
+      reactions.appendChild(wrap);
+      return;
+
     case "booking":
       renderBookingOptions();
       return;
