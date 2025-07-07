@@ -1,7 +1,6 @@
 // foxy/ui/ui.js
 
 import { services, emoji } from "../core/services.js";
-import { capitalize } from "./utils.js";
 import { addMessage, clearButtons, getReactions } from "./dom.js";
 
 /**
