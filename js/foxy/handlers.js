@@ -68,6 +68,20 @@ export function handleUserInput(message) {
     case "design":
       addMessage(randomReply("design"), true);
       return;
+      case "confirm":
+  if (lastIntent === "service" && lastService) {
+    addMessage(`${emoji()} Отлично! Хочешь, запишу тебя на «${lastService}»?`);
+    renderBookingOptions();
+  } else if (lastIntent === "design") {
+    addMessage(`${emoji()} Покажу тогда ещё примеры? 😉`);
+    renderReactions([
+      { text: "📌 Давай", callback: () => addMessage(randomReply("design"), true) },
+      { text: "🔥 Что модно", callback: () => showTrendyOptions() }
+    ]);
+  } else {
+    addMessage(`${emoji()} Класс! Чем могу помочь ещё?`);
+  }
+  return;
 
     case "abilities":
       addMessage(`${emoji()} Я умею подбирать дизайн, рассказывать про услуги и помогать с записью на маникюр.`);
