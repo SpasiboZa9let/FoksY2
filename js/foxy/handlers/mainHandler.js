@@ -1,47 +1,74 @@
 // foxy/handlers/mainHandler.js
 
 import { matchIntent } from "../core/intents.js";
-import { services, matchService, replies } from "../core/services.js"; // ← вот это
-import { lastInput, setLastInput, setLastIntent, setLastService, lastService, lastIntent } from "../core/state.js";
+import { matchService, emoji, services } from "../core/services.js";
+import {
+  lastInput, setLastInput, setLastIntent,
+  setLastService, lastService
+} from "../core/state.js";
+
 import { addMessage, clearButtons } from "../ui/dom.js";
-import { renderServiceList, renderBookingOptions } from "../ui/ui.js";
+import { renderBookingOptions, renderServiceList } from "../ui/ui.js";
 
-
-// ветки
 import { handleDesign } from "./design.js";
-import { handleService, handleServiceDetail } from "./services.js";
 import { handleMood } from "./mood.js";
 import { handleSmalltalk } from "./smalltalk.js";
+import { handleServiceIntent } from "./servicesHandler.js";
 
+// главный обработчик ввода
 export function handleUserInput(message) {
   clearButtons();
 
-  const input = message.trim();
-  if (!input || input.toLowerCase() === lastInput) return;
-  setLastInput(input.toLowerCase());
+  const input = message.trim().toLowerCase();
+  if (!input || input === lastInput) return;
+  setLastInput(input);
 
   addMessage(`Вы: ${message}`);
 
-  // определить интент
-  const intent = matchIntent(input.toLowerCase());
+  // 💬 Уточнение цены, подробностей
+  if (/сколько.*стоит|цена|подробн|узна|это с|можно|а где|а когда|подойдет/i.test(input)) {
+    if (lastService && services[lastService]) {
+      addMessage(`${emoji()} Ага, это «${lastService}» 💅\n${services[lastService]}`);
+      renderBookingOptions();
+      return;
+    }
+  }
+
+  // 🔍 Попытка угадать услугу напрямую
+  const svc = matchService(input);
+  if (svc) {
+    setLastService(svc.name);
+    setLastIntent("service");
+    handleServiceIntent(svc.name);
+    return;
+  }
+
+  // 🤖 Классификация интента
+  const intent = matchIntent(input);
   setLastIntent(intent);
 
-  // маршрутизация по интентам
+  // 🎯 Роутинг по интентам
   switch (intent) {
     case "design":
-      return handleDesign(input);
-
-    case "service":
-      return handleService(input);
-
-    case "serviceDetail":
-      return handleServiceDetail(input);
+      handleDesign();
+      break;
 
     case "mood":
-      return handleMood(input);
+      handleMood();
+      break;
+
+    case "showServices":
+      renderServiceList();
+      break;
+
+    case "booking":
+      renderBookingOptions();
+      break;
 
     default:
-      return handleSmalltalk(intent, input);
+      if (!handleSmalltalk(intent)) {
+        addMessage(`${emoji()} Не совсем поняла… Давай выберем из списка? 💅`);
+        renderServiceList();
+      }
   }
 }
-
