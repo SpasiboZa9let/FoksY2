@@ -1,9 +1,11 @@
 // foxy/handlers/mainHandler.js
 
 import { matchIntent } from "../core/intents.js";
-import { emoji } from "../core/services.js";
+import { services, matchService, replies } from "../core/services.js"; // ← вот это
+import { lastInput, setLastInput, setLastIntent, setLastService, lastService, lastIntent } from "../core/state.js";
 import { addMessage, clearButtons } from "../ui/dom.js";
-import { setLastInput, lastInput, setLastIntent } from "../core/state.js";
+import { renderServiceList, renderBookingOptions } from "../ui/ui.js";
+
 
 // ветки
 import { handleDesign } from "./design.js";
