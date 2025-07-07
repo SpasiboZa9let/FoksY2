@@ -1,14 +1,16 @@
-import { services } from "./responses.js";
-import { emoji } from "./personality.js";
+// foxy/ui/ui.js
+
+import { services, emoji } from "../core/services.js";
 import { capitalize } from "./utils.js";
 import { addMessage, clearButtons, getReactions } from "./dom.js";
 
 /**
- * Отрисовать только кнопки услуг, без текстового списка
+ * Рендер списка услуг кнопками
+ * @param {Function} onClick — callback при выборе услуги
  */
 export function renderServiceList(onClick) {
   clearButtons();
-  addMessage(`${emoji} Выберите услугу:`);
+  addMessage(`${emoji()} Выберите услугу:`);
 
   const reactions = getReactions();
   if (!reactions) return;
@@ -29,36 +31,11 @@ export function renderServiceList(onClick) {
 }
 
 /**
- * Подтверждение: "Вы имели в виду?"
- */
-export function renderInlineConfirmButtons(serviceName, onYes, onNo) {
-  clearButtons();
-  const reactions = getReactions();
-  if (!reactions) return;
-
-  const wr = document.createElement("div");
-  wr.className = "flex gap-2 flex-wrap";
-
-  const yes = document.createElement("button");
-  yes.textContent = "👍 Да";
-  yes.className = "bg-green-500 text-white px-3 py-1 rounded-xl text-sm";
-  yes.onclick = onYes;
-
-  const no = document.createElement("button");
-  no.textContent = "❌ Нет";
-  no.className = "bg-gray-400 text-white px-3 py-1 rounded-xl text-sm";
-  no.onclick = onNo;
-
-  wr.append(yes, no);
-  reactions.appendChild(wr);
-}
-
-/**
- * Кнопки записи
+ * Кнопки записи — открыть DIKIDI или Telegram
  */
 export function renderBookingOptions() {
   clearButtons();
-  addMessage(`${emoji} Можно записаться двумя способами:`);
+  addMessage(`${emoji()} Можно записаться двумя способами:`);
 
   const reactions = getReactions();
   if (!reactions) return;
@@ -67,8 +44,7 @@ export function renderBookingOptions() {
   const dikidiBtn = document.createElement("button");
   dikidiBtn.textContent = "Открыть DIKIDI";
   dikidiBtn.className = "bg-pink-600 text-white px-3 py-1 rounded-xl text-sm";
-  dikidiBtn.onclick = () =>
-    window.open("https://dikidi.net/1456370?p=2.pi-po-ssm&o=7", "_blank");
+  dikidiBtn.onclick = () => window.open("https://dikidi.net/1456370?p=2.pi-po-ssm&o=7", "_blank");
   reactions.appendChild(dikidiBtn);
 
   addMessage("💬 Или через Telegram:");
@@ -78,9 +54,10 @@ export function renderBookingOptions() {
   tgBtn.onclick = () => window.open("https://t.me/foxold_a", "_blank");
   reactions.appendChild(tgBtn);
 }
+
 /**
  * Рендер универсальных кнопок-реакций
- * @param {Array<{text: string, callback: () => void}>} options
+ * @param {Array<{text: string, callback: Function}>} options
  */
 export function renderReactions(options = []) {
   clearButtons();
