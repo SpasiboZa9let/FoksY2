@@ -23,8 +23,15 @@ export function matchIntent(input) {
   const normalized = normalize(input);
 
   for (const [intent, patterns] of Object.entries(intentMatchers)) {
-    if (patterns.some(p => new RegExp(`\\b${p}\\b`, "i").test(normalized))) {
-      return intent;
+    for (const rawPattern of patterns) {
+      const pattern = normalize(rawPattern);
+
+      if (pattern.includes(" ")) {
+        if (normalized.includes(pattern)) return intent;
+      } else {
+        const re = new RegExp(`\\b${pattern}\\b`);
+        if (re.test(normalized)) return intent;
+      }
     }
   }
 
