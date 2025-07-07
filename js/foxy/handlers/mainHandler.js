@@ -13,7 +13,7 @@ import { renderBookingOptions, renderServiceList } from "../ui/ui.js";
 import { handleDesign } from "./design.js";
 import { handleMood } from "./mood.js";
 import { handleSmalltalk } from "./smalltalk.js";
-import { handleServiceIntent } from "./servicesHandler.js";
+import { handleServiceInput } from "./servicesHandler.js";
 
 // главный обработчик ввода
 export function handleUserInput(message) {
@@ -39,7 +39,7 @@ export function handleUserInput(message) {
   if (svc) {
     setLastService(svc.name);
     setLastIntent("service");
-    handleServiceIntent(svc.name);
+    handleServiceInput(svc.name);
     return;
   }
 
