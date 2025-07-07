@@ -69,20 +69,21 @@ export function handleUserInput(message) {
       return;
 
     case "showSomething":
-      if (lastIntent === "design") {
-        addMessage(`${emoji()} Лови вдохновение ✨`);
-        addMessage(randomReply("design"), true);
-      } else if (lastService) {
-        const text = services[lastService];
-        addMessage(`${emoji()} Это «${lastService}»: ${text}`);
-      } else {
-        addMessage(`${emoji()} Что именно хочешь увидеть? 💅`);
-        renderReactions([
-          { text: "💅 Прайс", callback: () => renderServiceList(handleUserInput) },
-          { text: "🎨 Примеры дизайна", callback: () => addMessage(randomReply("design"), true) }
-        ]);
-      }
-      return;
+  if (lastService) {
+    const text = services[lastService];
+    addMessage(`${emoji()} Это «${lastService}»: ${text}`);
+    renderBookingOptions();
+  } else if (lastIntent === "design") {
+    addMessage(`${emoji()} Лови вдохновение ✨`);
+    addMessage(randomReply("design"), true);
+  } else {
+    addMessage(`${emoji()} Что именно хочешь увидеть? 💅`);
+    renderReactions([
+      { text: "💅 Прайс", callback: () => renderServiceList(handleUserInput) },
+      { text: "🎨 Примеры дизайна", callback: () => addMessage(randomReply("design"), true) }
+    ]);
+  }
+  return;
 
     case "confirm":
       if (lastIntent === "service" && lastService) {
