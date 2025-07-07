@@ -1,30 +1,52 @@
-import { randomReply, emoji } from "../core/services.js";
-import { addMessage } from "../ui/dom.js";
-import { renderServiceList } from "../ui/ui.js";
-
 // foxy/handlers/smalltalk.js
+
+import { randomReply, emoji } from "../core/services.js";
+import { addMessage, renderReactions } from "../ui/dom.js";
+import { renderServiceList, renderBookingOptions } from "../ui/ui.js";
+import { handleDesign } from "./design.js";
 
 export function handleSmalltalk(intent) {
   if (!intent) return false;
 
   const handlers = {
     greeting:      () => addMessage(randomReply("greeting")),
-    smalltalkLite: () => addMessage(randomReply("smalltalkLite")),  // <-- теперь обрабатываем
+    smalltalkLite: () => addMessage(randomReply("smalltalkLite")),
     thanks:        () => addMessage(randomReply("thanks")),
     bye:           () => addMessage(randomReply("bye")),
     mood:          () => addMessage(randomReply("mood")),
     softWarning:   () => addMessage("🧸 Хочу оставаться вежливой. Давай говорить по-доброму?"),
-    abilities:     () => {
-      addMessage(`${emoji()} Вот чем могу быть полезна прямо сейчас:`);
-      renderServiceList();
+    // Заменили поведение abilities:
+    abilities: () => {
+      addMessage(`${emoji()} Вот что я умею:`);
+      renderReactions([
+        {
+          text: "💅 Показать прайс",
+          callback: () => renderServiceList()
+        },
+        {
+          text: "🎨 Идеи дизайна",
+          callback: () => handleDesign()
+        },
+        {
+          text: "📅 Записаться",
+          callback: () => renderBookingOptions()
+        }
+      ]);
     },
-    help:          () => {
-      addMessage(`${emoji()} Я помогу с выбором! Вот что у меня есть:`);
-      renderServiceList();
+    help: () => {
+      addMessage(`${emoji()} Я помогу с выбором! Вот мои команды:`);
+      renderReactions([
+        { text: "💅 Прайс",        callback: () => renderServiceList()    },
+        { text: "🎨 Дизайн",      callback: () => handleDesign()        },
+        { text: "📅 Запись",      callback: () => renderBookingOptions() },
+        { text: "❓ Что я умею?",  callback: () => handlers.abilities()   }
+      ]);
     },
-    about:         () => {
+    about: () => {
       addMessage("🦊 Я Фокси — виртуальная подружка и мастер маникюра 💅");
-      renderServiceList();
+      renderReactions([
+        { text: "❓ Что я умею?", callback: () => handlers.abilities() }
+      ]);
     },
     confirmation:  () => {
       addMessage("Супер! Тогда выбери, с чего начнём 💅");
@@ -43,4 +65,3 @@ export function handleSmalltalk(intent) {
   }
   return false;
 }
-
