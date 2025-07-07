@@ -2,9 +2,10 @@
 
 import { matchIntent } from "./intents.js";
 import { services, randomReply, matchService, emoji } from "./responses.js";
-import {
+iimport {
   lastInput, setLastInput, foxyMood,
-  setLastIntent, setLastService, lastIntent, lastService
+  setLastIntent, setLastService, lastIntent, lastService,
+  lastReplyType, setLastReplyType
 } from "./state.js";
 import { addMessage, clearButtons, getReactions } from "./dom.js";
 import { renderServiceList, renderReactions, renderBookingOptions } from "./ui.js";
@@ -18,15 +19,20 @@ export function handleUserInput(message) {
 
   addMessage(`Вы: ${message}`);
 
-  // 🧠 0) Попытка отреагировать на продолжение разговора
-  if (/(сколько.*стоит|это с|а где|а когда|можно|подойдет|подойдёт)/i.test(input)) {
+  // 🧠 0) Попытка отреагировать на уточнение
+  if (/(сколько.*стоит|это с|а где|а когда|можно|под[оо]йд[её]т)/i.test(input)) {
     if (lastService) {
       const text = services[lastService];
-      if (text) {
+
+      if (lastReplyType === "fullService") {
+        addMessage(`${emoji(foxyMood)} Ага, уточняешь! Это всё про «${lastService}» 💅\n${text}`);
+        // не повторяем booking, просто даём фоллоу-ап
+      } else {
         addMessage(`${emoji(foxyMood)} Это про «${lastService}»? Вот что входит:\n${text}`);
         renderBookingOptions();
-        return;
+        setLastReplyType("fullService");
       }
+      return;
     } else if (lastIntent === "design") {
       addMessage(`${emoji()} Если про дизайн — могу показать примеры или тренды! 🎨`);
       renderReactions([
@@ -47,6 +53,7 @@ export function handleUserInput(message) {
     if (text) {
       addMessage(`${emoji(foxyMood)} ${text}`);
       renderBookingOptions();
+      setLastReplyType("fullService");
     } else {
       addMessage(`${emoji(foxyMood)} Упс… информации по услуге нет 😥`);
     }
