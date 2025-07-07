@@ -150,6 +150,11 @@
   import { emoji }            from './js/foxy/core/services.js';
 
   window.addEventListener('DOMContentLoaded', () => {
+    console.log("👣 Старт инициализации Фокси");
+    console.log("emoji:", emoji);
+    console.log("addMessage:", addMessage);
+    console.log("handleUserInput:", handleUserInput);
+
     requestAnimationFrame(() => {
       const chat = document.getElementById("pseudo-chat");
       if (!chat) {
