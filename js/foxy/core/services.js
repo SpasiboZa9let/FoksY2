@@ -1,3 +1,5 @@
+// foxy/core/services.js
+
 import { normalize } from "../core/utils.js";
 
 // 💅 Услуги и описание
@@ -24,6 +26,7 @@ const aliases = {
   "снять": "снятие покрытия"
 };
 
+// 🛑 Мягкий список блокируемых одиночных слов
 const stopWords = [
   "спасибо", "пока", "привет", "как дела", "что ты", "кто ты", "дизайн",
   "услуги", "помоги", "помощь", "записаться", "не знаю", "хочу", "расскажи"
@@ -34,14 +37,23 @@ const stopWords = [
  */
 export function matchService(text) {
   const input = normalize(text);
-  if (stopWords.includes(input)) return null;
-  if (aliases[input]) return { name: aliases[input], exact: false };
+
+  // Мягкая проверка: игнорировать только если фраза — стоп-слово
+  if (stopWords.some(w => input === w)) {
+    console.log("🛑 стоп-слово в matchService:", input);
+    return null;
+  }
+
+  if (aliases[input]) {
+    return { name: aliases[input], exact: false };
+  }
 
   for (const key of Object.keys(services)) {
     if (normalize(key) === input) {
       return { name: key, exact: true };
     }
   }
+
   return null;
 }
 
