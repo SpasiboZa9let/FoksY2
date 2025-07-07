@@ -82,5 +82,5 @@ switch (intent) {
   default:
     addMessage(randomReply("fallback"));
     renderServiceList();
+ }
 }
-
