@@ -18,11 +18,15 @@ export function handleSmalltalk(intent) {
     addMessage(randomReply("bye"));
     return true;
   }
+    if (intent === "softWarning") {
+    addMessage("🧸 Хочу оставаться вежливой. Давай говорить по-доброму?");
+    return true;
+  }
 
   if (intent === "mood") {
     addMessage(randomReply("mood"));
     return true;
   }
-
+  
   return false;
 }
