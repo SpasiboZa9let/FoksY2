@@ -1,28 +1,26 @@
+// foxy/core/state.js
 
-// js/foxy/state.js
+let lastInput = "";
+let lastIntent = null;
+let lastService = null;
+let lastReplyType = null;
 
-// фильтр повторов
-export let lastInput = "";
-export function setLastInput(val) {
-  lastInput = val;
+let foxyMood = "default"; // можно использовать: "default", "sparkle", "calm", "playful" и т.п.
+
+export function setLastInput(input) {
+  lastInput = input;
 }
-
-// сейчас статично, но можно менять
-export let foxyMood = "neutral";
+export function setLastIntent(intent) {
+  lastIntent = intent;
+}
+export function setLastService(service) {
+  lastService = service;
+}
+export function setLastReplyType(type) {
+  lastReplyType = type;
+}
 export function setFoxyMood(mood) {
   foxyMood = mood;
 }
-export let lastIntent = null;
-export function setLastIntent(val) {
-  lastIntent = val;
-}
 
-export let lastService = null;
-export function setLastService(val) {
-  lastService = val;
-}
-export let lastReplyType = null;
-export function setLastReplyType(t) {
-  lastReplyType = t;
-}
-
+export { lastInput, lastIntent, lastService, lastReplyType, foxyMood };
