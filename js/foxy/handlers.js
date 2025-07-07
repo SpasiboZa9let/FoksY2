@@ -20,7 +20,7 @@ export function handleUserInput(message) {
   addMessage(`Вы: ${message}`);
 
   // 🧠 0) Уточнение
-  if (/(сколько.*стоит|цена|это с|а где|а когда|можно|под[оо]йд[её]т)/i.test(input)) {
+  if (/(сколько.*стоит|цена|это с|а где|а когда|можно|под[оо]йд[её]т|узна[йт]|подробн)/i.test(input)) {
     if (lastService) {
       const text = services[lastService];
       addMessage(`${emoji(foxyMood)} Ага, это «${lastService}» 💅\n${text}`);
