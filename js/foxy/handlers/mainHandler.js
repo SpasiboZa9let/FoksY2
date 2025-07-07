@@ -40,7 +40,7 @@ export function handleUserInput(message) {
   // 🦊 Smalltalk-интенты
   if (handleSmalltalk(intent)) return;
 
-уточняющие вопросы (цена, подробности)
+//уточняющие вопросы (цена, подробности)
  if (intent === "inquireDetails") {
   if (lastService && services[lastService]) {
     addMessage(
