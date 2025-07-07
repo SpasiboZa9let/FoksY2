@@ -37,11 +37,21 @@ export function handleUserInput(message) {
   const intent = matchIntent(input);
   setLastIntent(intent);
 
-  // 🦊 Smalltalk-интенты
-  if (handleSmalltalk(intent)) return;
+ // foxy/handlers/mainHandler.js
 
-//уточняющие вопросы (цена, подробности)
- if (intent === "inquireDetails") {
+// … после определения intent и handleSmalltalk …
+
+// 🦊 Smalltalk-интенты
+if (handleSmalltalk(intent)) return;
+
+// 🗂 Показать услуги (и по «покажи», и по «услуги», и по «хочу другое»)
+if (intent === "showSomething" || intent === "showServices") {
+  renderServiceList();
+  return;
+}
+
+// 📝 Уточняющие вопросы (цена, подробности)
+if (intent === "inquireDetails") {
   if (lastService && services[lastService]) {
     addMessage(
       `${emoji()} Ага, это «${lastService}» 💅\n${services[lastService]}`
@@ -52,30 +62,25 @@ export function handleUserInput(message) {
     renderServiceList();
   }
   return;
-   }
-  
-
-  // 🎯 Остальные интенты
-  switch (intent) {
-    case "design":
-      handleDesign();
-      break;
-
-    case "mood":
-      handleMood();
-      break;
-
-    case "showServices":
-      renderServiceList();
-      break;
-
-    case "booking":
-    case "confirmBooking":
-      renderBookingOptions();
-      break;
-
-    default:
-      addMessage(randomReply("fallback"));
-      renderServiceList();
-  }
 }
+
+// 🎯 Остальные интенты
+switch (intent) {
+  case "design":
+    handleDesign();
+    break;
+
+  case "mood":
+    handleMood();
+    break;
+
+  case "booking":
+  case "confirmBooking":
+    renderBookingOptions();
+    break;
+
+  default:
+    addMessage(randomReply("fallback"));
+    renderServiceList();
+}
+
