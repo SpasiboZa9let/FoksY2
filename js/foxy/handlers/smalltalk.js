@@ -2,33 +2,35 @@ import { randomReply, emoji } from "../core/services.js";
 import { addMessage } from "../ui/dom.js";
 import { renderServiceList } from "../ui/ui.js";
 
+// foxy/handlers/smalltalk.js
+
 export function handleSmalltalk(intent) {
   if (!intent) return false;
 
   const handlers = {
-    greeting: () => addMessage(randomReply("greeting")),
-    thanks: () => addMessage(randomReply("thanks")),
-    bye: () => addMessage(randomReply("bye")),
-    mood: () => addMessage(randomReply("mood")),
-    softWarning: () =>
-      addMessage("🧸 Хочу оставаться вежливой. Давай говорить по-доброму?"),
-    abilities: () => {
+    greeting:      () => addMessage(randomReply("greeting")),
+    smalltalkLite: () => addMessage(randomReply("smalltalkLite")),  // <-- теперь обрабатываем
+    thanks:        () => addMessage(randomReply("thanks")),
+    bye:           () => addMessage(randomReply("bye")),
+    mood:          () => addMessage(randomReply("mood")),
+    softWarning:   () => addMessage("🧸 Хочу оставаться вежливой. Давай говорить по-доброму?"),
+    abilities:     () => {
       addMessage(`${emoji()} Вот чем могу быть полезна прямо сейчас:`);
       renderServiceList();
     },
-    help: () => {
+    help:          () => {
       addMessage(`${emoji()} Я помогу с выбором! Вот что у меня есть:`);
       renderServiceList();
     },
-    about: () => {
+    about:         () => {
       addMessage("🦊 Я Фокси — виртуальная подружка и мастер маникюра 💅");
       renderServiceList();
     },
-    confirmation: () => {
+    confirmation:  () => {
       addMessage("Супер! Тогда выбери, с чего начнём 💅");
       renderServiceList();
     },
-    confirm: () => {
+    confirm:       () => {
       addMessage("Отлично! Тогда давай выберем, что тебя интересует 💅");
       renderServiceList();
     }
@@ -39,6 +41,6 @@ export function handleSmalltalk(intent) {
     fn();
     return true;
   }
-
   return false;
 }
+
