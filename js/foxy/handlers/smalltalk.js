@@ -1,27 +1,28 @@
+import { randomReply } from "../core/services.js";
 import { addMessage } from "../ui/dom.js";
-import { randomReply, emoji } from "../core/services.js";
 
-const knownIntents = [
-  "greeting",
-  "thanks",
-  "bye",
-  "softWarning",
-  "smalltalkLite",
-  "about",
-  "styleTalk",
-  "abilities",
-  "help"
-];
-
-/**
- * Обработка «болтовни»
- * @param {string|null} intent
- * @returns {boolean} — был ли обработан интент
- */
 export function handleSmalltalk(intent) {
-  if (!intent || !knownIntents.includes(intent)) return false;
+  if (!intent) return false;
 
-  const reply = randomReply(intent);
-  addMessage(`${emoji()} ${reply}`);
-  return true;
+  if (intent === "thanks") {
+    addMessage(randomReply("thanks"));
+    return true;
+  }
+
+  if (intent === "greeting") {
+    addMessage(randomReply("greeting"));
+    return true;
+  }
+
+  if (intent === "bye") {
+    addMessage(randomReply("bye"));
+    return true;
+  }
+
+  if (intent === "mood") {
+    addMessage(randomReply("mood"));
+    return true;
+  }
+
+  return false;
 }
