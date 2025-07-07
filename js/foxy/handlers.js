@@ -3,6 +3,7 @@
 import { matchIntent } from "./intents.js";
 import { services, randomReply, matchService, emoji } from "./responses.js";
 import { lastInput, setLastInput, foxyMood }     from "./state.js";
+import { setLastIntent, setLastService, lastIntent, lastService } from "./state.js";
 import { addMessage, clearButtons, getReactions }              from "./dom.js";
 import { renderServiceList, renderReactions, renderBookingOptions } from "./ui.js";
 
