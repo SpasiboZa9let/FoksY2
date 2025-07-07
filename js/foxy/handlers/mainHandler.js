@@ -24,13 +24,13 @@ export function handleUserInput(message) {
   addMessage(`Вы: ${message}`);
 
   // 💬 Уточнение цены, подробностей
-if (/сколько.*стоит|цена|подробн|узна|это с|можно|а где|а когда|подойдет|уточни|покажи|ясно/i.test(input)) {
-  if (lastService && services[lastService]) {
-    addMessage(`${emoji()} Ага, это «${lastService}» 💅\n${services[lastService]}`);
-    renderBookingOptions();
-    return;
+  if (/сколько.*стоит|цена|подробн|узна|это с|можно|а где|а когда|подойдет|уточни|покажи|ясно/i.test(input)) {
+    if (lastService && services[lastService]) {
+      addMessage(`${emoji()} Ага, это «${lastService}» 💅\n${services[lastService]}`);
+      renderBookingOptions();
+      return;
+    }
   }
-}
 
   // 🔍 Попытка угадать услугу напрямую
   const svc = matchService(input);
@@ -45,27 +45,11 @@ if (/сколько.*стоит|цена|подробн|узна|это с|мо�
   const intent = matchIntent(input);
   setLastIntent(intent);
 
-  // 🎯 Роутинг по интентам
+  // 🦊 Smalltalk-интенты
+  if (handleSmalltalk(intent)) return;
+
+  // 🎯 Остальные интенты
   switch (intent) {
-    case "greeting":
-      addMessage(randomReply("greeting"));
-      break;
-
-    case "thanks":
-      addMessage(randomReply("thanks"));
-      break;
-
-    case "bye":
-      addMessage(randomReply("bye"));
-      break;
-
-    case "abilities":
-    case "help":
-    case "about":
-      addMessage(`${emoji()} Вот чем могу быть полезна прямо сейчас:`);
-      renderServiceList();
-      break;
-
     case "design":
       handleDesign();
       break;
@@ -84,9 +68,7 @@ if (/сколько.*стоит|цена|подробн|узна|это с|мо�
       break;
 
     default:
-      if (!handleSmalltalk(intent)) {
-        addMessage(randomReply("fallback"));
-        renderServiceList();
-      }
+      addMessage(randomReply("fallback"));
+      renderServiceList();
   }
 }
