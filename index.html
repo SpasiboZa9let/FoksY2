@@ -173,18 +173,19 @@
 
     // 2. Приветственное предложение с кнопками
     addMessage(
-      `<div class="foxy-suggestions text-sm leading-relaxed space-y-2 text-center">
-         <div>Вот что я могу показать прямо сейчас:</div>
-         <div class="flex flex-col gap-2 mt-2">
-           <button class="ai-btn" data-action="прайс">💅 Заглянуть в прайс-лист</button>
-           <button class="ai-btn" data-action="дизайн">🎨 Вдохновиться идеями дизайна</button>
-           <button class="ai-btn" data-action="записаться">📅 Записаться на удобное время</button>
-           <button class="ai-btn" data-action="что ты умеешь">❓ Узнать все мои возможности</button>
-         </div>
-         <div class="mt-2">Выбери, что тебе по душе, и я всё покажу 💖</div>
-       </div>`,
-      true
-    );
+  `<div class="foxy-suggestions text-center space-y-4">
+     <div class="text-base font-medium">Вот что я могу показать прямо сейчас:</div>
+     <div class="flex flex-col items-center gap-3">
+       <button class="ai-btn" data-action="прайс">💅 Заглянуть в прайс-лист</button>
+       <button class="ai-btn" data-action="дизайн">🎨 Вдохновиться идеями дизайна</button>
+       <button class="ai-btn" data-action="записаться">📅 Записаться на удобное время</button>
+       <button class="ai-btn" data-action="что ты умеешь">❓ Узнать все мои возможности</button>
+     </div>
+     <div class="text-sm text-gray-600">Выбери, что тебе по душе, и я всё покажу 💖</div>
+   </div>`,
+  true
+);
+
 
     // 3. Навешиваем клики на подсказки
     setTimeout(() => {
