@@ -14,7 +14,10 @@ const patterns = {
   softWarning:  [/дура/i, /тупая/i, /хуй/i, /пошла/i],
   smalltalkLite: [/ок/i, /хорошо/i, /ладно/i, /ясно/i],
   confirm:       [/^да$/i, /^ага$/i, /^точно$/i, /^именно$/i],
-  abilities:    [/что ты умеешь/i, /чем.*можешь.*помочь/i, /зачем ты/i, /для чего ты/i]
+  abilities:    [/что ты умеешь/i, /чем.*можешь.*помочь/i, /зачем ты/i, /для чего ты/i],
+  confirmBooking: [/запиш/i, /оформ/i, /подтверди/i, /забронируй/i, /внеси/i],
+  showSomething:  [/покажи/i, /открой/i, /хочу увидеть/i]
+
 };
 
 export function matchIntent(input) {
