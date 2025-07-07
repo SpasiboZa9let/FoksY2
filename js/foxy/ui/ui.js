@@ -71,7 +71,6 @@ export function renderReactions(options = []) {
     reactions.appendChild(btn);
   });
 }
-import { addMessage } from "./dom.js"; // если ещё не импортирован
 
 export function showTrendyOptions() {
   addMessage(`${emoji()} Сейчас в моде:`); // можно вставить свои тренды
