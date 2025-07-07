@@ -1,7 +1,7 @@
 import { services, emoji } from "../core/services.js";
 import { addMessage, clearButtons, getReactions } from "./dom.js";
 import { handleServiceInput } from "../handlers/servicesHandler.js"; // ✅ добавили
-import { capitalize } from "./utils.js"; // ✅ добавили
+import { capitalize } from "../core/utils.js"; // ✅ добавили
 
 /**
  * Рендер списка услуг кнопками
