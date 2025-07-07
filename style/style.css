@@ -83,10 +83,12 @@
 }
 
 /* -----------------------------------------------------------
-   Pseudo-AI button
+   Pseudo-AI button (реальный стиль кнопок)
 ----------------------------------------------------------- */
 .ai-btn {
-  @apply bg-pink-100 text-pink-600 px-3 py-1 rounded-full text-xs font-medium hover:bg-pink-200 transition;
+  /* Tailwind @apply */
+  @apply bg-pink-500 text-white font-medium px-4 py-2 rounded-2xl shadow-md
+         hover:bg-pink-600 hover:shadow-lg transform transition-transform active:scale-95;
   cursor: pointer;
 }
 
@@ -115,6 +117,7 @@
   max-height: 200px;
   opacity: 1;
 }
+
 .foxy-fade-in {
   animation: fadeIn 0.6s ease-in-out;
   opacity: 0;
@@ -127,15 +130,21 @@
   }
 }
 
-.foxy-suggestions strong {
-  color: #be185d;
-  font-weight: 500;
-  transition: color 0.3s ease;
+/* -----------------------------------------------------------
+   Suggestions styling
+----------------------------------------------------------- */
+.foxy-suggestions {
+  text-align: center;
 }
-.foxy-suggestions strong:hover {
-  color: #ec4899;
-  cursor: pointer;
+
+.foxy-suggestions .ai-btn {
+  margin: 0 auto;
+  display: block;
 }
+
+/* -----------------------------
+   Headings
+------------------------------ */
 h2 {
   font-size: 1.65rem; /* = 20px */
 }
