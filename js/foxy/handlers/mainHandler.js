@@ -37,16 +37,22 @@ export function handleUserInput(message) {
   const intent = matchIntent(input);
   setLastIntent(intent);
 
- // foxy/handlers/mainHandler.js
-
-// … после определения intent и handleSmalltalk …
-
 // 🦊 Smalltalk-интенты
 if (handleSmalltalk(intent)) return;
 
-// 🗂 Показать услуги (и по «покажи», и по «услуги», и по «хочу другое»)
+// 🗂 Показать услуги или «покажи» (с прямым выбором сервиса)
 if (intent === "showSomething" || intent === "showServices") {
-  renderServiceList();
+  // 1) Сначала проверяем, не упомянул ли пользователь конкретную услугу:
+  const svc2 = matchService(input);
+  if (svc2) {
+    setLastService(svc2.name);
+    setLastIntent("service");
+    handleServiceInput(svc2.name);
+  } 
+  // 2) Если нет — просто показываем весь прайс:
+  else {
+    renderServiceList();
+  }
   return;
 }
 
