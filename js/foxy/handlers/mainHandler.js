@@ -1,7 +1,5 @@
-// foxy/handlers/mainHandler.js
-
 import { matchIntent } from "../core/intents.js";
-import { matchService, emoji, services } from "../core/services.js";
+import { matchService, emoji, services, randomReply } from "../core/services.js";
 import {
   lastInput, setLastInput, setLastIntent,
   setLastService, lastService
@@ -15,7 +13,6 @@ import { handleMood } from "./mood.js";
 import { handleSmalltalk } from "./smalltalk.js";
 import { handleServiceInput } from "./servicesHandler.js";
 
-// главный обработчик ввода
 export function handleUserInput(message) {
   clearButtons();
 
@@ -34,7 +31,7 @@ export function handleUserInput(message) {
     }
   }
 
-  // 🔍 Попытка угадать услугу напрямую
+  // 🔍 Поиск по синонимам услуг
   const svc = matchService(input);
   if (svc) {
     setLastService(svc.name);
@@ -43,11 +40,11 @@ export function handleUserInput(message) {
     return;
   }
 
-  // 🤖 Классификация интента
+  // 🤖 Распознавание интента
   const intent = matchIntent(input);
   setLastIntent(intent);
 
-  // 🎯 Роутинг по интентам
+  // 🎯 Роутинг
   switch (intent) {
     case "design":
       handleDesign();
@@ -67,8 +64,8 @@ export function handleUserInput(message) {
 
     default:
       if (!handleSmalltalk(intent)) {
-        addMessage(`${emoji()} Не совсем поняла… Давай выберем из списка? 💅`);
-        renderServiceList();
+        addMessage(`${emoji()} ${randomReply(intent)}`, true);
+        setTimeout(() => renderServiceList(), 800); // не сразу, чтобы не душила
       }
   }
 }
