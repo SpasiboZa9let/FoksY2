@@ -144,12 +144,19 @@
   <script src="js/reviews-scroll.js" defer></script>
 
   <!-- Инициализация Фокси -->
-  <script type="module">
-    import { handleUserInput } from './js/foxy/handlers/mainHandler.js';
-    import { addMessage }       from './js/foxy/ui/dom.js';
-    import { emoji }            from './js/foxy/core/services.js';
+ <script type="module">
+  import { handleUserInput } from './js/foxy/handlers/mainHandler.js';
+  import { addMessage }       from './js/foxy/ui/dom.js';
+  import { emoji }            from './js/foxy/core/services.js';
 
-    window.addEventListener('DOMContentLoaded', () => {
+  window.addEventListener('DOMContentLoaded', () => {
+    requestAnimationFrame(() => {
+      const chat = document.getElementById("pseudo-chat");
+      if (!chat) {
+        console.error("⚠️ Элемент #pseudo-chat не найден — Фокси не сможет вывести сообщение.");
+        return;
+      }
+
       // Приветствие Фокси
       addMessage(`<strong>${emoji()} Фокси:</strong> Приветик, рада тебя видеть! 💖`, true);
 
@@ -187,7 +194,9 @@
         input.value = '';
       });
     });
-  </script>
+  });
+</script>
+
 
   <script>
     // Раскрытие прайс-аккордеона
