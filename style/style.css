@@ -83,14 +83,61 @@
 }
 
 /* -----------------------------------------------------------
-   Pseudo-AI button (реальный стиль кнопок)
+   Pseudo-AI button — чистый CSS вместо @apply
 ----------------------------------------------------------- */
 .ai-btn {
-  /* Tailwind @apply */
-  @apply bg-pink-500 text-white font-medium px-4 py-2 rounded-2xl shadow-md
-         hover:bg-pink-600 hover:shadow-lg transform transition-transform active:scale-95;
+  background: #ec4899;
+  color: #fff;
+  font-weight: 500;
+  font-size: 0.875rem; /* text-sm */
+  padding: 0.5rem 1rem;
+  border-radius: 1.5rem; /* rounded-2xl */
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  transition: background 0.2s ease, transform 0.1s ease, box-shadow 0.2s ease;
+  display: inline-block;
+  text-align: center;
   cursor: pointer;
+  user-select: none;
 }
+
+.ai-btn:hover {
+  background: #db2777; /* чуть темнее */
+  box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+}
+
+.ai-btn:active {
+  transform: scale(0.95);
+}
+
+/* -----------------------------------------------------------
+   Suggestions container — выравниваем и упорядочиваем
+----------------------------------------------------------- */
+.foxy-suggestions {
+  text-align: center;
+  padding: 1rem;              /* добавим немного внутреннего отступа */
+  background: #fff0f4;        /* лёгкий фон */
+  border-radius: 1rem;
+}
+
+.foxy-suggestions .buttons-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem; /* расстояние между кнопками */
+  margin: 0.75rem 0;
+}
+
+.foxy-suggestions .description {
+  font-size: 1rem;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+}
+
+.foxy-suggestions .footer {
+  font-size: 0.875rem;
+  color: #666;
+}
+
 
 /* -----------------------------------------------------------
    Accordion-style Services List
