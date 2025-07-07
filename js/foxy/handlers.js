@@ -60,57 +60,83 @@ export function handleUserInput(message) {
     return;
   }
 
-  // 2) Интент
+  // 2) ИНТЕНТЫ!!!///////
+  
   const intent = matchIntent(input.toLowerCase());
-  setLastIntent(intent);
+setLastIntent(intent);
 
-  switch (intent) {
-        case "design":
+switch (intent) {
+  case "design":
+    addMessage(randomReply("design"), true);
+    return;
+
+  case "confirmBooking":
+    if (lastService) {
+      addMessage(`${emoji()} Отлично! Открываю запись на «${lastService}» ✨`);
+      renderBookingOptions();
+    } else {
+      addMessage(`${emoji()} Давай сначала выберем услугу 💅`);
+      renderServiceList(handleUserInput);
+    }
+    return;
+
+  case "showSomething":
+    if (lastIntent === "design") {
+      addMessage(`${emoji()} Лови вдохновение ✨`);
       addMessage(randomReply("design"), true);
-      return;
+    } else if (lastService) {
+      addMessage(`${emoji()} Это «${lastService}»: ${services[lastService]}`);
+    } else {
+      addMessage(`${emoji()} Что именно хочешь увидеть? 💅`);
+      renderReactions([
+        { text: "💅 Прайс", callback: () => renderServiceList(handleUserInput) },
+        { text: "🎨 Примеры дизайна", callback: () => addMessage(randomReply("design"), true) }
+      ]);
+    }
+    return;
 
-    case "confirm":
-      if (lastIntent === "service" && lastService) {
-        addMessage(`${emoji()} Отлично! Хочешь, запишу тебя на «${lastService}»?`);
-        renderBookingOptions();
-      } else if (lastIntent === "design") {
-        addMessage(`${emoji()} Покажу тогда ещё примеры? 😉`);
-        renderReactions([
-          { text: "📌 Давай", callback: () => addMessage(randomReply("design"), true) },
-          { text: "🔥 Что модно", callback: () => showTrendyOptions() }
-        ]);
-      } else {
-        addMessage(`${emoji()} Класс! Чем могу помочь ещё?`);
-      }
-      return;
+  case "confirm":
+    if (lastIntent === "service" && lastService) {
+      addMessage(`${emoji()} Отлично! Хочешь, запишу тебя на «${lastService}»?`);
+      renderBookingOptions();
+    } else if (lastIntent === "design") {
+      addMessage(`${emoji()} Покажу тогда ещё примеры? 😉`);
+      renderReactions([
+        { text: "📌 Давай", callback: () => addMessage(randomReply("design"), true) },
+        { text: "🔥 Что модно", callback: () => showTrendyOptions() }
+      ]);
+    } else {
+      addMessage(`${emoji()} Класс! Чем могу помочь ещё?`);
+    }
+    return;
 
-    case "abilities":
-      addMessage(`${emoji()} Я умею подбирать дизайн, рассказывать про услуги и помогать с записью на маникюр.`);
+  case "abilities":
+    addMessage(`${emoji()} Я умею подбирать дизайн, рассказывать про услуги и помогать с записью на маникюр.`);
 
-      clearButtons();
-      const reactions = getReactions();
-      if (!reactions) return;
+    clearButtons();
+    const reactions = getReactions();
+    if (!reactions) return;
 
-      const options = [
-        { text: "💅 Прайс", handler: () => renderServiceList(handleUserInput) },
-        { text: "🎨 Дизайн", handler: () => addMessage(randomReply("design"), true) },
-        { text: "🔥 Что модно", handler: () => showTrendyOptions() }
-      ];
+    const options = [
+      { text: "💅 Прайс", handler: () => renderServiceList(handleUserInput) },
+      { text: "🎨 Дизайн", handler: () => addMessage(randomReply("design"), true) },
+      { text: "🔥 Что модно", handler: () => showTrendyOptions() }
+    ];
 
-      const wrap = document.createElement("div");
-      wrap.className = "flex gap-2 flex-wrap";
+    const wrap = document.createElement("div");
+    wrap.className = "flex gap-2 flex-wrap";
 
-      options.forEach(({ text, handler }) => {
-        const btn = document.createElement("button");
-        btn.textContent = text;
-        btn.className = "bg-pink-100 text-pink-700 px-3 py-1 rounded-xl text-sm";
-        btn.onclick = handler;
-        wrap.appendChild(btn);
-      });
+    options.forEach(({ text, handler }) => {
+      const btn = document.createElement("button");
+      btn.textContent = text;
+      btn.className = "bg-pink-100 text-pink-700 px-3 py-1 rounded-xl text-sm";
+      btn.onclick = handler;
+      wrap.appendChild(btn);
+    });
 
-      reactions.appendChild(wrap);
-      return;
-
+    reactions.appendChild(wrap);
+    return;
+    
     case "booking":
       renderBookingOptions();
       return;
