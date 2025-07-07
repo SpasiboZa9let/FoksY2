@@ -21,3 +21,8 @@ export let lastService = null;
 export function setLastService(val) {
   lastService = val;
 }
+export let lastReplyType = null;
+export function setLastReplyType(t) {
+  lastReplyType = t;
+}
+
