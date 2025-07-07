@@ -1,6 +1,4 @@
-// js/foxy/core/services.js
-
-import { normalize } from "../utils.js";
+import { normalize } from "../ui/utils.js";
 
 // 💅 Услуги и описание
 export const services = {
@@ -31,16 +29,19 @@ const stopWords = [
   "услуги", "помоги", "помощь", "записаться", "не знаю", "хочу", "расскажи"
 ];
 
-// 🔍 Поиск услуги по тексту
+/**
+ * Поиск услуги по тексту
+ */
 export function matchService(text) {
   const input = normalize(text);
   if (stopWords.includes(input)) return null;
   if (aliases[input]) return { name: aliases[input], exact: false };
 
   for (const key of Object.keys(services)) {
-    if (normalize(key) === input) return { name: key, exact: true };
+    if (normalize(key) === input) {
+      return { name: key, exact: true };
+    }
   }
-
   return null;
 }
 
@@ -63,7 +64,24 @@ export const replies = {
     "Пока-пока! Буду ждать 💖"
   ],
   design: [
-    "Для вдохновения дизайном ногтей загляни сюда: <a href=\"https://pin.it/2FsXp2Lb5\">Pinterest</a>"
+    "Для вдохновения дизайном ногтей загляни сюда: <a href=\"https://pin.it/2FsXp2Lb5\" class=\"text-pink-500 underline\">Pinterest</a>"
+  ],
+  fallback: [
+    "Не совсем поняла… Попробуй переформулировать 🙈"
   ]
 };
 
+/**
+ * Возвращает случайный ответ для данного интента
+ */
+export function randomReply(type) {
+  const arr = replies[type] || replies.fallback;
+  return arr[Math.floor(Math.random() * arr.length)];
+}
+
+/**
+ * Эмодзи Фокси (можно менять по настроению)
+ */
+export function emoji(mood = "neutral") {
+  return "🦊";
+}
