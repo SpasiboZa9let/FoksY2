@@ -68,6 +68,41 @@ export function handleUserInput(message) {
       }
       return;
 
+case "greeting":
+  addMessage(`${emoji()} Приветик, солнышко! 💖 Давай подберём тебе маникюр мечты ✨`);
+  renderReactions([
+    { text: "💅 Просто маникюр", callback: () => showBasicServices() },
+    { text: "🎨 Хочу дизайн", callback: () => showDesignIdeas() },
+    { text: "📅 Записаться", callback: () => renderBookingOptions() },
+    { text: "❓ Помоги выбрать", callback: () => showMoodOptions() }
+  ]);
+  return;
+
+case "showServices":
+  showBasicServices();
+  return;
+
+case "help":
+  showMoodOptions();
+  return;
+      case "greeting":
+  addMessage(`${emoji()} Приветик, солнышко! 💖 Давай подберём тебе маникюр мечты ✨`);
+  renderReactions([
+    { text: "💅 Просто маникюр", callback: () => showBasicServices() },
+    { text: "🎨 Хочу дизайн", callback: () => showDesignIdeas() },
+    { text: "📅 Записаться", callback: () => renderBookingOptions() },
+    { text: "❓ Помоги выбрать", callback: () => showMoodOptions() }
+  ]);
+  return;
+
+case "showServices":
+  showBasicServices();
+  return;
+
+case "help":
+  showMoodOptions();
+  return;
+
     case "showSomething":
   if (lastService) {
     const text = services[lastService];
@@ -149,6 +184,54 @@ export function handleUserInput(message) {
     default:
       addMessage(randomReply("fallback"));
       renderServiceList(handleUserInput);
+  }
+}
+function showBasicServices() {
+  addMessage(`${emoji()} Вот что могу предложить, милашка:`);
+
+  renderReactions([
+    { text: "✨ Комби маникюр", callback: () => selectService("комби маникюр") },
+    { text: "💅 Классический маникюр", callback: () => selectService("классический маникюр") },
+    { text: "🎯 Коррекция длины", callback: () => selectService("коррекция длины") }
+  ]);
+}
+
+function showDesignIdeas() {
+  addMessage(`${emoji()} Вот вдохновляющие идеи для дизайна ноготков 💅`);
+  addMessage(randomReply("design"), true);
+  showTrendyOptions();
+}
+
+function showMoodOptions() {
+  addMessage(`${emoji()} Что тебе ближе по настроению? 😉`);
+
+  renderReactions([
+    { text: "🌸 Нюд", callback: () => addMessage("Нюд — всегда в моде! 💅") },
+    { text: "💎 Блёстки", callback: () => addMessage("Блестим! 💖 Будет шикарно!") },
+    { text: "🌈 Что-то вау", callback: () => showDesignIdeas() }
+  ]);
+}
+
+function selectService(name) {
+  setLastService(name);
+  setLastIntent("service");
+
+  addMessage(`${emoji()} Отличный выбор — «${name}» 💅`);
+  addMessage(`Хочешь узнать подробнее или записаться? 😉`);
+
+  renderReactions([
+    { text: "📋 Подробнее", callback: () => showServiceDetails(name) },
+    { text: "📅 Записаться", callback: () => renderBookingOptions() }
+  ]);
+}
+
+function showServiceDetails(name) {
+  const price = services[name];
+  if (price) {
+    addMessage(`${emoji()} Ага, это «${name}» 💅\n${price}`);
+    renderBookingOptions();
+  } else {
+    addMessage(`${emoji()} Упс, пока нет подробностей 😥`);
   }
 }
 
