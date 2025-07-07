@@ -13,6 +13,7 @@ import { handleMood } from "./mood.js";
 import { handleSmalltalk } from "./smalltalk.js";
 import { handleServiceInput } from "./servicesHandler.js";
 
+// главный обработчик ввода
 export function handleUserInput(message) {
   clearButtons();
 
@@ -31,7 +32,7 @@ export function handleUserInput(message) {
     }
   }
 
-  // 🔍 Поиск по синонимам услуг
+  // 🔍 Попытка угадать услугу напрямую
   const svc = matchService(input);
   if (svc) {
     setLastService(svc.name);
@@ -40,12 +41,31 @@ export function handleUserInput(message) {
     return;
   }
 
-  // 🤖 Распознавание интента
+  // 🤖 Классификация интента
   const intent = matchIntent(input);
   setLastIntent(intent);
 
-  // 🎯 Роутинг
+  // 🎯 Роутинг по интентам
   switch (intent) {
+    case "greeting":
+      addMessage(randomReply("greeting"));
+      break;
+
+    case "thanks":
+      addMessage(randomReply("thanks"));
+      break;
+
+    case "bye":
+      addMessage(randomReply("bye"));
+      break;
+
+    case "abilities":
+    case "help":
+    case "about":
+      addMessage(`${emoji()} Вот чем могу быть полезна прямо сейчас:`);
+      renderServiceList();
+      break;
+
     case "design":
       handleDesign();
       break;
@@ -59,13 +79,14 @@ export function handleUserInput(message) {
       break;
 
     case "booking":
+    case "confirmBooking":
       renderBookingOptions();
       break;
 
     default:
       if (!handleSmalltalk(intent)) {
-        addMessage(`${emoji()} ${randomReply(intent)}`, true);
-        setTimeout(() => renderServiceList(), 800); // не сразу, чтобы не душила
+        addMessage(randomReply("fallback"));
+        renderServiceList();
       }
   }
 }
