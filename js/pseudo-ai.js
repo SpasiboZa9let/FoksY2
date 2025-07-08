@@ -30,6 +30,7 @@ function showSuggestions() {
          <button class="ai-btn" data-action="дизайн">🎨 Вдохновиться идеями дизайна</button>
          <button class="ai-btn" data-action="записаться">📅 Записаться на удобное время</button>
          <button class="ai-btn" data-action="что ты умеешь">❓ Узнать все мои возможности</button>
+         <button class="ai-btn" data-action="скидка">🏷️ Получить скидку</button>
        </div>
        <div class="footer">Выбери, что тебе по душе, и я всё покажу 💖</div>
      </div>`,
@@ -37,6 +38,7 @@ function showSuggestions() {
     true
   );
 }
+
 
 window.addEventListener('DOMContentLoaded', () => {
   let name = localStorage.getItem('foxy_userName');
