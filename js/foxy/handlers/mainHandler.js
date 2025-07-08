@@ -13,8 +13,8 @@ import { handleDesign } from "./design.js";
 import { handleMood } from "./mood.js";
 import { handleSmalltalk } from "./smalltalk.js";
 import { handleServiceInput, showServiceDetails } from "./servicesHandler.js";
+import { handleDiscount } from "./discount.js"; // 🔥 Новый модуль
 
-// Варианты приветствий (в core/state можно вынести, если нужно)
 const greetings = [
   `Привет, %NAME%! 💖 Чем сегодня порадовать твои ноготки?`,
   `Салют, %NAME%! 🌟 Готова создавать красоту вместе?`,
@@ -23,13 +23,11 @@ const greetings = [
   `Добро пожаловать, %NAME%! 😊 Давай сделаем ноготки особенными!`
 ];
 
-// Функция для рандомного выбора и подстановки имени
 function randomGreeting(name) {
   const tpl = greetings[Math.floor(Math.random() * greetings.length)];
   return tpl.replace("%NAME%", name);
 }
 
-// Единый блок показа подсказок
 function showSuggestions() {
   addMessage(
     `<div class="foxy-suggestions">
@@ -39,6 +37,7 @@ function showSuggestions() {
          <button class="ai-btn" data-action="дизайн">🎨 Вдохновиться идеями дизайна</button>
          <button class="ai-btn" data-action="записаться">📅 Записаться на удобное время</button>
          <button class="ai-btn" data-action="что ты умеешь">❓ Узнать все мои возможности</button>
+         <button class="ai-btn" data-action="скидка">🏷️ Скидка</button>
        </div>
        <div class="footer">Выбери, что тебе по душе, и я всё покажу 💖</div>
      </div>`,
@@ -46,48 +45,44 @@ function showSuggestions() {
   );
 }
 
-// главный обработчик ввода
 export function handleUserInput(message) {
   clearButtons();
 
-  // 1) Если мы только что спросили имя — сохраняем и показываем подсказки
   if (lastIntent === 'askName') {
     const name = message.trim();
     setUserName(name);
     localStorage.setItem('foxy_userName', name);
     addMessage(`Приятно познакомиться, ${name}! 💖`, false);
-
-    addMessage(
-      `<strong>${emoji()} Фокси:</strong> ${randomGreeting(name)}`,
-      true
-    );
+    addMessage(`<strong>${emoji()} Фокси:</strong> ${randomGreeting(name)}`, true);
     showSuggestions();
     setLastIntent(null);
     return;
   }
 
-  // 2) Обычная логика
   const input = message.trim();
   if (!input || input.toLowerCase() === lastInput) return;
-  const prevIntent = lastIntent; // сохраняем предыдущий интент
+  const prevIntent = lastIntent;
   setLastInput(input.toLowerCase());
 
   addMessage(`Вы: ${message}`);
 
-  // 🤖 Классификация интента
   const intent = matchIntent(input);
   setLastIntent(intent);
 
-  // 🚦 Подтверждение выбора услуги
+  // 🚦 Подтверждение услуги
   if (intent === 'confirm' && prevIntent === 'service') {
     showServiceDetails(lastService);
     return;
   }
 
-  // 🦊 Smalltalk
+  // 🎁 Промо / скидка
+  if (intent === "discount") {
+    handleDiscount();
+    return;
+  }
+
   if (handleSmalltalk(intent)) return;
 
-  // 🗂 Показать услуги или «покажи»
   if (intent === "showSomething" || intent === "showServices") {
     const svc2 = matchService(input);
     if (svc2) {
@@ -100,7 +95,6 @@ export function handleUserInput(message) {
     return;
   }
 
-  // 📝 Уточнения цены/подробностей
   const inquireRe = /(сколько|сколк[оья]|стоимост|цена)/i;
   if (inquireRe.test(input)) {
     const svc2 = matchService(input);
@@ -117,7 +111,6 @@ export function handleUserInput(message) {
     return;
   }
 
-  // 🔍 Попытка угадать услугу
   const svc = matchService(input);
   if (svc) {
     setLastService(svc.name);
@@ -126,7 +119,6 @@ export function handleUserInput(message) {
     return;
   }
 
-  // 🎯 Остальные интенты
   switch (intent) {
     case "design":
       handleDesign();
