@@ -56,15 +56,16 @@ function checkPromoReminder() {
     if (!localStorage.getItem("promoUsed")) {
       const deadline = new Date(expires).toLocaleDateString();
       addTypingMessage(
-        `🎁 Напоминаю: у тебя ещё действует промокод <strong>${promoCode}</strong><br><small>Срок до ${deadline}</small>`,
-        450,
-        true
-      );
-
-      renderReactions([
-        { text: "👍 Использовал", callback: () => localStorage.setItem("promoUsed", "true") },
-        { text: "❓ Пока нет", callback: () => {} }
-      ]);
+  `<div class="foxy-promo">
+     <p>🎁 Напоминаю: у тебя ещё действует промокод <strong>${promoCode}</strong><br><small>Срок до ${deadline}</small></p>
+     <div class="buttons-wrapper mt-2">
+       <button class="ai-btn" data-promo-action="used">✅ Использовал</button>
+       <button class="ai-btn" data-promo-action="later">⏳ Пока нет</button>
+     </div>
+   </div>`,
+  450,
+  true
+);
     }
   }
 }
@@ -114,3 +115,19 @@ form?.addEventListener('submit', e => {
   handleUserInput(text);
   input.value = '';
 });
+// Обработка кликов по промо-кнопкам
+document.body.addEventListener('click', event => {
+  const promoBtn = event.target.closest('[data-promo-action]');
+  if (!promoBtn) return;
+
+  const action = promoBtn.getAttribute('data-promo-action');
+  if (action === 'used') {
+    localStorage.removeItem("promoCode");
+    localStorage.removeItem("promoExpires");
+    addTypingMessage(`Отлично! Промокод больше не будет беспокоить 😊`, 300);
+    promoBtn.closest('.foxy-promo')?.remove();
+  } else if (action === 'later') {
+    addTypingMessage(`Окей, напомню позже 😉`, 300);
+  }
+});
+
