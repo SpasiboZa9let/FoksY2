@@ -26,12 +26,12 @@ export function handleDiscount() {
   localStorage.setItem("promoExpires", expireTime.toString());
   localStorage.setItem("promoUsed", "false");
 
-  addMessage(
-    `🎉 Твой новый промокод: <strong>${code}</strong>\n` +
-    `Действует до ${new Date(expireTime).toLocaleDateString()}\n` +
-    `📋 Покажи мастеру при записи — получишь подарок или скидку!`,
-    false
-  );
+  addTypingMessage(
+  `🎉 Твой новый промокод: <strong>${code}</strong><br>Действует до ${deadline}<br>📋 Покажи мастеру при записи — получишь подарок или скидку!`,
+  500,
+  true
+);
+
 }
 
 export function remindPromoIfActive() {
