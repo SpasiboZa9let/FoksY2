@@ -23,7 +23,7 @@ export function handleUserInput(message) {
 
   addMessage(`Вы: ${message}`);
 
-  // 🤖 Классификация интента (только для smalltalk и проч.)
+  // 🤖 Классификация интента (smalltalk, showSomething и т.п.)
   const intent = matchIntent(input);
   setLastIntent(intent);
 
@@ -43,16 +43,17 @@ export function handleUserInput(message) {
     return;
   }
 
-  // 📝 Уточняющие вопросы (любые «сколько», «цена», «стоимость» и их опечатки)
+  // 📝 Уточняющие вопросы (любые «сколько», «цена», «стоимость» и опечатки)
   const inquireRe = /(сколько|сколк[оья]|стоимост|цена)/i;
   if (inquireRe.test(input)) {
-    // если в той же строке есть упоминание услуги — запоминаем её
+    // запоминаем услугу, если упомянута в этой же фразе
     const svc2 = matchService(input);
     if (svc2) setLastService(svc2.name);
 
     if (lastService && services[lastService]) {
-      // выводим рандомный заголовок, потом детали и кнопки
-      addMessage(`${emoji()} ${randomReply("inquireDetails")}`, false);
+      // выводим рандомный заголовок из inquireDetails
+      addMessage(`${emoji()} ${randomReply("inquireDetails")}`, true);
+      // детали услуги
       addMessage(`«${lastService}» 💅\n${services[lastService]}`);
       renderBookingOptions();
     } else {
