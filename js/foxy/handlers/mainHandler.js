@@ -23,6 +23,44 @@ export function handleUserInput(message) {
 
   addMessage(`Вы: ${message}`);
 
+  // 🤖 Классификация интента (только для smalltalk и проч.)
+  const intent = matchIntent(input);
+  setLastIntent(intent);
+
+  // 🦊 Smalltalk-интенты
+  if (handleSmalltalk(intent)) return;
+
+  // 🗂 Показать услуги или «покажи» (с прямым выбором сервиса)
+  if (intent === "showSomething" || intent === "showServices") {
+    const svc2 = matchService(input);
+    if (svc2) {
+      setLastService(svc2.name);
+      setLastIntent("service");
+      handleServiceInput(svc2.name);
+    } else {
+      renderServiceList();
+    }
+    return;
+  }
+
+  // 📝 Уточняющие вопросы (любые «сколько», «цена», «стоимость» и их опечатки)
+  const inquireRe = /(сколько|сколк[оья]|стоимост|цена)/i;
+  if (inquireRe.test(input)) {
+    // если в той же строке есть упоминание услуги — запоминаем её
+    const svc2 = matchService(input);
+    if (svc2) setLastService(svc2.name);
+
+    if (lastService && services[lastService]) {
+      // выводим рандомный заголовок, потом детали и кнопки
+      addMessage(`${emoji()} ${randomReply("inquireDetails")}`, false);
+      addMessage(`«${lastService}» 💅\n${services[lastService]}`);
+      renderBookingOptions();
+    } else {
+      addMessage(randomReply("fallback"));
+      renderServiceList();
+    }
+    return;
+  }
 
   // 🔍 Попытка угадать услугу напрямую
   const svc = matchService(input);
@@ -33,62 +71,23 @@ export function handleUserInput(message) {
     return;
   }
 
-  // 🤖 Классификация интента
-  const intent = matchIntent(input);
-  setLastIntent(intent);
+  // 🎯 Остальные интенты
+  switch (intent) {
+    case "design":
+      handleDesign();
+      break;
 
-// 🦊 Smalltalk-интенты
-if (handleSmalltalk(intent)) return;
+    case "mood":
+      handleMood();
+      break;
 
-// 🗂 Показать услуги или «покажи» (с прямым выбором сервиса)
-if (intent === "showSomething" || intent === "showServices") {
-  // 1) Сначала проверяем, не упомянул ли пользователь конкретную услугу:
-  const svc2 = matchService(input);
-  if (svc2) {
-    setLastService(svc2.name);
-    setLastIntent("service");
-    handleServiceInput(svc2.name);
-  } 
-  // 2) Если нет — просто показываем весь прайс:
-  else {
-    renderServiceList();
+    case "booking":
+    case "confirmBooking":
+      renderBookingOptions();
+      break;
+
+    default:
+      addMessage(randomReply("fallback"));
+      renderServiceList();
   }
-  return;
-}
-
-// 📝 Уточняющие вопросы (цена, подробности)
-if (intent === "inquireDetails") {
-  const header = randomReply("inquireDetails");    // рандомная фраза из массива
-  if (lastService && services[lastService]) {
-    // Выводим сначала заголовок-реплай, потом детали и кнопки
-    addMessage(`${emoji()} ${header}`, false);
-    addMessage(`«${lastService}» 💅\n${services[lastService]}`);
-    renderBookingOptions();
-  } else {
-    addMessage(randomReply("fallback"));
-    renderServiceList();
-  }
-  return;
-}
-
-
-// 🎯 Остальные интенты
-switch (intent) {
-  case "design":
-    handleDesign();
-    break;
-
-  case "mood":
-    handleMood();
-    break;
-
-  case "booking":
-  case "confirmBooking":
-    renderBookingOptions();
-    break;
-
-  default:
-    addMessage(randomReply("fallback"));
-    renderServiceList();
- }
 }
