@@ -58,10 +58,11 @@ if (intent === "showSomething" || intent === "showServices") {
 
 // 📝 Уточняющие вопросы (цена, подробности)
 if (intent === "inquireDetails") {
+  const header = randomReply("inquireDetails");    // рандомная фраза из массива
   if (lastService && services[lastService]) {
-    addMessage(
-      `${emoji()} Ага, это «${lastService}» 💅\n${services[lastService]}`
-    );
+    // Выводим сначала заголовок-реплай, потом детали и кнопки
+    addMessage(`${emoji()} ${header}`, false);
+    addMessage(`«${lastService}» 💅\n${services[lastService]}`);
     renderBookingOptions();
   } else {
     addMessage(randomReply("fallback"));
@@ -69,6 +70,7 @@ if (intent === "inquireDetails") {
   }
   return;
 }
+
 
 // 🎯 Остальные интенты
 switch (intent) {
