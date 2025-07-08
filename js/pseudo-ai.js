@@ -1,7 +1,7 @@
-// js/pseudo-ai.js
+// js/pseudo-ai.js - обновлённый
 
 import { handleUserInput } from './foxy/handlers/mainHandler.js';
-import { addTypingMessage } from './foxy/ui/dom.js';
+import { addTypingMessage, renderReactions } from './foxy/ui/dom.js';
 import { emoji } from './foxy/core/services.js';
 import { setUserName, lastIntent, setLastIntent } from './foxy/core/state.js';
 
@@ -36,6 +36,39 @@ function showSuggestions() {
   );
 }
 
+function checkPromoReminder() {
+  const promoCode = localStorage.getItem("promoCode");
+  const promoExpires = localStorage.getItem("promoExpires");
+
+  if (promoCode && promoExpires) {
+    const now = Date.now();
+    const expires = parseInt(promoExpires);
+
+    // Если просрочено — удалить
+    if (now >= expires) {
+      localStorage.removeItem("promoCode");
+      localStorage.removeItem("promoExpires");
+      localStorage.removeItem("promoUsed");
+      return;
+    }
+
+    // Если ещё действует и не использован
+    if (!localStorage.getItem("promoUsed")) {
+      const deadline = new Date(expires).toLocaleDateString();
+      addTypingMessage(
+        `🎁 Напоминаю: у тебя ещё действует промокод <strong>${promoCode}</strong><br><small>Срок до ${deadline}</small>`,
+        450,
+        true
+      );
+
+      renderReactions([
+        { text: "👍 Использовал", callback: () => localStorage.setItem("promoUsed", "true") },
+        { text: "❓ Пока нет", callback: () => {} }
+      ]);
+    }
+  }
+}
+
 window.addEventListener('DOMContentLoaded', () => {
   let name = localStorage.getItem('foxy_userName');
   console.log('[DEBUG] DOMContentLoaded, имя:', name);
@@ -55,19 +88,8 @@ window.addEventListener('DOMContentLoaded', () => {
     true
   );
 
-  // 🔔 Промокод (если активен)
-  const promoCode = localStorage.getItem("promoCode");
-  const promoExpires = localStorage.getItem("promoExpires");
-
-  if (promoCode && promoExpires && Date.now() < parseInt(promoExpires)) {
-    const deadline = new Date(parseInt(promoExpires)).toLocaleDateString();
-    addTypingMessage(
-  `🎁 Напоминаю: у тебя ещё действует промокод <strong>${promoCode}</strong><br><small>Срок до ${deadline}</small>`,
-  450,
-  true
-);
-
-  }
+  // 🔔 Промо-напоминание (если есть активный и неиспользованный)
+  checkPromoReminder();
 
   // Подсказки
   showSuggestions();
