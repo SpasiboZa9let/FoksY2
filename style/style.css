@@ -142,7 +142,8 @@
    Sticky-first message — фиксируем приветствие наверху
 ----------------------------------------------------------- */
 #pseudo-chat {
-  padding-top: 1rem;
+  /* Увеличенный отступ сверху под "липкое" приветствие */
+  padding-top: 6rem;
   position: relative;
 }
 #pseudo-chat > .foxy-fade-in:first-child {
