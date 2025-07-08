@@ -1,4 +1,4 @@
-// js/pseudo-ai.js - обновлённый
+// js/pseudo-ai.js
 
 import { handleUserInput } from './foxy/handlers/mainHandler.js';
 import { addTypingMessage, renderReactions } from './foxy/ui/dom.js';
@@ -18,60 +18,62 @@ function randomGreeting(name) {
   return template.replace('%NAME%', name);
 }
 
-function showSuggestions() {
-  addTypingMessage(
-    `<div class="foxy-suggestions">
-       <div class="description">Вот что я могу показать прямо сейчас:</div>
-       <div class="buttons-wrapper">
-         <button class="ai-btn" data-action="прайс">💅 Заглянуть в прайс-лист</button>
-         <button class="ai-btn" data-action="дизайн">🎨 Вдохновиться идеями дизайна</button>
-         <button class="ai-btn" data-action="записаться">📅 Записаться на удобное время</button>
-         <button class="ai-btn" data-action="что ты умеешь">❓ Узнать все мои возможности</button>
-         <button class="ai-btn" data-action="скидка">🏷️ Получить скидку</button>
-       </div>
-       <div class="footer">Выбери, что тебе по душе, и я всё покажу 💖</div>
-     </div>`,
-    600,
-    true
-  );
+function showSuggestions(delay = 0) {
+  setTimeout(() => {
+    addTypingMessage(
+      `<div class="foxy-suggestions">
+         <div class="description">Вот что я могу показать прямо сейчас:</div>
+         <div class="buttons-wrapper">
+           <button class="ai-btn" data-action="прайс">💅 Заглянуть в прайс-лист</button>
+           <button class="ai-btn" data-action="дизайн">🎨 Вдохновиться идеями дизайна</button>
+           <button class="ai-btn" data-action="записаться">📅 Записаться на удобное время</button>
+           <button class="ai-btn" data-action="что ты умеешь">❓ Узнать все мои возможности</button>
+           <button class="ai-btn" data-action="скидка">🏷️ Получить скидку</button>
+         </div>
+         <div class="footer">Выбери, что тебе по душе, и я всё покажу 💖</div>
+       </div>`,
+      600,
+      true
+    );
+  }, delay);
 }
 
-function checkPromoReminder() {
-  const promoCode = localStorage.getItem("promoCode");
-  const promoExpires = localStorage.getItem("promoExpires");
+function checkPromoReminder(delay = 0) {
+  setTimeout(() => {
+    const promoCode = localStorage.getItem("promoCode");
+    const promoExpires = localStorage.getItem("promoExpires");
 
-  if (promoCode && promoExpires) {
-    const now = Date.now();
-    const expires = parseInt(promoExpires);
+    if (promoCode && promoExpires) {
+      const now = Date.now();
+      const expires = parseInt(promoExpires);
 
-    // Если просрочено — удалить
-    if (now >= expires) {
-      localStorage.removeItem("promoCode");
-      localStorage.removeItem("promoExpires");
-      localStorage.removeItem("promoUsed");
-      return;
+      if (now >= expires) {
+        localStorage.removeItem("promoCode");
+        localStorage.removeItem("promoExpires");
+        localStorage.removeItem("promoUsed");
+        return;
+      }
+
+      if (!localStorage.getItem("promoUsed")) {
+        const deadline = new Date(expires).toLocaleDateString();
+        addTypingMessage(
+          `<div class="foxy-promo">
+             <p>🎁 Напоминаю: у тебя ещё действует промокод <strong>${promoCode}</strong><br><small>Срок до ${deadline}</small></p>
+             <div class="buttons-wrapper mt-2">
+               <button class="ai-btn" data-promo-action="used">✅ Использовал</button>
+               <button class="ai-btn" data-promo-action="later">⏳ Пока нет</button>
+             </div>
+           </div>`,
+          450,
+          true
+        );
+      }
     }
-
-    // Если ещё действует и не использован
-    if (!localStorage.getItem("promoUsed")) {
-      const deadline = new Date(expires).toLocaleDateString();
-      addTypingMessage(
-  `<div class="foxy-promo">
-     <p>🎁 Напоминаю: у тебя ещё действует промокод <strong>${promoCode}</strong><br><small>Срок до ${deadline}</small></p>
-     <div class="buttons-wrapper mt-2">
-       <button class="ai-btn" data-promo-action="used">✅ Использовал</button>
-       <button class="ai-btn" data-promo-action="later">⏳ Пока нет</button>
-     </div>
-   </div>`,
-  450,
-  true
-);
-    }
-  }
+  }, delay);
 }
 
 window.addEventListener('DOMContentLoaded', () => {
-  let name = localStorage.getItem('foxy_userName');
+  const name = localStorage.getItem('foxy_userName');
   console.log('[DEBUG] DOMContentLoaded, имя:', name);
 
   if (!name || name.trim().length < 2) {
@@ -89,14 +91,12 @@ window.addEventListener('DOMContentLoaded', () => {
     true
   );
 
-  // 🔔 Промо-напоминание (если есть активный и неиспользованный)
-  checkPromoReminder();
-
-  // Подсказки
-  showSuggestions();
+  // ⏱ Показываем блоки с задержкой, чтобы не перекрывали друг друга
+  checkPromoReminder(1300); // через 1.3 сек после приветствия
+  showSuggestions(2100);    // через 2.1 сек
 });
 
-// Делегирование кликов
+// Делегирование кликов по кнопкам-командам
 document.body.addEventListener('click', event => {
   const btn = event.target.closest('[data-action]');
   if (btn) {
@@ -105,7 +105,24 @@ document.body.addEventListener('click', event => {
   }
 });
 
-// Форма ввода
+// Делегирование кликов по промо-кнопкам
+document.body.addEventListener('click', event => {
+  const promoBtn = event.target.closest('[data-promo-action]');
+  if (!promoBtn) return;
+
+  const action = promoBtn.getAttribute('data-promo-action');
+  if (action === 'used') {
+    localStorage.removeItem("promoCode");
+    localStorage.removeItem("promoExpires");
+    localStorage.setItem("promoUsed", "true");
+    addTypingMessage(`Отлично! Промокод больше не будет беспокоить 😊`, 300);
+    promoBtn.closest('.foxy-promo')?.remove();
+  } else if (action === 'later') {
+    addTypingMessage(`Окей, напомню позже 😉`, 300);
+  }
+});
+
+// Обработка формы ввода
 const form = document.getElementById('pseudo-form');
 const input = document.getElementById('pseudo-input');
 form?.addEventListener('submit', e => {
@@ -115,19 +132,3 @@ form?.addEventListener('submit', e => {
   handleUserInput(text);
   input.value = '';
 });
-// Обработка кликов по промо-кнопкам
-document.body.addEventListener('click', event => {
-  const promoBtn = event.target.closest('[data-promo-action]');
-  if (!promoBtn) return;
-
-  const action = promoBtn.getAttribute('data-promo-action');
-  if (action === 'used') {
-    localStorage.removeItem("promoCode");
-    localStorage.removeItem("promoExpires");
-    addTypingMessage(`Отлично! Промокод больше не будет беспокоить 😊`, 300);
-    promoBtn.closest('.foxy-promo')?.remove();
-  } else if (action === 'later') {
-    addTypingMessage(`Окей, напомню позже 😉`, 300);
-  }
-});
-
