@@ -145,15 +145,21 @@
   padding-top: 0;
   position: relative;
 }
+#pseudo-chat {
+  /* отключаем лишние паддинги */
+  padding-top: 0;
+  position: relative;
+}
 #pseudo-chat > .foxy-fade-in:first-child {
-  position: fixed;
-  /* Задайте top по расположению блока в макете */
-  top: 280px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: calc(100% - 2rem);
-  max-width: 24rem;
-  z-index: 1000;
+  /* прилипает внутри контейнера чата */
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: #fff0f4;
+  padding: 0.5rem 1rem;
+  border-radius: 1rem;
+  /* пространство для соседних сообщений */
+  margin-bottom: 1rem;
 }
 
 /* -----------------------------------------------------------
