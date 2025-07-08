@@ -38,19 +38,16 @@ function showSuggestions() {
 
 window.addEventListener('DOMContentLoaded', () => {
   const tg = window.Telegram?.WebApp;
-  const user = tg?.initDataUnsafe?.user || {};
-  // пытаемся прочитать сохранённое имя
-  let name = localStorage.getItem('foxy_userName') || user.first_name || '';
+  // читаем только то, что уже в localStorage — без автозахвата из Telegram
+  let name = localStorage.getItem('foxy_userName') || '';
 
   if (!name) {
     // спрашиваем имя у новой пользовательницы
     addMessage('🦊 Привет! Как тебя зовут?', false);
     // помечаем состояние ожидания имени
-    setUserName('');
-    // сохраняем intent для обработки имени
     setLastIntent('askName');
   } else {
-    // сохраняем имя в state и поздравляем рандомом
+    // сохраняем имя в state и выводим приветствие
     setUserName(name);
     addMessage(
       `<strong>${emoji()} Фокси:</strong> ${randomGreeting(name)}`,
@@ -59,6 +56,7 @@ window.addEventListener('DOMContentLoaded', () => {
     // показываем подсказки-опции
     showSuggestions();
   }
+
 
   // Навешиваем клики на подсказки
   setTimeout(() => {
