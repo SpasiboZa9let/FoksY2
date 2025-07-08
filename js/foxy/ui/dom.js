@@ -36,7 +36,6 @@ export function addMessage(text, isHTML = false) {
   chat.scrollTop = chat.scrollHeight;
 }
 
-
 /**
  * Очищает контейнер с кнопками (реакциями)
  */
@@ -45,6 +44,11 @@ export function clearButtons() {
   if (!reactions) return;
   reactions.innerHTML = "";
 }
+
+/**
+ * Отрисовывает кнопки-реакции
+ * @param {Array} options — список кнопок с текстом и callback
+ */
 export function renderReactions(options = []) {
   const reactions = getReactions();
   if (!reactions) return;
@@ -56,4 +60,35 @@ export function renderReactions(options = []) {
     btn.addEventListener("click", opt.callback);
     reactions.appendChild(btn);
   }
+}
+
+/**
+ * Полностью очищает чат
+ */
+export function clearChat() {
+  const chat = getChat();
+  if (!chat) return;
+  chat.innerHTML = "";
+}
+
+/**
+ * Добавляет сообщение с эффектом печати
+ * @param {string} text — финальный текст
+ * @param {number} delay — задержка в мс
+ */
+export function addTypingMessage(text, delay = 500) {
+  const chat = getChat();
+  if (!chat) return;
+
+  const bubble = document.createElement("div");
+  bubble.className = "bg-white p-2 rounded-xl text-sm shadow whitespace-pre-line foxy-fade-in opacity-50";
+  bubble.textContent = "Фокси печатает...";
+
+  chat.appendChild(bubble);
+  chat.scrollTop = chat.scrollHeight;
+
+  setTimeout(() => {
+    bubble.textContent = text;
+    bubble.classList.remove("opacity-50");
+  }, delay);
 }
