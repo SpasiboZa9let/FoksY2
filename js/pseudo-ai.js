@@ -39,25 +39,22 @@ function showSuggestions() {
 window.addEventListener('DOMContentLoaded', () => {
   const tg = window.Telegram?.WebApp;
   // читаем только то, что уже в localStorage — без автозахвата из Telegram
-  // Читаем из localStorage только ключ foxy_userName
-let name = localStorage.getItem('foxy_userName') || '';
+  let name = localStorage.getItem('foxy_userName') || '';
 
-if (!name) {
-  // Если его нет — спрашиваем
-  addMessage('🦊 Привет! Как тебя зовут?', false);
-  setLastIntent('askName');
-  return;
-}
-// Если есть — сохраняем в state и сразу приветствуем
-setUserName(name);
-addMessage(
-  `<strong>${emoji()} Фокси:</strong> ${randomGreeting(name)}`,
-  true
-);
-showSuggestions();
-
+  if (!name || name.trim().length < 2) {
+    // Если имени нет или оно слишком короткое — спрашиваем
+    addMessage('🦊 Привет! Как тебя зовут?', false);
+    setLastIntent('askName');
+    return;
   }
 
+  // Если имя есть — сохраняем в state и приветствуем
+  setUserName(name);
+  addMessage(
+    `<strong>${emoji()} Фокси:</strong> ${randomGreeting(name)}`,
+    true
+  );
+  showSuggestions();
 
   // Навешиваем клики на подсказки
   setTimeout(() => {
@@ -79,4 +76,5 @@ showSuggestions();
     handleUserInput(text);
     input.value = '';
   });
+
 });
