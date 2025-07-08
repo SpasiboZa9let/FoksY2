@@ -5,7 +5,6 @@ import { addTypingMessage } from './foxy/ui/dom.js';
 import { emoji } from './foxy/core/services.js';
 import { setUserName, lastIntent, setLastIntent } from './foxy/core/state.js';
 
-// Список приветствий с подстановкой имени
 const greetings = [
   `Привет, %NAME%! 💖 Чем сегодня порадовать твои ноготки?`,
   `Салют, %NAME%! 🌟 Готова создавать красоту вместе?`,
@@ -14,13 +13,11 @@ const greetings = [
   `Добро пожаловать, %NAME%! 😊 Давай сделаем ноготки особенными!`
 ];
 
-// Рандомное приветствие с именем
 function randomGreeting(name) {
   const template = greetings[Math.floor(Math.random() * greetings.length)];
   return template.replace('%NAME%', name);
 }
 
-// Блок подсказок
 function showSuggestions() {
   addTypingMessage(
     `<div class="foxy-suggestions">
@@ -39,7 +36,6 @@ function showSuggestions() {
   );
 }
 
-
 window.addEventListener('DOMContentLoaded', () => {
   let name = localStorage.getItem('foxy_userName');
   console.log('[DEBUG] DOMContentLoaded, имя:', name);
@@ -51,15 +47,31 @@ window.addEventListener('DOMContentLoaded', () => {
   }
 
   setUserName(name);
+
+  // Приветствие
   addTypingMessage(
     `<strong>${emoji()} Фокси:</strong> ${randomGreeting(name)}`,
     500,
     true
   );
+
+  // 🔔 Промокод (если активен)
+  const promoCode = localStorage.getItem("promoCode");
+  const promoExpires = localStorage.getItem("promoExpires");
+
+  if (promoCode && promoExpires && Date.now() < parseInt(promoExpires)) {
+    const deadline = new Date(parseInt(promoExpires)).toLocaleDateString();
+    addTypingMessage(
+      `🎁 Напоминаю: у тебя ещё действует промокод <strong>${promoCode}</strong><br><small>Срок до ${deadline}</small>`,
+      450
+    );
+  }
+
+  // Подсказки
   showSuggestions();
 });
 
-// — Убираем старый setTimeout() и вместо него — делегируем клики по всему документу —
+// Делегирование кликов
 document.body.addEventListener('click', event => {
   const btn = event.target.closest('[data-action]');
   if (btn) {
@@ -68,7 +80,7 @@ document.body.addEventListener('click', event => {
   }
 });
 
-// Обработка формы ввода
+// Форма ввода
 const form = document.getElementById('pseudo-form');
 const input = document.getElementById('pseudo-input');
 form?.addEventListener('submit', e => {
