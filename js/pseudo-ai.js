@@ -1,4 +1,4 @@
-// pseudo-ai.js
+// js/pseudo-ai.js
 
 import { handleUserInput } from './foxy/handlers/mainHandler.js';
 import { addTypingMessage } from './foxy/ui/dom.js';
@@ -14,13 +14,13 @@ const greetings = [
   `Добро пожаловать, %NAME%! 😊 Давай сделаем ноготки особенными!`
 ];
 
-// Возвращает случайное приветствие с именем
+// Рандомное приветствие с именем
 function randomGreeting(name) {
   const template = greetings[Math.floor(Math.random() * greetings.length)];
   return template.replace('%NAME%', name);
 }
 
-// Показывает подсказки
+// Блок подсказок
 function showSuggestions() {
   addTypingMessage(
     `<div class="foxy-suggestions">
@@ -39,44 +39,36 @@ function showSuggestions() {
 }
 
 window.addEventListener('DOMContentLoaded', () => {
-  const tg = window.Telegram?.WebApp;
   let name = localStorage.getItem('foxy_userName');
-
-  console.log('[DEBUG] DOMContentLoaded');
-  console.log('[DEBUG] foxy_userName =', name);
+  console.log('[DEBUG] DOMContentLoaded, имя:', name);
 
   if (!name || name.trim().length < 2) {
-    console.log('[DEBUG] Спрашиваю имя');
     addTypingMessage('🦊 Привет! Как тебя зовут?', 500);
     setLastIntent('askName');
     return;
   }
 
   setUserName(name);
-
   addTypingMessage(
     `<strong>${emoji()} Фокси:</strong> ${randomGreeting(name)}`,
     500,
     true
   );
-
   showSuggestions();
 });
 
-// Навешиваем клики на подсказки
-setTimeout(() => {
-  document.querySelectorAll('[data-action]').forEach(el => {
-    el.addEventListener('click', () => {
-      const cmd = el.getAttribute('data-action');
-      if (cmd) handleUserInput(cmd);
-    });
-  });
-}, 0);
+// — Убираем старый setTimeout() и вместо него — делегируем клики по всему документу —
+document.body.addEventListener('click', event => {
+  const btn = event.target.closest('[data-action]');
+  if (btn) {
+    const cmd = btn.getAttribute('data-action');
+    if (cmd) handleUserInput(cmd);
+  }
+});
 
-// Обработка формы
+// Обработка формы ввода
 const form = document.getElementById('pseudo-form');
 const input = document.getElementById('pseudo-input');
-
 form?.addEventListener('submit', e => {
   e.preventDefault();
   const text = input.value.trim();
