@@ -1,7 +1,7 @@
 import { handleUserInput } from './foxy/handlers/mainHandler.js';
 import { addMessage }       from './foxy/ui/dom.js';
 import { emoji }            from './foxy/core/services.js';
-import { setUserName, lastIntent } from './foxy/core/state.js';
+import { setUserName, lastIntent, setLastIntent } from './foxy/core/state.js';
 import { renderServiceList } from './foxy/ui/ui.js';
 
 // Список рандомных приветственных фраз с плейсхолдером для имени
@@ -48,7 +48,7 @@ window.addEventListener('DOMContentLoaded', () => {
     // помечаем состояние ожидания имени
     setUserName('');
     // сохраняем intent для обработки имени
-    lastIntent = 'askName';
+    setLastIntent('askName');
   } else {
     // сохраняем имя в state и поздравляем рандомом
     setUserName(name);
