@@ -112,10 +112,10 @@ export const replies = {
   ],
 
   design: [
-    `Держи подборку свежих идей дизайна: <a href="https://ru.pinterest.com/foksynails/%D0%B4%D0%B8%D0%B7%D0%B0%D0%B9%D0%BD/?invite_code=be24647141714804b78fe8d043c1d5bf&sender=918171580188790185" target="_blank">Pinterest</a> 🎨`,
-    `Вдохновляйся: вот отличный <a href="https://ru.pinterest.com/foksynails/%D0%B4%D0%B8%D0%B7%D0%B0%D0%B9%D0%BD/?invite_code=be24647141714804b78fe8d043c1d5bf&sender=918171580188790185" target="_blank">Pinterest-альбом</a>! ✨`,
-    `Смотри трендовые варианты на этой доске: <a href="https://ru.pinterest.com/foksynails/%D0%B4%D0%B8%D0%B7%D0%B0%D0%B9%D0%BD/?invite_code=be24647141714804b78fe8d043c1d5bf&sender=918171580188790185" target="_blank">Trendy Nail Designs</a> 🌈`,
-    `Нужен эффект «вау»? Вот коллекция идей: <a href="https://ru.pinterest.com/foksynails/%D0%B4%D0%B8%D0%B7%D0%B0%D0%B9%D0%BD/?invite_code=be24647141714804b78fe8d043c1d5bf&sender=918171580188790185" target="_blank">Pinterest</a> 💎`
+    `Держи подборку свежих идей дизайна: <a href="https://ru.pinterest.com/foksynails/%D0%B4%D0%B8%D0%B7%D0%B0%D0%B9%D0%BD/?invite_code=be24647141714804b78fe8d043c1d5bf&sender=918171580188790185" target="_blank" class="text-pink-600 underline hover:text-pink-800">Pinterest-альбом</a> 🎨`,
+    `Вдохновляйся: вот отличный <a href="https://ru.pinterest.com/foksynails/%D0%B4%D0%B8%D0%B7%D0%B0%D0%B9%D0%BD/?invite_code=be24647141714804b78fe8d043c1d5bf&sender=918171580188790185" target="_blank" class="text-pink-600 underline hover:text-pink-800">Pinterest-альбом</a>! ✨`,
+    `Смотри трендовые варианты на этой доске: <a href="https://ru.pinterest.com/foksynails/%D0%B4%D0%B8%D0%B7%D0%B0%D0%B9%D0%BD/?invite_code=be24647141714804b78fe8d043c1d5bf&sender=918171580188790185" target="_blank" class="text-pink-600 underline hover:text-pink-800">Trendy Nail Designs</a> 🌈`,
+    `Нужен эффект «вау»? Вот коллекция идей: <a href="https://ru.pinterest.com/foksynails/%D0%B4%D0%B8%D0%B7%D0%B0%D0%B9%D0%BD/?invite_code=be24647141714804b78fe8d043c1d5bf&sender=918171580188790185" target="_blank" class="text-pink-600 underline hover:text-pink-800">Pinterest</a> 💎`
   ],
 
   fallback: [
