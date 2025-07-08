@@ -1,22 +1,10 @@
 import { handleUserInput } from './foxy/handlers/mainHandler.js';
-import { addMessage } from './foxy/ui/dom.js';
+import { addMessage, addTypingMessage } from './foxy/ui/dom.js';
 import { emoji } from './foxy/core/services.js';
-import { setUserName, setLastIntent } from './foxy/core/state.js';
+import { setUserName, lastIntent, setLastIntent } from './foxy/core/state.js';
 
-// Приветствия до ввода имени (без обращения)
-const fallbackGreetings = [
-  `Приветик, красавица! 💖 Давай выберем что-то стильное — нюд, блёстки или что-нибудь вау?`,
-  `Салют! Я Фокси — твоя подружка в мире маникюра 💅 Спрашивай, не стесняйся!`,
-  `Привет! Готова сделать твои ногти идеальными? 💫 Я помогу тебе выбрать лучшее ✨`,
-  `Хэй, рада тебя видеть! 💖 Что сегодня выберем: нежный нюд или блестящий космос?`,
-  `Добро пожаловать, любимка! 😘 Маникюр мечты уже рядом — расскажи, чего хочешь`,
-  `Здравствуй! Фокси на связи — давай сотворим красоту для твоих ноготков 🌸`,
-  `Йо! В мире маникюра сегодня всё для тебя — выбирай, что нужно 💖`,
-  `Приветствую! Хочешь прайс, идеи дизайна или сразу запись? 📋`
-];
-
-// Приветствия с подстановкой имени
-const greetingsWithName = [
+// Список приветствий с %NAME%
+const greetings = [
   `Привет, %NAME%! 💖 Чем сегодня порадовать твои ноготки?`,
   `Салют, %NAME%! 🌟 Готова создавать красоту вместе?`,
   `Здравствуй, %NAME%! ✨ Что выберем для твоего идеального маникюра?`,
@@ -24,17 +12,15 @@ const greetingsWithName = [
   `Добро пожаловать, %NAME%! 😊 Давай сделаем ноготки особенными!`
 ];
 
-function randomGreeting(name = null) {
-  if (name) {
-    const template = greetingsWithName[Math.floor(Math.random() * greetingsWithName.length)];
-    return template.replace('%NAME%', name);
-  } else {
-    return fallbackGreetings[Math.floor(Math.random() * fallbackGreetings.length)];
-  }
+// Функция случайного приветствия с подстановкой имени
+function randomGreeting(name) {
+  const template = greetings[Math.floor(Math.random() * greetings.length)];
+  return template.replace('%NAME%', name);
 }
 
+// Подсказки
 function showSuggestions() {
-  addMessage(
+  addTypingMessage(
     `<div class="foxy-suggestions">
        <div class="description">Вот что я могу показать прямо сейчас:</div>
        <div class="buttons-wrapper">
@@ -45,7 +31,7 @@ function showSuggestions() {
        </div>
        <div class="footer">Выбери, что тебе по душе, и я всё покажу 💖</div>
      </div>`,
-    true
+    500
   );
 }
 
@@ -53,19 +39,20 @@ window.addEventListener('DOMContentLoaded', () => {
   const tg = window.Telegram?.WebApp;
   let name = localStorage.getItem('foxy_userName');
 
-  console.log('[DEBUG] DOMContentLoaded, имя из localStorage:', name);
+  console.log('[DEBUG] DOMContentLoaded');
+  console.log('[DEBUG] foxy_userName =', name);
 
   if (!name || name.trim().length < 2) {
-    console.log('[DEBUG] Имя не задано, спрашиваем у пользователя');
-    addMessage('🦊 Привет! Как тебя зовут?', false);
+    console.log('[DEBUG] Спрашиваю имя');
+    addTypingMessage('🦊 Привет! Как тебя зовут?', 400);
     setLastIntent('askName');
     return;
   }
 
   setUserName(name);
-  addMessage(
+  addTypingMessage(
     `<strong>${emoji()} Фокси:</strong> ${randomGreeting(name)}`,
-    true
+    400
   );
   showSuggestions();
 });
@@ -80,7 +67,7 @@ setTimeout(() => {
   });
 }, 0);
 
-// Обработка формы ввода
+// Обработка ввода формы
 const form = document.getElementById('pseudo-form');
 const input = document.getElementById('pseudo-input');
 
