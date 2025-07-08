@@ -54,7 +54,7 @@ function checkPromoReminder(delay = 0) {
         return;
       }
 
-      if (!localStorage.getItem("promoUsed")) {
+      if (localStorage.getItem("promoUsed") !== 'true') {
         const deadline = new Date(expires).toLocaleDateString();
         addTypingMessage(
           `<div class="foxy-promo">
