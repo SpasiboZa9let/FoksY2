@@ -1,5 +1,3 @@
-// js/foxy/dom.js
-
 /**
  * Возвращает контейнер для сообщений
  */
@@ -75,8 +73,9 @@ export function clearChat() {
  * Добавляет сообщение с эффектом печати
  * @param {string} text — финальный текст
  * @param {number} delay — задержка в мс
+ * @param {boolean} [isHTML=false] — использовать innerHTML вместо textContent
  */
-export function addTypingMessage(text, delay = 500) {
+export function addTypingMessage(text, delay = 500, isHTML = false) {
   const chat = getChat();
   if (!chat) return;
 
@@ -88,7 +87,11 @@ export function addTypingMessage(text, delay = 500) {
   chat.scrollTop = chat.scrollHeight;
 
   setTimeout(() => {
-    bubble.textContent = text;
+    if (isHTML) {
+      bubble.innerHTML = text;
+    } else {
+      bubble.textContent = text;
+    }
     bubble.classList.remove("opacity-50");
   }, delay);
 }
