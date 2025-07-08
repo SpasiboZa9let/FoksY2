@@ -2,7 +2,8 @@ import { matchIntent } from "../core/intents.js";
 import { matchService, emoji, services, randomReply } from "../core/services.js";
 import {
   lastInput, setLastInput, setLastIntent,
-  setLastService, lastService
+  lastIntent, setLastService, lastService,
+  setUserName
 } from "../core/state.js";
 
 import { addMessage, clearButtons } from "../ui/dom.js";
@@ -17,20 +18,31 @@ import { handleServiceInput } from "./servicesHandler.js";
 export function handleUserInput(message) {
   clearButtons();
 
+  // 📝 Обработка ввода имени пользователя
+  if (lastIntent === "askName") {
+    const name = message.trim();
+    setUserName(name);
+    localStorage.setItem("foxy_userName", name);
+    addMessage(`Приятно познакомиться, ${name}! 💖`, false);
+    renderServiceList(); // или showSuggestions()
+    setLastIntent(null);
+    return;
+  }
+
   const input = message.trim().toLowerCase();
   if (!input || input === lastInput) return;
   setLastInput(input);
 
   addMessage(`Вы: ${message}`);
 
-  // 🤖 Классификация интента (smalltalk, showSomething и т.п.)
+  // 🤖 Классификация интента
   const intent = matchIntent(input);
   setLastIntent(intent);
 
   // 🦊 Smalltalk-интенты
   if (handleSmalltalk(intent)) return;
 
-  // 🗂 Показать услуги или «покажи» (с прямым выбором сервиса)
+  // 🗂 Показать услуги или «покажи»
   if (intent === "showSomething" || intent === "showServices") {
     const svc2 = matchService(input);
     if (svc2) {
@@ -43,17 +55,14 @@ export function handleUserInput(message) {
     return;
   }
 
-  // 📝 Уточняющие вопросы (любые «сколько», «цена», «стоимость» и опечатки)
+  // 🔍 Уточняющие вопросы (цена, стоимость и опечатки)
   const inquireRe = /(сколько|сколк[оья]|стоимост|цена)/i;
   if (inquireRe.test(input)) {
-    // запоминаем услугу, если упомянута в этой же фразе
     const svc2 = matchService(input);
     if (svc2) setLastService(svc2.name);
 
     if (lastService && services[lastService]) {
-      // выводим рандомный заголовок из inquireDetails
       addMessage(`${emoji()} ${randomReply("inquireDetails")}`, true);
-      // детали услуги
       addMessage(`«${lastService}» 💅\n${services[lastService]}`);
       renderBookingOptions();
     } else {
@@ -63,7 +72,7 @@ export function handleUserInput(message) {
     return;
   }
 
-  // 🔍 Попытка угадать услугу напрямую
+  // 🔎 Попытка угадать услугу напрямую
   const svc = matchService(input);
   if (svc) {
     setLastService(svc.name);
@@ -77,16 +86,13 @@ export function handleUserInput(message) {
     case "design":
       handleDesign();
       break;
-
     case "mood":
       handleMood();
       break;
-
     case "booking":
     case "confirmBooking":
       renderBookingOptions();
       break;
-
     default:
       addMessage(randomReply("fallback"));
       renderServiceList();
