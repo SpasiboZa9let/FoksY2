@@ -51,19 +51,22 @@ export function handleUserInput(message) {
   clearButtons();
 
   // 1) Если мы только что спросили имя — сохраняем и показываем подсказки
-  if (lastIntent === "askName") {
-    const name = message.trim();
-    setUserName(name);
-    localStorage.setItem("foxy_userName", name);
-    addMessage(`Приятно познакомиться, ${name}! 💖`, false);
-    addMessage(
-      `<strong>${emoji()} Фокси:</strong> ${randomGreeting(name)}`,
-      true
-    );
-    showSuggestions();
-    setLastIntent(null);
-    return;
-  }
+  if (lastIntent === 'askName') {
+  // Получили ответ — это и есть имя
+  const name = message.trim();
+  setUserName(name);
+  localStorage.setItem('foxy_userName', name);
+  addMessage(`Приятно познакомиться, ${name}! 💖`, false);
+
+  // После сохранения имени — единоразово персональное приветствие
+  addMessage(
+    `<strong>${emoji()} Фокси:</strong> ${randomGreeting(name)}`,
+    true
+  );
+  showSuggestions();
+  setLastIntent(null);
+  return;
+}
 
   // 2) Обычная логика
   const input = message.trim();
