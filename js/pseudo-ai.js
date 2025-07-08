@@ -60,7 +60,7 @@ function checkPromoReminder(delay = 0) {
           `<div class="foxy-promo">
              <p>🎁 Напоминаю: у тебя ещё действует промокод <strong>${promoCode}</strong><br><small>Срок до ${deadline}</small></p>
              <div class="buttons-wrapper mt-2">
-               <button class="ai-btn" data-promo-action="used">✅ Использовал</button>
+               <button class="ai-btn" data-promo-action="used">✅ Конечно!</button>
                <button class="ai-btn" data-promo-action="later">⏳ Пока нет</button>
              </div>
            </div>`,
