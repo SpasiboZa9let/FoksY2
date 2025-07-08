@@ -62,9 +62,11 @@ window.addEventListener('DOMContentLoaded', () => {
   if (promoCode && promoExpires && Date.now() < parseInt(promoExpires)) {
     const deadline = new Date(parseInt(promoExpires)).toLocaleDateString();
     addTypingMessage(
-      `🎁 Напоминаю: у тебя ещё действует промокод <strong>${promoCode}</strong><br><small>Срок до ${deadline}</small>`,
-      450
-    );
+  `🎁 Напоминаю: у тебя ещё действует промокод <strong>${promoCode}</strong><br><small>Срок до ${deadline}</small>`,
+  450,
+  true
+);
+
   }
 
   // Подсказки
