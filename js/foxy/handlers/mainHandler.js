@@ -1,8 +1,8 @@
 import { matchIntent } from "../core/intents.js";
 import { matchService, emoji, services, randomReply } from "../core/services.js";
 import {
-  lastInput, setLastInput, setLastIntent,
-  lastIntent, setLastService, lastService,
+  lastInput, setLastInput, lastIntent, setLastIntent,
+  lastService, setLastService,
   userName, setUserName
 } from "../core/state.js";
 
@@ -12,7 +12,7 @@ import { renderBookingOptions, renderServiceList } from "../ui/ui.js";
 import { handleDesign } from "./design.js";
 import { handleMood } from "./mood.js";
 import { handleSmalltalk } from "./smalltalk.js";
-import { handleServiceInput } from "./servicesHandler.js";
+import { handleServiceInput, showServiceDetails } from "./servicesHandler.js";
 
 // Варианты приветствий (в core/state можно вынести, если нужно)
 const greetings = [
@@ -52,25 +52,24 @@ export function handleUserInput(message) {
 
   // 1) Если мы только что спросили имя — сохраняем и показываем подсказки
   if (lastIntent === 'askName') {
-  // Получили ответ — это и есть имя
-  const name = message.trim();
-  setUserName(name);
-  localStorage.setItem('foxy_userName', name);
-  addMessage(`Приятно познакомиться, ${name}! 💖`, false);
+    const name = message.trim();
+    setUserName(name);
+    localStorage.setItem('foxy_userName', name);
+    addMessage(`Приятно познакомиться, ${name}! 💖`, false);
 
-  // После сохранения имени — единоразово персональное приветствие
-  addMessage(
-    `<strong>${emoji()} Фокси:</strong> ${randomGreeting(name)}`,
-    true
-  );
-  showSuggestions();
-  setLastIntent(null);
-  return;
-}
+    addMessage(
+      `<strong>${emoji()} Фокси:</strong> ${randomGreeting(name)}`,
+      true
+    );
+    showSuggestions();
+    setLastIntent(null);
+    return;
+  }
 
   // 2) Обычная логика
   const input = message.trim();
   if (!input || input.toLowerCase() === lastInput) return;
+  const prevIntent = lastIntent; // сохраняем предыдущий интент
   setLastInput(input.toLowerCase());
 
   addMessage(`Вы: ${message}`);
@@ -78,6 +77,12 @@ export function handleUserInput(message) {
   // 🤖 Классификация интента
   const intent = matchIntent(input);
   setLastIntent(intent);
+
+  // 🚦 Подтверждение выбора услуги
+  if (intent === 'confirm' && prevIntent === 'service') {
+    showServiceDetails(lastService);
+    return;
+  }
 
   // 🦊 Smalltalk
   if (handleSmalltalk(intent)) return;
