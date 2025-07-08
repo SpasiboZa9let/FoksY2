@@ -1,9 +1,11 @@
+// pseudo-ai.js
+
 import { handleUserInput } from './foxy/handlers/mainHandler.js';
-import { addMessage, addTypingMessage } from './foxy/ui/dom.js';
+import { addTypingMessage } from './foxy/ui/dom.js';
 import { emoji } from './foxy/core/services.js';
 import { setUserName, lastIntent, setLastIntent } from './foxy/core/state.js';
 
-// Список приветствий с %NAME%
+// Список приветствий с подстановкой имени
 const greetings = [
   `Привет, %NAME%! 💖 Чем сегодня порадовать твои ноготки?`,
   `Салют, %NAME%! 🌟 Готова создавать красоту вместе?`,
@@ -12,13 +14,13 @@ const greetings = [
   `Добро пожаловать, %NAME%! 😊 Давай сделаем ноготки особенными!`
 ];
 
-// Функция случайного приветствия с подстановкой имени
+// Возвращает случайное приветствие с именем
 function randomGreeting(name) {
   const template = greetings[Math.floor(Math.random() * greetings.length)];
   return template.replace('%NAME%', name);
 }
 
-// Подсказки
+// Показывает подсказки
 function showSuggestions() {
   addTypingMessage(
     `<div class="foxy-suggestions">
@@ -31,7 +33,8 @@ function showSuggestions() {
        </div>
        <div class="footer">Выбери, что тебе по душе, и я всё покажу 💖</div>
      </div>`,
-    500
+    600,
+    true
   );
 }
 
@@ -44,16 +47,19 @@ window.addEventListener('DOMContentLoaded', () => {
 
   if (!name || name.trim().length < 2) {
     console.log('[DEBUG] Спрашиваю имя');
-    addTypingMessage('🦊 Привет! Как тебя зовут?', 400);
+    addTypingMessage('🦊 Привет! Как тебя зовут?', 500);
     setLastIntent('askName');
     return;
   }
 
   setUserName(name);
+
   addTypingMessage(
     `<strong>${emoji()} Фокси:</strong> ${randomGreeting(name)}`,
-    400
+    500,
+    true
   );
+
   showSuggestions();
 });
 
@@ -67,7 +73,7 @@ setTimeout(() => {
   });
 }, 0);
 
-// Обработка ввода формы
+// Обработка формы
 const form = document.getElementById('pseudo-form');
 const input = document.getElementById('pseudo-input');
 
