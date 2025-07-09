@@ -101,7 +101,7 @@ window.addEventListener('DOMContentLoaded', () => {
   checkPromoReminder(1300);
   showSuggestions(2100);
 
-  // Fullscreen
+  // FULLSCREEN
   const btn = document.getElementById("toggle-fullscreen");
   const chatWrapper = document.querySelector(".chat-wrapper");
 
@@ -126,7 +126,7 @@ window.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // Обработка формы
+  // ОБРАБОТКА ФОРМЫ
   const form = document.getElementById('pseudo-form');
   const input = document.getElementById('pseudo-input');
 
@@ -135,26 +135,22 @@ window.addEventListener('DOMContentLoaded', () => {
       e.preventDefault();
       const text = input.value.trim();
       if (!text) return;
-      handleUserInput(text);
-      input.value = '';
+
+      if (lastIntent === 'askName') {
+        localStorage.setItem('foxy_userName', text);
+        localStorage.setItem('foxy_lastIntent', '');
+        document.getElementById('pseudo-chat').innerHTML = '';
+        window.location.reload();
+      } else {
+        handleUserInput(text);
+        input.value = '';
+      }
     });
 
     input.addEventListener('keydown', (e) => {
       if (e.key === 'Enter') {
         e.preventDefault();
-        const text = input.value.trim();
-        if (!text) return;
-
-       if (lastIntent === 'askName') {
-  localStorage.setItem('foxy_userName', text);
-  localStorage.setItem('foxy_lastIntent', ''); // обнуляем явно
-  document.getElementById('pseudo-chat').innerHTML = '';
-  window.location.reload();
-}
- else {
-          handleUserInput(text);
-          input.value = '';
-        }
+        form.dispatchEvent(new Event('submit'));
       }
     });
   }
