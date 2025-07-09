@@ -98,6 +98,7 @@ export function addTypingMessage(text, delay = 500, isHTML = false) {
   chat.scrollTop = chat.scrollHeight;
 
   setTimeout(() => {
+    // Вставка финального текста
     if (isHTML) {
       bubble.innerHTML = text;
     } else {
@@ -105,8 +106,10 @@ export function addTypingMessage(text, delay = 500, isHTML = false) {
     }
     bubble.classList.remove("opacity-50");
 
-    // 🎯 Добавляем welcome-класс, если это приветствие
-    const lower = text.toLowerCase();
+    // 🧠 Получаем текст без HTML
+    const rawText = isHTML ? bubble.innerText : text;
+    const lower = rawText.toLowerCase();
+
     const isFoxyGreeting = lower.includes("фокси") && lower.includes("порадовать");
 
     if (isFoxyGreeting) {
@@ -115,4 +118,5 @@ export function addTypingMessage(text, delay = 500, isHTML = false) {
     }
   }, delay);
 }
+
 
