@@ -107,15 +107,19 @@ export function addTypingMessage(text, delay = 500, isHTML = false) {
     bubble.classList.remove("opacity-50");
 
     // 🧠 Получаем текст без HTML
-    const rawText = isHTML ? bubble.innerText : text;
+const tempDiv = document.createElement("div");
+tempDiv.innerHTML = text;
+const rawText = isHTML ? tempDiv.textContent : text;
 const lower = rawText.toLowerCase();
+
 const isFoxyGreeting = lower.includes("фокси") && lower.includes("порадовать");
 const isUserGreeting = lower.includes("меня зовут") || lower.includes("евлампий");
 
-    if (isFoxyGreeting) {
-      bubble.classList.add("welcome-message");
-      console.log("🎯 welcome-message добавлен:", bubble.className);
-    }
+if ((isFoxyGreeting && !fromUser) || (isUserGreeting && fromUser)) {
+  bubble.classList.add("welcome-message");
+  console.log("🎯 welcome-message добавлен:", bubble.className);
+}
+
   }, delay);
 }
 
