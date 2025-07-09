@@ -1,24 +1,17 @@
-/* Контейнер сообщений */
 #pseudo-chat {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
   padding-top: 0;
   position: relative;
 }
 
-/* Первое сообщение — приветствие, по центру */
 #pseudo-chat > .foxy-fade-in:first-child {
-  align-self: center;
-  background: #ffffff;
-  color: #333;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: #fff0f4;
   padding: 0.5rem 1rem;
   border-radius: 1rem;
   margin-bottom: 1rem;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
-
-/* Контейнер чата */
 .chat-wrapper.neon-box {
   border-radius: 1.5rem;
   padding: 1rem;
@@ -29,8 +22,6 @@
     0 0 18px rgba(255, 105, 180, 0.15);
   transition: box-shadow 0.3s ease;
 }
-
-/* Чат в полноэкранном режиме */
 .chat-wrapper.fullscreen {
   position: fixed;
   top: 0;
@@ -42,8 +33,6 @@
   padding: 2rem 1rem;
   overflow-y: auto;
 }
-
-/* Кнопка сброса */
 .foxy-reset-btn {
   background: transparent;
   border: none;
@@ -58,38 +47,3 @@
   text-decoration: underline;
 }
 
-/* Сообщения от Фокси — слева */
-.from-foxy {
-  align-self: flex-start;
-  background: #ffffff;
-  color: #333333;
-}
-
-/* Сообщения пользователя — справа */
-.from-user {
-  align-self: flex-end;
-  background: #ffffff;
-  color: #333333;
-}
-
-/* Общие стили для всех пузырьков */
-.from-user,
-.from-foxy {
-  max-width: 80%;
-  padding: 0.5rem 1rem;
-  border-radius: 1rem;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  white-space: pre-line;
-  font-size: 0.875rem;
-}
-
-/* Эффект появления (можно расширять) */
-.foxy-fade-in {
-  animation: fadeIn 0.4s ease forwards;
-  opacity: 0;
-}
-@keyframes fadeIn {
-  to {
-    opacity: 1;
-  }
-}
