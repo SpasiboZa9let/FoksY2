@@ -27,12 +27,13 @@ export function addMessage(text, isHTML = false, fromUser = false) {
 
   // 💎 Добавление welcome-стиля
   const lower = text.toLowerCase();
-  const isFoxyGreeting = text.includes("Фокси:") && text.includes("порадовать");
-  const isUserGreeting = lower.includes("меня зовут") || lower.includes("как меня зовут") || lower.includes("евлампий");
+const isFoxyGreeting = lower.includes("фокси") && lower.includes("порадовать");
+const isUserGreeting = lower.includes("меня зовут") || lower.includes("как меня зовут") || lower.includes("евлампий");
 
-  if ((isFoxyGreeting && !fromUser) || (isUserGreeting && fromUser)) {
-    bubble.classList.add("welcome-message");
-  }
+if ((isFoxyGreeting && !fromUser) || (isUserGreeting && fromUser)) {
+  bubble.classList.add("welcome-message");
+}
+
 
   if (isHTML) {
     bubble.innerHTML = text;
