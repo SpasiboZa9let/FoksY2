@@ -128,4 +128,18 @@ window.addEventListener('DOMContentLoaded', () => {
       lucide.createIcons();
     }
   });
+
+  // ✅ ОБРАБОТКА ФОРМЫ — не даём странице перезагружаться
+  const form = document.getElementById('pseudo-form');
+  const input = document.getElementById('pseudo-input');
+
+  if (form && input) {
+    form.addEventListener('submit', (e) => {
+      e.preventDefault(); // 🛑 Отключаем дефолтный submit
+      const text = input.value.trim();
+      if (!text) return;
+      handleUserInput(text); // 💬 Отправляем сообщение в логику
+      input.value = '';      // 🧹 Чистим поле
+    });
+  }
 });
