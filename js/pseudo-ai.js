@@ -1,8 +1,13 @@
 // js/pseudo-ai.js
-import { handleUserInput } from './foxy/handlers/mainHandler.js';
-import { addTypingMessage, clearChat } from './foxy/ui/dom.js';
-import { emoji }             from './foxy/core/services.js';
-import { setUserName }       from './foxy/core/state.js';
+import { handleUserInput }      from './foxy/handlers/mainHandler.js';
+import { addTypingMessage,
+         clearChat }           from './foxy/ui/dom.js';
+import { emoji }               from './foxy/core/services.js';
+import {
+  setUserName,
+  getLastIntent,
+  setLastIntent
+} from './foxy/core/state.js';
 
 const greetings = [
   `Привет, %NAME%! 💖 Чем сегодня порадовать твои ноготки?`,
@@ -92,7 +97,7 @@ window.addEventListener('DOMContentLoaded', () => {
   const name = localStorage.getItem('foxy_userName');
   if (!name || name.trim().length < 2) {
     addTypingMessage('🦊 Привет! Как тебя зовут?', 500);
-    localStorage.setItem('foxy_lastIntent', 'askName');
+    setLastIntent('askName');            // ← теперь через сеттер
   } else {
     setUserName(name);
     initFoxyAfterName(name);
@@ -125,14 +130,15 @@ window.addEventListener('DOMContentLoaded', () => {
   function handleSubmit() {
     const text = input.value.trim();
     if (!text) return;
-    const intent = localStorage.getItem('foxy_lastIntent');
+
+    const intent = getLastIntent();      // ← теперь через геттер
     console.log('[DEBUG] Submit intent:', intent);
 
     if (intent === 'askName') {
       localStorage.setItem('foxy_userName', text);
-      localStorage.removeItem('foxy_lastIntent');
-      clearChat();         // очищаем все предыдущие сообщения
-      input.value = '';    // убираем текст из поля
+      setLastIntent('');                // ← сброс интента через сеттер
+      clearChat();                      // очищаем все предыдущие сообщения
+      input.value = '';                 // убираем текст из поля
       setUserName(text);
       initFoxyAfterName(text);
     } else {
@@ -174,11 +180,12 @@ window.addEventListener('DOMContentLoaded', () => {
   const resetBtn = document.getElementById('foxy-reset');
   resetBtn?.addEventListener('click', () => {
     if (!confirm('Вы точно хотите сбросить все ваши данные?')) return;
-    ['foxy_userName','foxy_lastIntent','promoCode','promoExpires','promoUsed']
+    ['foxy_userName','promoCode','promoExpires','promoUsed']
       .forEach(key => localStorage.removeItem(key));
-    clearChat();                 // очищаем чат
-    input.value = '';            // очищаем поле ввода
+    setLastIntent('');                // ← сброс интента через сеттер
+    clearChat();                      // очищаем чат
+    input.value = '';                 // очищаем поле ввода
     addTypingMessage('🦊 Данные сброшены. Привет! Как тебя зовут?', 300);
-    localStorage.setItem('foxy_lastIntent', 'askName');
+    setLastIntent('askName');         // ← запускаем фазу ввода имени
   });
 });
