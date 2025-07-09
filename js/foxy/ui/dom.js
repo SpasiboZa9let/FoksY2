@@ -111,6 +111,8 @@ export function addTypingMessage(text, delay = 500, isHTML = false) {
       text.includes("порадовать")
     ) {
       bubble.classList.add("welcome-message");
+      console.log("🧪 Класс bubble:", bubble.className);
+
     }
   }, delay);
 }
