@@ -1,16 +1,8 @@
 // js/pseudo-ai.js
-
-console.log('[DEBUG] pseudo-ai.js загружен!');
-window.addEventListener("beforeunload", e => {
-  console.warn('[BLOCKED] попытка перезагрузки');
-  e.preventDefault(); e.returnValue = '';
-});
-
-
 import { handleUserInput } from './foxy/handlers/mainHandler.js';
-import { addTypingMessage } from './foxy/ui/dom.js';
-import { emoji } from './foxy/core/services.js';
-import { setUserName } from './foxy/core/state.js';
+import { addTypingMessage }  from './foxy/ui/dom.js';
+import { emoji }             from './foxy/core/services.js';
+import { setUserName }       from './foxy/core/state.js';
 
 const greetings = [
   `Привет, %NAME%! 💖 Чем сегодня порадовать твои ноготки?`,
@@ -21,8 +13,8 @@ const greetings = [
 ];
 
 function randomGreeting(name) {
-  const template = greetings[Math.floor(Math.random() * greetings.length)];
-  return template.replace('%NAME%', name);
+  return greetings[Math.floor(Math.random() * greetings.length)]
+    .replace('%NAME%', name);
 }
 
 function showSuggestions(delay = 0) {
@@ -31,13 +23,13 @@ function showSuggestions(delay = 0) {
       `<div class="foxy-suggestions">
          <div class="description">Вот что я могу показать прямо сейчас:</div>
          <div class="buttons-wrapper">
-           <button class="ai-btn" data-action="прайс">💅 Заглянуть в прайс-лист</button>
-           <button class="ai-btn" data-action="дизайн">🎨 Вдохновиться идеями дизайна</button>
-           <button class="ai-btn" data-action="записаться">📅 Записаться на удобное время</button>
-           <button class="ai-btn" data-action="что ты умеешь">❓ Узнать все мои возможности</button>
-           <button class="ai-btn" data-action="скидка">🏷️ Получить скидку</button>
+           <button class="ai-btn" data-action="прайс">💅 Прайс-лист</button>
+           <button class="ai-btn" data-action="дизайн">🎨 Идеи дизайна</button>
+           <button class="ai-btn" data-action="записаться">📅 Запись на время</button>
+           <button class="ai-btn" data-action="что ты умеешь">❓ Возможности</button>
+           <button class="ai-btn" data-action="скидка">🏷️ Скидка</button>
          </div>
-         <div class="footer">Выбери, что тебе по душе, и я всё покажу 💖</div>
+         <div class="footer">Выбери что-то, и я покажу 💖</div>
        </div>`,
       600,
       true
@@ -47,42 +39,39 @@ function showSuggestions(delay = 0) {
 
 function checkPromoReminder(delay = 0) {
   setTimeout(() => {
-    const promoCode = localStorage.getItem("promoCode");
+    const promoCode    = localStorage.getItem("promoCode");
     const promoExpires = localStorage.getItem("promoExpires");
+    if (!promoCode || !promoExpires) return;
 
-    if (promoCode && promoExpires) {
-      const now = Date.now();
-      const expires = parseInt(promoExpires);
+    const now     = Date.now();
+    const expires = +promoExpires;
+    if (now >= expires) {
+      localStorage.removeItem("promoCode");
+      localStorage.removeItem("promoExpires");
+      localStorage.removeItem("promoUsed");
+      return;
+    }
 
-      if (now >= expires) {
-        localStorage.removeItem("promoCode");
-        localStorage.removeItem("promoExpires");
-        localStorage.removeItem("promoUsed");
-        return;
-      }
-
-      if (localStorage.getItem("promoUsed") !== 'true') {
-        const deadline = new Date(expires).toLocaleDateString();
-        addTypingMessage(
-          `<div class="foxy-promo no-opacity">
-             <p>🎁 Напоминаю: у тебя ещё действует промокод <strong>${promoCode}</strong><br><small>Срок до ${deadline}</small></p>
-             <div class="buttons-wrapper mt-2">
-               <button class="ai-btn" data-promo-action="used">✅ Активирован</button>
-               <button class="ai-btn" data-promo-action="later">⏳ Пока нет</button>
-             </div>
-           </div>`,
-          450,
-          true
-        );
-
-        setTimeout(() => {
-          const el = document.querySelector('.foxy-promo');
-          if (el) {
-            el.classList.remove('no-opacity');
-            el.classList.add('foxy-fade-in');
-          }
-        }, 550);
-      }
+    if (localStorage.getItem("promoUsed") !== 'true') {
+      const deadline = new Date(expires).toLocaleDateString();
+      addTypingMessage(
+        `<div class="foxy-promo no-opacity">
+           <p>🎁 Промокод <strong>${promoCode}</strong> до ${deadline}</p>
+           <div class="buttons-wrapper mt-2">
+             <button class="ai-btn" data-promo-action="used">✅ Активирован</button>
+             <button class="ai-btn" data-promo-action="later">⏳ Напомнить позже</button>
+           </div>
+         </div>`,
+        450,
+        true
+      );
+      setTimeout(() => {
+        const el = document.querySelector('.foxy-promo');
+        if (el) {
+          el.classList.remove('no-opacity');
+          el.classList.add('foxy-fade-in');
+        }
+      }, 550);
     }
   }, delay);
 }
@@ -93,112 +82,90 @@ function initFoxyAfterName(name) {
     500,
     true
   );
-
   checkPromoReminder(1300);
   showSuggestions(2100);
 }
 
 window.addEventListener('DOMContentLoaded', () => {
-  const name = localStorage.getItem('foxy_userName');
-  console.log('[DEBUG] DOMContentLoaded, имя:', name);
+  console.log('[DEBUG] pseudo-ai.js загружен!');
 
+  const name = localStorage.getItem('foxy_userName');
   if (!name || name.trim().length < 2) {
     addTypingMessage('🦊 Привет! Как тебя зовут?', 500);
     localStorage.setItem('foxy_lastIntent', 'askName');
-    return;
+  } else {
+    setUserName(name);
+    initFoxyAfterName(name);
   }
 
-  setUserName(name);
-  initFoxyAfterName(name);
-
-  // FULLSCREEN
-  const btn = document.getElementById("toggle-fullscreen");
-  const chatWrapper = document.querySelector(".chat-wrapper");
-
+  // Fullscreen-кнопка
+  const btn     = document.getElementById("toggle-fullscreen");
+  const wrapper = document.querySelector(".chat-wrapper");
   let expanded = false;
-
   btn?.addEventListener("click", () => {
     expanded = !expanded;
-    chatWrapper.classList.toggle("fullscreen");
-
+    wrapper.classList.toggle("fullscreen");
     const icon = btn.querySelector("i");
     icon.setAttribute("data-lucide", expanded ? "minimize" : "maximize");
     lucide.createIcons();
   });
-
-  document.addEventListener("keydown", (e) => {
+  document.addEventListener("keydown", e => {
     if (e.key === "Escape" && expanded) {
       expanded = false;
-      chatWrapper.classList.remove("fullscreen");
-      const icon = btn.querySelector("i");
-      icon.setAttribute("data-lucide", "maximize");
+      wrapper.classList.remove("fullscreen");
+      btn.querySelector("i").setAttribute("data-lucide","maximize");
       lucide.createIcons();
     }
   });
 
-  // ОБРАБОТКА ФОРМЫ
-  const form = document.getElementById('pseudo-form');
-  const input = document.getElementById('pseudo-input');
+  // ОБРАБОТКА ВВОДА БЕЗ <form>
+  const input     = document.getElementById('pseudo-input');
+  const submitBtn = document.getElementById('pseudo-submit');
 
-  if (form && input) {
-    form.addEventListener('submit', (e) => {
-      e.preventDefault();
-      const text = input.value.trim();
-      if (!text) return;
+  function handleSubmit() {
+    const text = input.value.trim();
+    if (!text) return;
+    const intent = localStorage.getItem('foxy_lastIntent');
+    console.log('[DEBUG] Submit intent:', intent);
 
-      const intent = localStorage.getItem('foxy_lastIntent');
-      console.log('[DEBUG] Submit intent:', intent);
-
-      if (intent === 'askName') {
-        localStorage.setItem('foxy_userName', text);
-        localStorage.removeItem('foxy_lastIntent');
-        document.getElementById('pseudo-chat').innerHTML = '';
-        setUserName(text);
-        initFoxyAfterName(text);
-      } else {
-        handleUserInput(text);
-        input.value = '';
-      }
-    });
-
-    input.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter') {
-        e.preventDefault();
-        form.dispatchEvent(new Event('submit'));
-      }
-    });
-  }
-});
-
-// Кнопки меню
-document.body.addEventListener('click', event => {
-  const btn = event.target.closest('[data-action]');
-  if (btn) {
-    const cmd = btn.getAttribute('data-action');
-    if (cmd) {
-      console.log('[FOXY DEBUG] Клик по кнопке с data-action:', cmd);
-      handleUserInput(cmd);
+    if (intent === 'askName') {
+      localStorage.setItem('foxy_userName', text);
+      localStorage.removeItem('foxy_lastIntent');
+      document.getElementById('pseudo-chat').innerHTML = '';
+      setUserName(text);
+      initFoxyAfterName(text);
+    } else {
+      handleUserInput(text);
+      input.value = '';
     }
   }
-});
 
-// Промо-кнопки
-document.body.addEventListener('click', event => {
-  const promoBtn = event.target.closest('[data-promo-action]');
-  if (!promoBtn) return;
+  submitBtn.addEventListener('click', handleSubmit);
+  input.addEventListener('keydown', e => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      handleSubmit();
+    }
+  });
 
-  const action = promoBtn.getAttribute('data-promo-action');
-  console.log('[FOXY DEBUG] Клик по промо-кнопке:', action);
-
-  if (action === 'used') {
-    localStorage.removeItem("promoCode");
-    localStorage.removeItem("promoExpires");
-    localStorage.setItem("promoUsed", "true");
-    addTypingMessage(`Отлично! Промокод больше не будет беспокоить 😊`, 300);
-    promoBtn.closest('.foxy-promo')?.remove();
-  }
-
-  if (action === 'later') {
-    addTypingMessage(`Окей, напомню позже 😉`, 300);
-  }
+  // Обработка меню и промо-кнопок
+  document.body.addEventListener('click', event => {
+    const actionBtn = event.target.closest('[data-action]');
+    if (actionBtn) {
+      handleUserInput(actionBtn.getAttribute('data-action'));
+    }
+    const promoBtn = event.target.closest('[data-promo-action]');
+    if (promoBtn) {
+      const action = promoBtn.getAttribute('data-promo-action');
+      if (action === 'used') {
+        localStorage.removeItem("promoCode");
+        localStorage.removeItem("promoExpires");
+        localStorage.setItem("promoUsed", "true");
+        addTypingMessage(`Отлично! Промокод больше не будет напоминать.`, 300);
+        promoBtn.closest('.foxy-promo')?.remove();
+      } else {
+        addTypingMessage(`Хорошо, напомню позже 😉`, 300);
+      }
+    }
+  });
 });
