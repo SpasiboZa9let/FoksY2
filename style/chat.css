@@ -12,3 +12,14 @@
   border-radius: 1rem;
   margin-bottom: 1rem;
 }
+.chat-wrapper.neon-box {
+  border-radius: 1.5rem;
+  padding: 1rem;
+  background: #fff0f4;
+  box-shadow:
+    0 0 8px rgba(255, 105, 180, 0.3),
+    0 0 12px rgba(255, 105, 180, 0.2),
+    0 0 18px rgba(255, 105, 180, 0.15);
+  transition: box-shadow 0.3s ease;
+}
+
