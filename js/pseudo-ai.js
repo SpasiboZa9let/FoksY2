@@ -83,6 +83,8 @@ setTimeout(() => {
 }
 
 window.addEventListener('DOMContentLoaded', () => {
+  alert("Фокси загружена");
+
   const name = localStorage.getItem('foxy_userName');
   console.log('[DEBUG] DOMContentLoaded, имя:', name);
 
@@ -104,7 +106,7 @@ window.addEventListener('DOMContentLoaded', () => {
   showSuggestions(2100);
   //setupGalleryClicks();
 
-  // ✅ FULLSCREEN ЛОГИКА — вот она, прямо тут
+  // ✅ FULLSCREEN ЛОГИКА
   const btn = document.getElementById("toggle-fullscreen");
   const chatWrapper = document.querySelector(".chat-wrapper");
 
@@ -129,18 +131,25 @@ window.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // ✅ ОБРАБОТКА ФОРМЫ — не даём странице перезагружаться
+  // ✅ ОБРАБОТКА ФОРМЫ — в том числе на мобилке
   const form = document.getElementById('pseudo-form');
   const input = document.getElementById('pseudo-input');
 
   if (form && input) {
     form.addEventListener('submit', (e) => {
-      e.preventDefault(); // 🛑 Отключаем дефолтный submit
+      e.preventDefault(); // 🛑 блокируем reload
       const text = input.value.trim();
       if (!text) return;
-      handleUserInput(text); // 💬 Отправляем сообщение в логику
-      input.value = '';      // 🧹 Чистим поле
+      handleUserInput(text); // 💬
+      input.value = '';
+    });
+
+    input.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault(); // блокирует отправку Enter'ом
+        form.dispatchEvent(new Event('submit'));
+      }
     });
   }
 });
-alert("Фокси загружена");
+
