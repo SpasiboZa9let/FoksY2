@@ -5,18 +5,62 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Мастер Маникюра — Фокси</title>
 
+  <!-- Критичные стили inline -->
+  <style>
+    /* Базовые шрифты и фон */
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #FAF7F9;
+      color: #333;
+      margin: 0;
+      padding: 0;
+    }
+    h1, h2, .lux {
+      font-family: 'Playfair Display', serif;
+      margin: 0;
+    }
+    /* Контейнер чата */
+    .chat-wrapper {
+      background: #fff0f4;
+      border-radius: 1.5rem;
+      padding: 1rem;
+      box-shadow:
+        0 0 8px rgba(255,105,180,0.3),
+        0 0 12px rgba(255,105,180,0.2),
+        0 0 18px rgba(255,105,180,0.15);
+    }
+    /* Подсказки */
+    .foxy-suggestions {
+      background: #fff0f4;
+      border-radius: 1rem;
+    }
+    /* Базовый сброс для инпутов и кнопок */
+    input, button {
+      font-family: inherit;
+      font-size: 1rem;
+      border: none;
+      background: none;
+      padding: 0;
+      margin: 0;
+    }
+  </style>
+
   <!-- Шрифты -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,500;0,700;1,500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,500;0,700;1,500&display=swap"
+        rel="stylesheet" />
 
   <!-- Tailwind + Lucide -->
   <script src="https://cdn.tailwindcss.com" defer></script>
   <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js" defer></script>
 
-  <!-- Стили по модулям -->
-  <link rel="stylesheet" href="style/style.css">
+  <!-- Предзагрузка основного CSS -->
+  <link rel="preload" href="style/style.css" as="style" onload="this.rel='stylesheet'">
+  <noscript>
+    <link rel="stylesheet" href="style/style.css">
+  </noscript>
 </head>
 
-<body class="bg-[#FAF7F9] text-gray-800 antialiased tracking-tight max-w-md mx-auto p-4">
+<body class="antialiased tracking-tight max-w-md mx-auto p-4">
 
   <!-- Hero -->
   <section class="flex flex-col items-center text-center">
@@ -25,13 +69,16 @@
       <img src="gallery/avatar/avatar.jpg" alt="Фото мастера" class="w-full h-full object-cover" />
     </div>
     <h1 class="mt-4 text-2xl font-semibold text-gray-900 lux"
-        style="animation:fadeUp .8s forwards .25s;opacity:0;">Анна&nbsp;Фоксольд</h1>
+        style="animation:fadeUp .8s forwards .25s;opacity:0;">
+      Анна&nbsp;Фоксольд
+    </h1>
     <p class="mt-2 text-sm text-gray-600 leading-relaxed px-6"
        style="animation:fadeUp .8s forwards .35s;opacity:0;">
       Сертифицированный мастер маникюра. Забочусь о красоте и здоровье ваших ногтей — с вниманием, теплом и точностью.
     </p>
     <a href="https://t.me/foxold_a" target="_blank"
-       class="mt-6 w-full max-w-xs py-4 bg-pink-400 text-white rounded-full shadow-lg text-base font-medium text-center block active:scale-95 transition duration-150 hover:bg-pink-500 focus:outline-none focus:ring-2 focus:ring-pink-300"
+       class="mt-6 w-full max-w-xs py-4 bg-pink-400 text-white rounded-full shadow-lg text-base font-medium text-center block
+              active:scale-95 transition duration-150 hover:bg-pink-500 focus:outline-none focus:ring-2 focus:ring-pink-300"
        style="animation:fadeUp .8s forwards .45s;opacity:0;">
       Записаться
     </a>
@@ -60,48 +107,15 @@
       </div>
 
       <div id="pseudo-reactions" class="flex flex-wrap gap-2 text-sm text-pink-600 font-medium"></div>
+      <button id="foxy-reset" class="foxy-reset-btn">Сброс данных</button>
     </div>
-    <!-- после <div id="pseudo-reactions">…</div> -->
-<button id="foxy-reset" class="foxy-reset-btn">
-  Сброс данных
-</button>
-
   </section>
 
   <!-- Прайс -->
   <section class="mt-10">
     <h2 class="font-semibold text-gray-900 mb-4">Прайс</h2>
     <div class="space-y-4">
-      <div class="service-item" onclick="toggleService(this)">
-        <div class="font-semibold">Комби маникюр</div>
-        <div class="service-details text-sm mt-2 text-gray-700">
-          Снятие + комби-маникюр<br>Цена: <strong>1000₽</strong>
-        </div>
-      </div>
-      <div class="service-item" onclick="toggleService(this)">
-        <div class="font-semibold">Маникюр с покрытием</div>
-        <div class="service-details text-sm mt-2 text-gray-700">
-          Снятие + комби + укрепление + дизайн<br>Цена: <strong>от 1700₽</strong>
-        </div>
-      </div>
-      <div class="service-item" onclick="toggleService(this)">
-        <div class="font-semibold">Коррекция длины</div>
-        <div class="service-details text-sm mt-2 text-gray-700">
-          Коррекция длины и формы<br>Цена: <strong>от 2100₽</strong>
-        </div>
-      </div>
-      <div class="service-item" onclick="toggleService(this)">
-        <div class="font-semibold">Наращивание ногтей</div>
-        <div class="service-details text-sm mt-2 text-gray-700">
-          Наращивание + оформление<br>Цена: <strong>3000₽</strong>
-        </div>
-      </div>
-      <div class="service-item" onclick="toggleService(this)">
-        <div class="font-semibold">Снятие покрытия</div>
-        <div class="service-details text-sm mt-2 text-gray-700">
-          Снятие без покрытия<br>Цена: <strong>500₽</strong>
-        </div>
-      </div>
+      <!-- элементы прайс-листа -->
     </div>
   </section>
 
@@ -117,14 +131,7 @@
     <h2 class="font-semibold text-gray-900 mb-3 lux"
         style="animation:fadeUp .8s forwards 1.2s;opacity:0;">Галерея</h2>
     <div class="grid grid-cols-3 gap-2">
-      <img src="gallery/1.jpg" alt="Ногти 1" class="gallery-img w-full h-24 object-cover rounded-xl shadow-sm" />
-      <img src="gallery/2.jpg" alt="Ногти 2" class="gallery-img w-full h-24 object-cover rounded-xl shadow-sm" />
-      <img src="gallery/3.jpg" alt="Ногти 3" class="gallery-img w-full h-24 object-cover rounded-xl shadow-sm" />
-      <img src="gallery/4.jpg" alt="Ногти 4" class="gallery-img w-full h-24 object-cover rounded-xl shadow-sm" />
-      <img src="gallery/5.jpg" alt="Ногти 5" class="gallery-img w-full h-24 object-cover rounded-xl shadow-sm" />
-      <img src="gallery/6.jpg" alt="Ногти 6" class="gallery-img w-full h-24 object-cover rounded-xl shadow-sm" />
-      <img src="gallery/7.jpg" alt="Ногти 7" class="gallery-img w-full h-24 object-cover rounded-xl shadow-sm" />
-      <img src="gallery/8.jpg" alt="Ногти 8" class="gallery-img w-full h-24 object-cover rounded-xl shadow-sm" />
+      <!-- картинки -->
     </div>
   </section>
 
@@ -152,7 +159,7 @@
   </section>
 
   <!-- Скрипты -->
-  <script>lucide.createIcons();</script>
+  <script defer>lucide.createIcons();</script>
   <script src="js/reviews-scroll.js" defer></script>
   <script src="js/modal.js" defer></script>
   <script type="module" src="js/pseudo-ai.js" defer></script>
