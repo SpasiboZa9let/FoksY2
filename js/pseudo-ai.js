@@ -145,18 +145,19 @@ window.addEventListener('DOMContentLoaded', () => {
     const text = input.value.trim();
     if (!text) return;
 
-    // 🔍 Если Фокси ждёт имя
     if (lastIntent === 'askName') {
       localStorage.setItem('foxy_userName', text);
       setUserName(text);
       setLastIntent(null);
       document.getElementById('pseudo-chat').innerHTML = '';
-      window.location.reload(); // 🔁 Чисто и просто
+      window.location.reload(); // 🔁 Перезапуск
     } else {
-      form.dispatchEvent(new Event('submit'));
+      handleUserInput(text); // 💬 Просто обычный ввод
+      input.value = '';
     }
   }
 });
+
 });
 
 // ✅ ОБРАБОТКА КНОПОК с data-action
