@@ -3,7 +3,7 @@
 import { handleUserInput } from './foxy/handlers/mainHandler.js';
 import { addTypingMessage } from './foxy/ui/dom.js';
 import { emoji } from './foxy/core/services.js';
-import { setUserName, lastIntent, setLastIntent } from './foxy/core/state.js';
+import { setUserName } from './foxy/core/state.js';
 
 const greetings = [
   `Привет, %NAME%! 💖 Чем сегодня порадовать твои ноготки?`,
@@ -80,18 +80,7 @@ function checkPromoReminder(delay = 0) {
   }, delay);
 }
 
-window.addEventListener('DOMContentLoaded', () => {
-  const name = localStorage.getItem('foxy_userName');
-  console.log('[DEBUG] DOMContentLoaded, имя:', name);
-
-  if (!name || name.trim().length < 2) {
-    addTypingMessage('🦊 Привет! Как тебя зовут?', 500);
-    setLastIntent('askName');
-    return;
-  }
-
-  setUserName(name);
-
+function initFoxyAfterName(name) {
   addTypingMessage(
     `<strong>${emoji()} Фокси:</strong> ${randomGreeting(name)}`,
     500,
@@ -100,6 +89,20 @@ window.addEventListener('DOMContentLoaded', () => {
 
   checkPromoReminder(1300);
   showSuggestions(2100);
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+  const name = localStorage.getItem('foxy_userName');
+  console.log('[DEBUG] DOMContentLoaded, имя:', name);
+
+  if (!name || name.trim().length < 2) {
+    addTypingMessage('🦊 Привет! Как тебя зовут?', 500);
+    localStorage.setItem('foxy_lastIntent', 'askName');
+    return;
+  }
+
+  setUserName(name);
+  initFoxyAfterName(name);
 
   // FULLSCREEN
   const btn = document.getElementById("toggle-fullscreen");
@@ -127,37 +130,37 @@ window.addEventListener('DOMContentLoaded', () => {
   });
 
   // ОБРАБОТКА ФОРМЫ
-const form = document.getElementById('pseudo-form');
-const input = document.getElementById('pseudo-input');
+  const form = document.getElementById('pseudo-form');
+  const input = document.getElementById('pseudo-input');
 
-if (form && input) {
-  form.addEventListener('submit', (e) => {
-    e.preventDefault();
-    const text = input.value.trim();
-    if (!text) return;
-
-    const intent = localStorage.getItem('foxy_lastIntent');
-    console.log('[DEBUG] Submit intent:', intent);
-
-    if (intent === 'askName') {
-      localStorage.setItem('foxy_userName', text);
-      localStorage.removeItem('foxy_lastIntent');
-      document.getElementById('pseudo-chat').innerHTML = '';
-      window.location.reload();
-    } else {
-      handleUserInput(text);
-      input.value = '';
-    }
-  });
-
-  input.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter') {
+  if (form && input) {
+    form.addEventListener('submit', (e) => {
       e.preventDefault();
-      form.dispatchEvent(new Event('submit'));
-    }
-  });
-}
+      const text = input.value.trim();
+      if (!text) return;
 
+      const intent = localStorage.getItem('foxy_lastIntent');
+      console.log('[DEBUG] Submit intent:', intent);
+
+      if (intent === 'askName') {
+        localStorage.setItem('foxy_userName', text);
+        localStorage.removeItem('foxy_lastIntent');
+        document.getElementById('pseudo-chat').innerHTML = '';
+        setUserName(text);
+        initFoxyAfterName(text);
+      } else {
+        handleUserInput(text);
+        input.value = '';
+      }
+    });
+
+    input.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        form.dispatchEvent(new Event('submit'));
+      }
+    });
+  }
 });
 
 // Кнопки меню
