@@ -155,8 +155,30 @@ document.body.addEventListener('click', event => {
     const cmd = btn.getAttribute('data-action');
     if (cmd) {
       console.log('[FOXY DEBUG] Клик по кнопке с data-action:', cmd);
-      alert(`Вы нажали: ${cmd}`);
       handleUserInput(cmd);
     }
   }
 });
+
+// ✅ ОБРАБОТКА ПРОМО-КНОПОК
+document.body.addEventListener('click', event => {
+  const promoBtn = event.target.closest('[data-promo-action]');
+  if (!promoBtn) return;
+
+  const action = promoBtn.getAttribute('data-promo-action');
+  console.log('[FOXY DEBUG] Клик по промо-кнопке:', action);
+
+  if (action === 'used') {
+    localStorage.removeItem("promoCode");
+    localStorage.removeItem("promoExpires");
+    localStorage.setItem("promoUsed", "true");
+    addTypingMessage(`Отлично! Промокод больше не будет беспокоить 😊`, 300);
+    promoBtn.closest('.foxy-promo')?.remove();
+  }
+
+  if (action === 'later') {
+    addTypingMessage(`Окей, напомню позже 😉`, 300);
+  }
+});
+
+
