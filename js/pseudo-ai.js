@@ -94,80 +94,17 @@ window.addEventListener('DOMContentLoaded', () => {
 
   setUserName(name);
 
-  // Приветствие
   addTypingMessage(
     `<strong>${emoji()} Фокси:</strong> ${randomGreeting(name)}`,
     500,
     true
   );
 
-  // ⏱ Показываем блоки с задержкой, чтобы не перекрывали друг друга
-  checkPromoReminder(1300); // через 1.3 сек после приветствия
-  showSuggestions(2100);    // через 2.1 сек
-
-  // Настраиваем клики по галерее
+  checkPromoReminder(1300);
+  showSuggestions(2100);
   setupGalleryClicks();
-});
 
-function setupGalleryClicks() {
-  const modal = document.getElementById("gallery-modal");
-  const modalImg = document.getElementById("gallery-modal-img");
-
-  document.querySelectorAll(".gallery-img").forEach(img => {
-    img.addEventListener("click", () => {
-      modalImg.src = img.src;
-      modal.classList.add("open");
-
-      const close = () => {
-        modal.classList.remove("open");
-        modal.classList.add("closing");
-        setTimeout(() => {
-          modal.classList.remove("closing");
-          modalImg.src = "";
-        }, 300);
-      };
-
-      modal.addEventListener("click", close, { once: true });
-    });
-  });
-}
-
-// Делегирование кликов по кнопкам-командам
-document.body.addEventListener('click', event => {
-  const btn = event.target.closest('[data-action]');
-  if (btn) {
-    const cmd = btn.getAttribute('data-action');
-    if (cmd) handleUserInput(cmd);
-  }
-});
-
-// Делегирование кликов по промо-кнопкам
-document.body.addEventListener('click', event => {
-  const promoBtn = event.target.closest('[data-promo-action]');
-  if (!promoBtn) return;
-
-  const action = promoBtn.getAttribute('data-promo-action');
-  if (action === 'used') {
-    localStorage.removeItem("promoCode");
-    localStorage.removeItem("promoExpires");
-    localStorage.setItem("promoUsed", "true");
-    addTypingMessage(`Отлично! Промокод больше не будет беспокоить 😊`, 300);
-    promoBtn.closest('.foxy-promo')?.remove();
-  } else if (action === 'later') {
-    addTypingMessage(`Окей, напомню позже 😉`, 300);
-  }
-});
-
-// Обработка формы ввода
-const form = document.getElementById('pseudo-form');
-const input = document.getElementById('pseudo-input');
-form?.addEventListener('submit', e => {
-  e.preventDefault();
-  const text = input.value.trim();
-  if (!text) return;
-  handleUserInput(text);
-  input.value = '';
-  document.addEventListener("DOMContentLoaded", () => {
+  // ✅ FULLSCREEN ЛОГИКА — вот она, прямо тут
   const btn = document.getElementById("toggle-fullscreen");
   const chatWrapper = document.querySelector(".chat-wrapper");
 
@@ -179,7 +116,7 @@ form?.addEventListener('submit', e => {
 
     const icon = btn.querySelector("i");
     icon.setAttribute("data-lucide", expanded ? "minimize" : "maximize");
-    lucide.createIcons(); // обновить иконку
+    lucide.createIcons();
   });
 
   document.addEventListener("keydown", (e) => {
@@ -191,5 +128,4 @@ form?.addEventListener('submit', e => {
       lucide.createIcons();
     }
   });
-});
 });
