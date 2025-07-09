@@ -1,3 +1,5 @@
+// js/pseudo-ai.js
+
 import { handleUserInput } from './foxy/handlers/mainHandler.js';
 import { addTypingMessage, renderReactions } from './foxy/ui/dom.js';
 import { emoji } from './foxy/core/services.js';
@@ -55,32 +57,30 @@ function checkPromoReminder(delay = 0) {
       if (localStorage.getItem("promoUsed") !== 'true') {
         const deadline = new Date(expires).toLocaleDateString();
         addTypingMessage(
-  `<div class="foxy-promo no-opacity">
-     <p>🎁 Напоминаю: у тебя ещё действует промокод <strong>${promoCode}</strong><br><small>Срок до ${deadline}</small></p>
-     <div class="buttons-wrapper mt-2">
-       <button class="ai-btn" data-promo-action="used">✅ Активирован</button>
-       <button class="ai-btn" data-promo-action="later">⏳ Пока нет</button>
-     </div>
-   </div>`,
-  450,
-  true
-);
+          `<div class="foxy-promo no-opacity">
+             <p>🎁 Напоминаю: у тебя ещё действует промокод <strong>${promoCode}</strong><br><small>Срок до ${deadline}</small></p>
+             <div class="buttons-wrapper mt-2">
+               <button class="ai-btn" data-promo-action="used">✅ Активирован</button>
+               <button class="ai-btn" data-promo-action="later">⏳ Пока нет</button>
+             </div>
+           </div>`,
+          450,
+          true
+        );
 
-setTimeout(() => {
-  const el = document.querySelector('.foxy-promo');
-  if (el) {
-    el.classList.remove('no-opacity');
-    el.classList.add('foxy-fade-in');
-  }
-}, 550);
+        setTimeout(() => {
+          const el = document.querySelector('.foxy-promo');
+          if (el) {
+            el.classList.remove('no-opacity');
+            el.classList.add('foxy-fade-in');
+          }
+        }, 550);
       }
     }
   }, delay);
 }
 
 window.addEventListener('DOMContentLoaded', () => {
-  alert("Фокси загружена");
-
   const name = localStorage.getItem('foxy_userName');
   console.log('[DEBUG] DOMContentLoaded, имя:', name);
 
@@ -101,7 +101,7 @@ window.addEventListener('DOMContentLoaded', () => {
   checkPromoReminder(1300);
   showSuggestions(2100);
 
-  // FULLSCREEN логика
+  // FULLSCREEN кнопка
   const btn = document.getElementById("toggle-fullscreen");
   const chatWrapper = document.querySelector(".chat-wrapper");
 
@@ -126,25 +126,37 @@ window.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // ✅ ОБРАБОТКА ВВОДА И КНОПКИ
+  // ОБРАБОТКА ФОРМЫ
+  const form = document.getElementById('pseudo-form');
   const input = document.getElementById('pseudo-input');
-  const submitBtn = document.getElementById('pseudo-submit');
 
-  if (input && submitBtn) {
-    const sendMessage = () => {
+  if (form && input) {
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
       const text = input.value.trim();
       if (!text) return;
       handleUserInput(text);
       input.value = '';
-    };
-
-    submitBtn.addEventListener('click', sendMessage);
+    });
 
     input.addEventListener('keydown', (e) => {
       if (e.key === 'Enter') {
         e.preventDefault();
-        sendMessage();
+        form.dispatchEvent(new Event('submit'));
       }
     });
+  }
+});
+
+// ✅ ОБРАБОТКА КНОПОК с data-action
+document.body.addEventListener('click', event => {
+  const btn = event.target.closest('[data-action]');
+  if (btn) {
+    const cmd = btn.getAttribute('data-action');
+    if (cmd) {
+      console.log('[FOXY DEBUG] Клик по кнопке с data-action:', cmd);
+      alert(`Вы нажали: ${cmd}`);
+      handleUserInput(cmd);
+    }
   }
 });
