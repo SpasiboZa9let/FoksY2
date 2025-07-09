@@ -40,6 +40,7 @@ if ((isFoxyGreeting && !fromUser) || (isUserGreeting && fromUser)) {
   } else {
     bubble.textContent = text;
   }
+console.log("class:", bubble.className);
 
   chat.appendChild(bubble);
   chat.scrollTop = chat.scrollHeight;
