@@ -2,10 +2,10 @@
 import { matchIntent } from "../core/intents.js";
 import { matchService, emoji, services, randomReply } from "../core/services.js";
 import {
-  lastInput, setLastInput,
+  getLastInput, setLastInput,
   getLastIntent, setLastIntent,
-  lastService, setLastService,
-  userName, setUserName
+  getLastService, setLastService,
+  getUserName, setUserName
 } from "../core/state.js";
 
 import { addMessage, clearButtons } from "../ui/dom.js";
@@ -63,7 +63,7 @@ export function handleUserInput(message) {
   }
 
   const input = message.trim();
-  if (!input || input.toLowerCase() === lastInput) return;
+  if (!input || input.toLowerCase() === getLastInput()) return;
   const prevIntent = getLastIntent();
   setLastInput(input.toLowerCase());
 
@@ -75,7 +75,7 @@ export function handleUserInput(message) {
 
   // 🚦 Подтверждение услуги
   if (intent === 'confirm' && prevIntent === 'service') {
-    showServiceDetails(lastService);
+    showServiceDetails(getLastService());
     return;
   }
 
@@ -107,9 +107,9 @@ export function handleUserInput(message) {
     const svc2 = matchService(input);
     if (svc2) setLastService(svc2.name);
 
-    if (lastService && services[lastService]) {
+    if (getLastService() && services[getLastService()]) {
       addMessage(`${emoji()} ${randomReply("inquireDetails")}`, true);
-      addMessage(`«${lastService}» 💅\n${services[lastService]}`);
+      addMessage(`«${getLastService()}» 💅\n${services[getLastService()]}`);
       renderBookingOptions();
     } else {
       addMessage(randomReply("fallback"));
