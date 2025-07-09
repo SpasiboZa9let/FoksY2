@@ -127,33 +127,37 @@ window.addEventListener('DOMContentLoaded', () => {
   });
 
   // ОБРАБОТКА ФОРМЫ
-  const form = document.getElementById('pseudo-form');
-  const input = document.getElementById('pseudo-input');
+const form = document.getElementById('pseudo-form');
+const input = document.getElementById('pseudo-input');
 
-  if (form && input) {
-    form.addEventListener('submit', (e) => {
+if (form && input) {
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const text = input.value.trim();
+    if (!text) return;
+
+    const intent = localStorage.getItem('foxy_lastIntent');
+    console.log('[DEBUG] Submit intent:', intent);
+
+    if (intent === 'askName') {
+      localStorage.setItem('foxy_userName', text);
+      localStorage.removeItem('foxy_lastIntent');
+      document.getElementById('pseudo-chat').innerHTML = '';
+      window.location.reload();
+    } else {
+      handleUserInput(text);
+      input.value = '';
+    }
+  });
+
+  input.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
       e.preventDefault();
-      const text = input.value.trim();
-      if (!text) return;
+      form.dispatchEvent(new Event('submit'));
+    }
+  });
+}
 
-      if (localStorage.getItem('foxy_lastIntent') === 'askName') {
-        localStorage.setItem('foxy_userName', text);
-        localStorage.setItem('foxy_lastIntent', '');
-        document.getElementById('pseudo-chat').innerHTML = '';
-        window.location.reload();
-      } else {
-        handleUserInput(text);
-        input.value = '';
-      }
-    });
-
-    input.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter') {
-        e.preventDefault();
-        form.dispatchEvent(new Event('submit'));
-      }
-    });
-  }
 });
 
 // Кнопки меню
