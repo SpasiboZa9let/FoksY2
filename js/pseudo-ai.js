@@ -136,7 +136,7 @@ window.addEventListener('DOMContentLoaded', () => {
       const text = input.value.trim();
       if (!text) return;
 
-      if (lastIntent === 'askName') {
+      if (localStorage.getItem('foxy_lastIntent') === 'askName') {
         localStorage.setItem('foxy_userName', text);
         localStorage.setItem('foxy_lastIntent', '');
         document.getElementById('pseudo-chat').innerHTML = '';
