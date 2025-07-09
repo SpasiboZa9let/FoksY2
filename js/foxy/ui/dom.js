@@ -16,13 +16,14 @@ export function getReactions() {
  * Добавляет в чат новое сообщение.
  * @param {string} text — текст сообщения (или HTML, если isHTML=true)
  * @param {boolean} [isHTML=false] — вставлять как HTML (true) или как textContent (false)
+ * @param {boolean} [fromUser=false] — сообщение от пользователя (true) или от Фокси (false)
  */
-export function addMessage(text, isHTML = false) {
+export function addMessage(text, isHTML = false, fromUser = false) {
   const chat = getChat();
   if (!chat) return;
 
   const bubble = document.createElement("div");
-  bubble.className = "bg-white p-2 rounded-xl text-sm shadow whitespace-pre-line foxy-fade-in";
+  bubble.className = `chat-bubble foxy-fade-in ${fromUser ? 'from-user' : 'from-foxy'}`;
 
   if (isHTML) {
     bubble.innerHTML = text;
@@ -80,7 +81,7 @@ export function addTypingMessage(text, delay = 500, isHTML = false) {
   if (!chat) return;
 
   const bubble = document.createElement("div");
-  bubble.className = "bg-white p-2 rounded-xl text-sm shadow whitespace-pre-line foxy-fade-in opacity-50";
+  bubble.className = "chat-bubble foxy-fade-in opacity-50 from-foxy";
   bubble.textContent = "Фокси печатает...";
 
   chat.appendChild(bubble);
