@@ -1,5 +1,3 @@
-// js/pseudo-ai.js
-
 import { handleUserInput } from './foxy/handlers/mainHandler.js';
 import { addTypingMessage, renderReactions } from './foxy/ui/dom.js';
 import { emoji } from './foxy/core/services.js';
@@ -74,9 +72,7 @@ setTimeout(() => {
     el.classList.remove('no-opacity');
     el.classList.add('foxy-fade-in');
   }
-}, 550); // чуть позже вставки, чтобы сработал переход
-
-
+}, 550);
       }
     }
   }, delay);
@@ -104,9 +100,8 @@ window.addEventListener('DOMContentLoaded', () => {
 
   checkPromoReminder(1300);
   showSuggestions(2100);
-  //setupGalleryClicks();
 
-  // ✅ FULLSCREEN ЛОГИКА
+  // FULLSCREEN логика
   const btn = document.getElementById("toggle-fullscreen");
   const chatWrapper = document.querySelector(".chat-wrapper");
 
@@ -131,25 +126,25 @@ window.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // ✅ ОБРАБОТКА ФОРМЫ — в том числе на мобилке
-  const form = document.getElementById('pseudo-form');
+  // ✅ ОБРАБОТКА ВВОДА И КНОПКИ
   const input = document.getElementById('pseudo-input');
+  const submitBtn = document.getElementById('pseudo-submit');
 
-  if (form && input) {
-    form.addEventListener('submit', (e) => {
-      e.preventDefault(); // 🛑 блокируем reload
+  if (input && submitBtn) {
+    const sendMessage = () => {
       const text = input.value.trim();
       if (!text) return;
-      handleUserInput(text); // 💬
+      handleUserInput(text);
       input.value = '';
-    });
+    };
+
+    submitBtn.addEventListener('click', sendMessage);
 
     input.addEventListener('keydown', (e) => {
       if (e.key === 'Enter') {
-        e.preventDefault(); // блокирует отправку Enter'ом
-        form.dispatchEvent(new Event('submit'));
+        e.preventDefault();
+        sendMessage();
       }
     });
   }
 });
-
