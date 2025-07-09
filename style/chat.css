@@ -10,7 +10,7 @@
   gap: 0.5rem;
 }
 
-/* Первое «приветственное» сообщение по центру */
+/* Первое «приветственное» сообщение — по центру */
 #pseudo-chat > .foxy-fade-in:first-child {
   position: sticky;
   top: 0;
@@ -21,7 +21,6 @@
   border-radius: 1rem;
   margin-bottom: 1rem;
 
-  /* Выравниваем по центру */
   align-self: center;
 }
 
@@ -64,18 +63,26 @@
   text-decoration: underline;
 }
 
-/* Пузырьки сообщений (и от пользователя, и от Фокси) — белый фон, тёмный текст, справа */
-.from-user,
+/* Стиль для сообщений пользователя */
+.from-user {
+  background: #ffffff;
+  color: #333333;
+  align-self: flex-end;
+}
+
+/* Стиль для сообщений Фокси */
 .from-foxy {
   background: #ffffff;
   color: #333333;
+  align-self: flex-start;
+}
 
+/* Общие стили для обоих пузырей */
+.from-user,
+.from-foxy {
   max-width: 80%;
   padding: 0.5rem 1rem;
   border-radius: 1rem;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   white-space: pre-line;
-
-  /* Оба выравниваются вправо */
-  align-self: flex-end;
 }
