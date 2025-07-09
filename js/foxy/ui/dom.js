@@ -86,19 +86,18 @@ export function clearChat() {
  * @param {number} delay — задержка в мс
  * @param {boolean} [isHTML=false]
  */
-export function addTypingMessage(text, delay = 500, isHTML = false) {
+export function addTypingMessage(text, delay = 500, isHTML = false, fromUser = false) {
   const chat = getChat();
   if (!chat) return;
 
   const bubble = document.createElement("div");
-  bubble.className = "chat-bubble foxy-fade-in opacity-50 from-foxy";
+  bubble.className = `chat-bubble foxy-fade-in opacity-50 ${fromUser ? 'from-user' : 'from-foxy'}`;
   bubble.textContent = "Фокси печатает...";
 
   chat.appendChild(bubble);
   chat.scrollTop = chat.scrollHeight;
 
   setTimeout(() => {
-    // Вставка финального текста
     if (isHTML) {
       bubble.innerHTML = text;
     } else {
@@ -106,21 +105,17 @@ export function addTypingMessage(text, delay = 500, isHTML = false) {
     }
     bubble.classList.remove("opacity-50");
 
-    // 🧠 Получаем текст без HTML
-const tempDiv = document.createElement("div");
-tempDiv.innerHTML = text;
-const rawText = isHTML ? tempDiv.textContent : text;
-const lower = rawText.toLowerCase();
+    // 💡 Проверка на welcome
+    const tempDiv = document.createElement("div");
+    tempDiv.innerHTML = text;
+    const rawText = isHTML ? tempDiv.textContent : text;
+    const lower = rawText.toLowerCase();
+    const isFoxyGreeting = lower.includes("фокси") && lower.includes("порадовать");
+    const isUserGreeting = lower.includes("меня зовут") || lower.includes("евлампий");
 
-const isFoxyGreeting = lower.includes("фокси") && lower.includes("порадовать");
-const isUserGreeting = lower.includes("меня зовут") || lower.includes("евлампий");
-
-if ((isFoxyGreeting && !fromUser) || (isUserGreeting && fromUser)) {
-  bubble.classList.add("welcome-message");
-  console.log("🎯 welcome-message добавлен:", bubble.className);
-}
-
+    if ((isFoxyGreeting && !fromUser) || (isUserGreeting && fromUser)) {
+      bubble.classList.add("welcome-message");
+      console.log("🎯 welcome (typing):", bubble.className);
+    }
   }, delay);
 }
-
-
