@@ -15,8 +15,8 @@ export function getReactions() {
 /**
  * Добавляет в чат новое сообщение.
  * @param {string} text — текст сообщения (или HTML, если isHTML=true)
- * @param {boolean} [isHTML=false] — вставлять как HTML (true) или как textContent (false)
- * @param {boolean} [fromUser=false] — сообщение от пользователя (true) или от Фокси (false)
+ * @param {boolean} [isHTML=false] — вставлять как HTML
+ * @param {boolean} [fromUser=false] — сообщение от пользователя
  */
 export function addMessage(text, isHTML = false, fromUser = false) {
   const chat = getChat();
@@ -25,10 +25,10 @@ export function addMessage(text, isHTML = false, fromUser = false) {
   const bubble = document.createElement("div");
   bubble.className = `chat-bubble foxy-fade-in ${fromUser ? 'from-user' : 'from-foxy'}`;
 
-  // 💎 Применяем оформление для приветствия
+  // 💎 Добавление welcome-стиля
   const lower = text.toLowerCase();
   const isFoxyGreeting = text.includes("Фокси:") && text.includes("порадовать");
-  const isUserGreeting = lower.includes("как тебя зовут") || lower.includes("евлампий") || lower.includes("меня зовут");
+  const isUserGreeting = lower.includes("меня зовут") || lower.includes("как меня зовут") || lower.includes("евлампий");
 
   if ((isFoxyGreeting && !fromUser) || (isUserGreeting && fromUser)) {
     bubble.classList.add("welcome-message");
@@ -44,9 +44,8 @@ export function addMessage(text, isHTML = false, fromUser = false) {
   chat.scrollTop = chat.scrollHeight;
 }
 
-
 /**
- * Очищает контейнер с кнопками (реакциями)
+ * Очищает контейнер с кнопками
  */
 export function clearButtons() {
   const reactions = getReactions();
@@ -56,7 +55,6 @@ export function clearButtons() {
 
 /**
  * Отрисовывает кнопки-реакции
- * @param {Array} options — список кнопок с текстом и callback
  */
 export function renderReactions(options = []) {
   const reactions = getReactions();
@@ -84,7 +82,7 @@ export function clearChat() {
  * Добавляет сообщение с эффектом печати
  * @param {string} text — финальный текст
  * @param {number} delay — задержка в мс
- * @param {boolean} [isHTML=false] — использовать innerHTML вместо textContent
+ * @param {boolean} [isHTML=false]
  */
 export function addTypingMessage(text, delay = 500, isHTML = false) {
   const chat = getChat();
@@ -104,5 +102,13 @@ export function addTypingMessage(text, delay = 500, isHTML = false) {
       bubble.textContent = text;
     }
     bubble.classList.remove("opacity-50");
+
+    // 🎯 Welcome-класс — после печати
+    if (
+      text.includes("Фокси:") &&
+      text.includes("порадовать")
+    ) {
+      bubble.classList.add("welcome-message");
+    }
   }, delay);
 }
