@@ -56,7 +56,7 @@ export function handleUserInput(message) {
     setUserName(name);
     localStorage.setItem('foxy_userName', name);
     addMessage(`Приятно познакомиться, ${name}! 💖`, false);
-    addMessage(`<strong>${emoji()} Фокси:</strong> ${randomGreeting(name)}`, true);
+    addTypingMessage(`<strong>${emoji()} Фокси:</strong> ${randomGreeting(name)}`, 300, true);
     showSuggestions();
     setLastIntent('');        // сброс интента
     return;
