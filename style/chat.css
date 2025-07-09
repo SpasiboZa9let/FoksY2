@@ -33,4 +33,17 @@
   padding: 2rem 1rem;
   overflow-y: auto;
 }
+.foxy-reset-btn {
+  background: transparent;
+  border: none;
+  color: #ec4899;
+  font-size: 0.75rem;
+  cursor: pointer;
+  padding: 0;
+  margin: 0.5rem 0 0 auto;
+  display: block;
+}
+.foxy-reset-btn:hover {
+  text-decoration: underline;
+}
 
