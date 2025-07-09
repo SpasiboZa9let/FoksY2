@@ -58,26 +58,26 @@
 
   <!-- Фокси-чат -->
   <section class="mt-10">
-  <div class="chat-wrapper neon-box">
-    <h2 class="text-lg font-semibold mb-3 text-pink-600">Спроси у Фокси</h2>
-      <div class="relative">
-    <button id="toggle-fullscreen"
-            class="absolute top-2 right-2 bg-white/70 hover:bg-white text-pink-600 p-1 rounded-full shadow transition"
-            title="Развернуть">
-      <i data-lucide="maximize" class="w-5 h-5"></i>
+  <div class="chat-wrapper neon-box relative">
+  <button id="toggle-fullscreen"
+          class="absolute top-2 right-2 bg-white/70 hover:bg-white text-pink-600 p-1 rounded-full shadow transition z-20"
+          title="Развернуть">
+    <i data-lucide="maximize" class="w-5 h-5"></i>
+  </button>
+
+  <h2 class="text-lg font-semibold mb-3 text-pink-600">Спроси у Фокси</h2>
+  <div id="pseudo-chat" class="flex flex-col space-y-2 max-h-64 overflow-y-auto mb-3"></div>
+  <form id="pseudo-form" class="flex space-x-2 mb-3">
+    <input id="pseudo-input" type="text" placeholder="Ваш ответ..."
+           class="flex-1 rounded-xl border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-pink-300" />
+    <button type="submit"
+            class="bg-pink-500 text-white px-4 py-2 rounded-xl text-sm hover:bg-pink-600">
+      Ок
     </button>
-  </div>
-    <div id="pseudo-chat" class="flex flex-col space-y-2 max-h-64 overflow-y-auto mb-3"></div>
-    <form id="pseudo-form" class="flex space-x-2 mb-3">
-      <input id="pseudo-input" type="text" placeholder="Ваш ответ..."
-             class="flex-1 rounded-xl border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-pink-300" />
-      <button type="submit"
-              class="bg-pink-500 text-white px-4 py-2 rounded-xl text-sm hover:bg-pink-600">
-        Ок
-      </button>
-    </form>
-    <div id="pseudo-reactions" class="flex flex-wrap gap-2 text-sm text-pink-600 font-medium"></div>
-  </div>
+  </form>
+  <div id="pseudo-reactions" class="flex flex-wrap gap-2 text-sm text-pink-600 font-medium"></div>
+</div>
+
 </section>
 
   <!-- Прайс -->
