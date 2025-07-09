@@ -104,24 +104,32 @@ window.addEventListener('DOMContentLoaded', () => {
   }
 
   // Fullscreen-кнопка
-  const btn     = document.getElementById("toggle-fullscreen");
-  const wrapper = document.querySelector(".chat-wrapper");
-  let expanded = false;
-  btn?.addEventListener("click", () => {
-    expanded = !expanded;
-    wrapper.classList.toggle("fullscreen");
-    const icon = btn.querySelector("i");
+  // Fullscreen-кнопка
+const btn     = document.getElementById("toggle-fullscreen");
+const wrapper = document.querySelector(".chat-wrapper");
+let expanded = false;
+
+btn?.addEventListener("click", () => {
+  expanded = !expanded;
+  wrapper.classList.toggle("fullscreen");
+  const icon = btn.querySelector("i");
+  if (icon) {
     icon.setAttribute("data-lucide", expanded ? "minimize" : "maximize");
     lucide.createIcons();
-  });
-  document.addEventListener("keydown", e => {
-    if (e.key === "Escape" && expanded) {
-      expanded = false;
-      wrapper.classList.remove("fullscreen");
-      btn.querySelector("i").setAttribute("data-lucide","maximize");
+  }
+});
+
+document.addEventListener("keydown", e => {
+  if (e.key === "Escape" && expanded) {
+    expanded = false;
+    wrapper.classList.remove("fullscreen");
+    const icon = btn.querySelector("i");
+    if (icon) {
+      icon.setAttribute("data-lucide", "maximize");
       lucide.createIcons();
     }
-  });
+  }
+});
 
   // ОБРАБОТКА ВВОДА БЕЗ <form>
   const input     = document.getElementById('pseudo-input');
