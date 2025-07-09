@@ -140,12 +140,23 @@ window.addEventListener('DOMContentLoaded', () => {
     });
 
     input.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter') {
-        e.preventDefault();
-        form.dispatchEvent(new Event('submit'));
-      }
-    });
+  if (e.key === 'Enter') {
+    e.preventDefault();
+    const text = input.value.trim();
+    if (!text) return;
+
+    // 🔍 Если Фокси ждёт имя
+    if (lastIntent === 'askName') {
+      localStorage.setItem('foxy_userName', text);
+      setUserName(text);
+      setLastIntent(null);
+      document.getElementById('pseudo-chat').innerHTML = '';
+      window.location.reload(); // 🔁 Чисто и просто
+    } else {
+      form.dispatchEvent(new Event('submit'));
+    }
   }
+});
 });
 
 // ✅ ОБРАБОТКА КНОПОК с data-action
