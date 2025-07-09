@@ -46,4 +46,8 @@
 .foxy-reset-btn:hover {
   text-decoration: underline;
 }
+#pseudo-input {
+  background: #fff;
+  border: 1px solid #ddd;
+}
 
