@@ -98,24 +98,29 @@ export function addTypingMessage(text, delay = 500, isHTML = false, fromUser = f
   chat.scrollTop = chat.scrollHeight;
 
   setTimeout(() => {
+    // 1. Вставляем содержимое
     if (isHTML) {
       bubble.innerHTML = text;
     } else {
       bubble.textContent = text;
     }
+
     bubble.classList.remove("opacity-50");
 
-    // 💡 Проверка на welcome
+    // 2. Анализируем "сырое" содержимое
     const tempDiv = document.createElement("div");
     tempDiv.innerHTML = text;
     const rawText = isHTML ? tempDiv.textContent : text;
     const lower = rawText.toLowerCase();
+
     const isFoxyGreeting = lower.includes("фокси") && lower.includes("порадовать");
     const isUserGreeting = lower.includes("меня зовут") || lower.includes("евлампий");
 
+    // 3. Добавляем welcome-класс до финального показа
     if ((isFoxyGreeting && !fromUser) || (isUserGreeting && fromUser)) {
       bubble.classList.add("welcome-message");
       console.log("🎯 welcome (typing):", bubble.className);
     }
   }, delay);
 }
+
