@@ -1,7 +1,7 @@
 // js/pseudo-ai.js
 
 import { handleUserInput } from './foxy/handlers/mainHandler.js';
-import { addTypingMessage, renderReactions } from './foxy/ui/dom.js';
+import { addTypingMessage } from './foxy/ui/dom.js';
 import { emoji } from './foxy/core/services.js';
 import { setUserName, lastIntent, setLastIntent } from './foxy/core/state.js';
 
@@ -101,7 +101,7 @@ window.addEventListener('DOMContentLoaded', () => {
   checkPromoReminder(1300);
   showSuggestions(2100);
 
-  // FULLSCREEN кнопка
+  // Fullscreen
   const btn = document.getElementById("toggle-fullscreen");
   const chatWrapper = document.querySelector(".chat-wrapper");
 
@@ -126,7 +126,7 @@ window.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // ОБРАБОТКА ФОРМЫ
+  // Обработка формы
   const form = document.getElementById('pseudo-form');
   const input = document.getElementById('pseudo-input');
 
@@ -140,26 +140,27 @@ window.addEventListener('DOMContentLoaded', () => {
     });
 
     input.addEventListener('keydown', (e) => {
-  if (e.key === 'Enter') {
-    e.preventDefault();
-    const text = input.value.trim();
-    if (!text) return;
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        const text = input.value.trim();
+        if (!text) return;
 
-    if (lastIntent === 'askName') {
-      localStorage.setItem('foxy_userName', text);
-      setUserName(text);
-      setLastIntent(null);
-      document.getElementById('pseudo-chat').innerHTML = '';
-      window.location.reload(); // 🔁 Перезапуск
-    } else {
-      handleUserInput(text); // 💬 Просто обычный ввод
-      input.value = '';
-    }
+        if (lastIntent === 'askName') {
+          localStorage.setItem('foxy_userName', text);
+          setUserName(text);
+          setLastIntent(null);
+          document.getElementById('pseudo-chat').innerHTML = '';
+          window.location.reload();
+        } else {
+          handleUserInput(text);
+          input.value = '';
+        }
+      }
+    });
   }
 });
 
-
-// ✅ ОБРАБОТКА КНОПОК с data-action
+// Кнопки меню
 document.body.addEventListener('click', event => {
   const btn = event.target.closest('[data-action]');
   if (btn) {
@@ -171,7 +172,7 @@ document.body.addEventListener('click', event => {
   }
 });
 
-// ✅ ОБРАБОТКА ПРОМО-КНОПОК
+// Промо-кнопки
 document.body.addEventListener('click', event => {
   const promoBtn = event.target.closest('[data-promo-action]');
   if (!promoBtn) return;
@@ -191,5 +192,3 @@ document.body.addEventListener('click', event => {
     addTypingMessage(`Окей, напомню позже 😉`, 300);
   }
 });
-
-
