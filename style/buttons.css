@@ -1,0 +1,23 @@
+.ai-btn {
+  background: #ec4899;
+  color: #fff;
+  font-weight: 500;
+  font-size: 0.875rem;
+  padding: 0.5rem 1rem;
+  border-radius: 1.5rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  transition: background 0.2s ease, transform 0.1s ease, box-shadow 0.2s ease;
+  display: inline-block;
+  text-align: center;
+  cursor: pointer;
+  user-select: none;
+}
+
+.ai-btn:hover {
+  background: #db2777;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+}
+
+.ai-btn:active {
+  transform: scale(0.95);
+}
