@@ -55,12 +55,13 @@ export function handleUserInput(message) {
   const name = message.trim();
   setUserName(name);
   localStorage.setItem('foxy_userName', name);
+  clearChat();            // очищаем предыдущее
   addMessage(`Приятно познакомиться, ${name}! 💖`, false);
-
-  initFoxyAfterName(name); // ✅ вместо дублирования
+  // НЕ вызываем initFoxyAfterName — этим займётся pseudo-ai.js
   setLastIntent('');
   return;
 }
+
 
 
   const input = message.trim();
