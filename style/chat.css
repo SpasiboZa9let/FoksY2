@@ -22,4 +22,15 @@
     0 0 18px rgba(255, 105, 180, 0.15);
   transition: box-shadow 0.3s ease;
 }
+.chat-wrapper.fullscreen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 50;
+  width: 100vw;
+  height: 100vh;
+  background: #fff0f4;
+  padding: 2rem 1rem;
+  overflow-y: auto;
+}
 
