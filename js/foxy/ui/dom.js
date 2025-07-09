@@ -1,3 +1,5 @@
+// js/foxy/ui/dom.js
+
 /**
  * Возвращает контейнер для сообщений
  */
@@ -22,7 +24,17 @@ export function addMessage(text, isHTML = false) {
   if (!chat) return;
 
   const bubble = document.createElement("div");
-  bubble.className = "bg-white p-2 rounded-xl text-sm shadow whitespace-pre-line foxy-fade-in";
+  // Определяем класс по отправителю
+  const whoClass = isHTML ? "from-foxy" : "from-user";
+  bubble.className = [
+    whoClass,
+    "p-2",
+    "rounded-xl",
+    "text-sm",
+    "shadow",
+    "whitespace-pre-line",
+    "foxy-fade-in"
+  ].join(" ");
 
   if (isHTML) {
     bubble.innerHTML = text;
@@ -80,7 +92,17 @@ export function addTypingMessage(text, delay = 500, isHTML = false) {
   if (!chat) return;
 
   const bubble = document.createElement("div");
-  bubble.className = "bg-white p-2 rounded-xl text-sm shadow whitespace-pre-line foxy-fade-in opacity-50";
+  // Всегда от Фокси и полупрозрачное
+  bubble.className = [
+    "from-foxy",
+    "p-2",
+    "rounded-xl",
+    "text-sm",
+    "shadow",
+    "whitespace-pre-line",
+    "foxy-fade-in",
+    "opacity-50"
+  ].join(" ");
   bubble.textContent = "Фокси печатает...";
 
   chat.appendChild(bubble);
