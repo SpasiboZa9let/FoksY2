@@ -26,7 +26,7 @@ export function addMessage(text, isHTML = false, fromUser = false) {
   bubble.className = `chat-bubble foxy-fade-in ${fromUser ? 'from-user' : 'from-foxy'}`;
 
   // 💎 Добавление welcome-стиля
-  const lower = text.toLowerCase();
+const lower = text.toLowerCase();
 const isFoxyGreeting = lower.includes("фокси") && lower.includes("порадовать");
 const isUserGreeting = lower.includes("меня зовут") || lower.includes("как меня зовут") || lower.includes("евлампий");
 
@@ -108,9 +108,9 @@ export function addTypingMessage(text, delay = 500, isHTML = false) {
 
     // 🧠 Получаем текст без HTML
     const rawText = isHTML ? bubble.innerText : text;
-    const lower = rawText.toLowerCase();
-
-    const isFoxyGreeting = lower.includes("фокси") && lower.includes("порадовать");
+const lower = rawText.toLowerCase();
+const isFoxyGreeting = lower.includes("фокси") && lower.includes("порадовать");
+const isUserGreeting = lower.includes("меня зовут") || lower.includes("евлампий");
 
     if (isFoxyGreeting) {
       bubble.classList.add("welcome-message");
