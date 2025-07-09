@@ -102,7 +102,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
   checkPromoReminder(1300);
   showSuggestions(2100);
-  setupGalleryClicks();
+  //setupGalleryClicks();
 
   // ✅ FULLSCREEN ЛОГИКА — вот она, прямо тут
   const btn = document.getElementById("toggle-fullscreen");
