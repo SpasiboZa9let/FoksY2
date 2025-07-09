@@ -2,7 +2,11 @@
 #pseudo-chat {
   padding-top: 0;
   position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
 }
+
 
 /* Первый "пузырь" — подсказка — закрепляется */
 #pseudo-chat > .foxy-fade-in:first-child {
