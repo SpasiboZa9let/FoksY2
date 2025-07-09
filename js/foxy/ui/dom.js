@@ -25,22 +25,18 @@ export function addMessage(text, isHTML = false, fromUser = false) {
   const bubble = document.createElement("div");
   bubble.className = `chat-bubble foxy-fade-in ${fromUser ? 'from-user' : 'from-foxy'}`;
 
-  // 💎 Добавление welcome-стиля
-const lower = text.toLowerCase();
-const isFoxyGreeting = lower.includes("фокси") && lower.includes("порадовать");
-const isUserGreeting = lower.includes("меня зовут") || lower.includes("как меня зовут") || lower.includes("евлампий");
-
-if ((isFoxyGreeting && !fromUser) || (isUserGreeting && fromUser)) {
-  bubble.classList.add("welcome-message");
-}
-
+  // 💎 Все сообщения, содержащие "Фокси:", считаем приветственными
+  if (!fromUser && text.includes('Фокси:')) {
+    bubble.classList.add("welcome-message");
+  }
 
   if (isHTML) {
     bubble.innerHTML = text;
   } else {
     bubble.textContent = text;
   }
-console.log("class:", bubble.className);
+
+  console.log("class:", bubble.className);
 
   chat.appendChild(bubble);
   chat.scrollTop = chat.scrollHeight;
@@ -85,6 +81,7 @@ export function clearChat() {
  * @param {string} text — финальный текст
  * @param {number} delay — задержка в мс
  * @param {boolean} [isHTML=false]
+ * @param {boolean} [fromUser=false]
  */
 export function addTypingMessage(text, delay = 500, isHTML = false, fromUser = false) {
   const chat = getChat();
@@ -107,20 +104,10 @@ export function addTypingMessage(text, delay = 500, isHTML = false, fromUser = f
 
     bubble.classList.remove("opacity-50");
 
-    // 2. Анализируем "сырое" содержимое
-    const tempDiv = document.createElement("div");
-    tempDiv.innerHTML = text;
-    const rawText = isHTML ? tempDiv.textContent : text;
-    const lower = rawText.toLowerCase();
-
-    const isFoxyGreeting = lower.includes("фокси") && lower.includes("порадовать");
-    const isUserGreeting = lower.includes("меня зовут") || lower.includes("евлампий");
-
-    // 3. Добавляем welcome-класс до финального показа
-    if ((isFoxyGreeting && !fromUser) || (isUserGreeting && fromUser)) {
+    // 2. Любое сообщение с "Фокси:" делаем приветственным
+    if (!fromUser && text.includes('Фокси:')) {
       bubble.classList.add("welcome-message");
       console.log("🎯 welcome (typing):", bubble.className);
     }
   }, delay);
 }
-
