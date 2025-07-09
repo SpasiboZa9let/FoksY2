@@ -1,7 +1,9 @@
+// js/foxy/handlers/mainHandler.js
 import { matchIntent } from "../core/intents.js";
 import { matchService, emoji, services, randomReply } from "../core/services.js";
 import {
-  lastInput, setLastInput, lastIntent, setLastIntent,
+  lastInput, setLastInput,
+  getLastIntent, setLastIntent,
   lastService, setLastService,
   userName, setUserName
 } from "../core/state.js";
@@ -13,7 +15,7 @@ import { handleDesign } from "./design.js";
 import { handleMood } from "./mood.js";
 import { handleSmalltalk } from "./smalltalk.js";
 import { handleServiceInput, showServiceDetails } from "./servicesHandler.js";
-import { handleDiscount } from "./discount.js"; // 🔥 Новый модуль
+import { handleDiscount } from "./discount.js";
 
 const greetings = [
   `Привет, %NAME%! 💖 Чем сегодня порадовать твои ноготки?`,
@@ -48,24 +50,26 @@ function showSuggestions() {
 export function handleUserInput(message) {
   clearButtons();
 
-  if (lastIntent === 'askName') {
+  // Фаза ввода имени
+  if (getLastIntent() === 'askName') {
     const name = message.trim();
     setUserName(name);
     localStorage.setItem('foxy_userName', name);
     addMessage(`Приятно познакомиться, ${name}! 💖`, false);
     addMessage(`<strong>${emoji()} Фокси:</strong> ${randomGreeting(name)}`, true);
     showSuggestions();
-    setLastIntent(null);
+    setLastIntent('');        // сброс интента
     return;
   }
 
   const input = message.trim();
   if (!input || input.toLowerCase() === lastInput) return;
-  const prevIntent = lastIntent;
+  const prevIntent = getLastIntent();
   setLastInput(input.toLowerCase());
 
   addMessage(`Вы: ${message}`);
 
+  // Определяем новый интент
   const intent = matchIntent(input);
   setLastIntent(intent);
 
@@ -81,8 +85,10 @@ export function handleUserInput(message) {
     return;
   }
 
+  // Общение
   if (handleSmalltalk(intent)) return;
 
+  // Показ услуг
   if (intent === "showSomething" || intent === "showServices") {
     const svc2 = matchService(input);
     if (svc2) {
@@ -95,6 +101,7 @@ export function handleUserInput(message) {
     return;
   }
 
+  // Уточнение цены
   const inquireRe = /(сколько|сколк[оья]|стоимост|цена)/i;
   if (inquireRe.test(input)) {
     const svc2 = matchService(input);
@@ -111,6 +118,7 @@ export function handleUserInput(message) {
     return;
   }
 
+  // Прямая услуга по ключевому слову
   const svc = matchService(input);
   if (svc) {
     setLastService(svc.name);
@@ -119,6 +127,7 @@ export function handleUserInput(message) {
     return;
   }
 
+  // Остальные команды
   switch (intent) {
     case "design":
       handleDesign();
