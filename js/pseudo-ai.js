@@ -143,3 +143,4 @@ window.addEventListener('DOMContentLoaded', () => {
     });
   }
 });
+alert("Фокси загружена");
