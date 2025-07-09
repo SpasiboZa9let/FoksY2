@@ -168,4 +168,17 @@ window.addEventListener('DOMContentLoaded', () => {
       }
     }
   });
+
+  // СБРОС ДАННЫХ
+  const resetBtn = document.getElementById('foxy-reset');
+  resetBtn?.addEventListener('click', () => {
+    if (!confirm('Вы точно хотите сбросить все ваши данные?')) return;
+    // Удаляем все ключи
+    ['foxy_userName','foxy_lastIntent','promoCode','promoExpires','promoUsed']
+      .forEach(key => localStorage.removeItem(key));
+    // Очищаем чат и запускаем фазу вопроса имени
+    document.getElementById('pseudo-chat').innerHTML = '';
+    addTypingMessage('🦊 Данные сброшены. Привет! Как тебя зовут?', 300);
+    localStorage.setItem('foxy_lastIntent', 'askName');
+  });
 });
