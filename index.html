@@ -213,20 +213,29 @@
     </a>
   </section>
 
-  <!-- Скрипты -->
-  <script defer>lucide.createIcons();</script>
-  <script src="js/reviews-scroll.js" defer></script>
-  <script src="js/modal.js" defer></script>
-  <script type="module" src="js/pseudo-ai.js" defer></script>
+ <!-- Скрипты -->
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js" defer></script>
+<script src="https://cdn.tailwindcss.com" defer></script>
 
-  <script>
-    // Прайс-аккордеон
-    function toggleService(el) {
-      document.querySelectorAll('.service-item').forEach(item => {
-        if (item !== el) item.classList.remove('active');
-      });
-      el.classList.toggle('active');
+<script src="js/reviews-scroll.js" defer></script>
+<script src="js/modal.js" defer></script>
+<script type="module" src="js/pseudo-ai.js" defer></script>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    if (window.lucide) {
+      lucide.createIcons();
     }
-  </script>
+  });
+
+  // Прайс-аккордеон
+  function toggleService(el) {
+    document.querySelectorAll('.service-item').forEach(item => {
+      if (item !== el) item.classList.remove('active');
+    });
+    el.classList.toggle('active');
+  }
+</script>
+
 </body>
 </html>
