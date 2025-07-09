@@ -39,6 +39,28 @@
   padding: 2rem 1rem;
   overflow-y: auto;
 }
+.chat-bubble {
+  max-width: 80%;
+  padding: 0.5rem 0.75rem;
+  border-radius: 1rem;
+  font-size: 0.875rem;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  white-space: pre-line;
+  display: inline-block;
+}
+
+.from-foxy {
+  align-self: flex-start;
+  background: #fff0f4;
+  color: #333;
+}
+
+.from-user {
+  align-self: flex-end;
+  background: #e0f2fe;
+  color: #111;
+}
+
 
 /* Кнопка сброса */
 .foxy-reset-btn {
