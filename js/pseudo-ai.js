@@ -158,7 +158,6 @@ window.addEventListener('DOMContentLoaded', () => {
   }
 });
 
-});
 
 // ✅ ОБРАБОТКА КНОПОК с data-action
 document.body.addEventListener('click', event => {
