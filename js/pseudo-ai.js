@@ -94,7 +94,33 @@ window.addEventListener('DOMContentLoaded', () => {
   // ⏱ Показываем блоки с задержкой, чтобы не перекрывали друг друга
   checkPromoReminder(1300); // через 1.3 сек после приветствия
   showSuggestions(2100);    // через 2.1 сек
+
+  // Настраиваем клики по галерее
+  setupGalleryClicks();
 });
+
+function setupGalleryClicks() {
+  const modal = document.getElementById("gallery-modal");
+  const modalImg = document.getElementById("gallery-modal-img");
+
+  document.querySelectorAll(".gallery-img").forEach(img => {
+    img.addEventListener("click", () => {
+      modalImg.src = img.src;
+      modal.classList.add("open");
+
+      const close = () => {
+        modal.classList.remove("open");
+        modal.classList.add("closing");
+        setTimeout(() => {
+          modal.classList.remove("closing");
+          modalImg.src = "";
+        }, 300);
+      };
+
+      modal.addEventListener("click", close, { once: true });
+    });
+  });
+}
 
 // Делегирование кликов по кнопкам-командам
 document.body.addEventListener('click', event => {
