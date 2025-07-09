@@ -1,7 +1,6 @@
 // js/pseudo-ai.js
 import { handleUserInput }      from './foxy/handlers/mainHandler.js';
-import { addTypingMessage,
-         clearChat }           from './foxy/ui/dom.js';
+import { addTypingMessage, addMessage, clearChat } from './foxy/ui/dom.js';
 import { emoji }               from './foxy/core/services.js';
 import {
   setUserName,
