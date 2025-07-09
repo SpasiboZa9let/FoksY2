@@ -1,6 +1,6 @@
 // js/pseudo-ai.js
 import { handleUserInput } from './foxy/handlers/mainHandler.js';
-import { addTypingMessage }  from './foxy/ui/dom.js';
+import { addTypingMessage, clearChat } from './foxy/ui/dom.js';
 import { emoji }             from './foxy/core/services.js';
 import { setUserName }       from './foxy/core/state.js';
 
@@ -131,7 +131,8 @@ window.addEventListener('DOMContentLoaded', () => {
     if (intent === 'askName') {
       localStorage.setItem('foxy_userName', text);
       localStorage.removeItem('foxy_lastIntent');
-      document.getElementById('pseudo-chat').innerHTML = '';
+      clearChat();         // очищаем все предыдущие сообщения
+      input.value = '';    // убираем текст из поля
       setUserName(text);
       initFoxyAfterName(text);
     } else {
@@ -173,11 +174,10 @@ window.addEventListener('DOMContentLoaded', () => {
   const resetBtn = document.getElementById('foxy-reset');
   resetBtn?.addEventListener('click', () => {
     if (!confirm('Вы точно хотите сбросить все ваши данные?')) return;
-    // Удаляем все ключи
     ['foxy_userName','foxy_lastIntent','promoCode','promoExpires','promoUsed']
       .forEach(key => localStorage.removeItem(key));
-    // Очищаем чат и запускаем фазу вопроса имени
-    document.getElementById('pseudo-chat').innerHTML = '';
+    clearChat();                 // очищаем чат
+    input.value = '';            // очищаем поле ввода
     addTypingMessage('🦊 Данные сброшены. Привет! Как тебя зовут?', 300);
     localStorage.setItem('foxy_lastIntent', 'askName');
   });
