@@ -57,16 +57,21 @@ function checkPromoReminder(delay = 0) {
       if (localStorage.getItem("promoUsed") !== 'true') {
         const deadline = new Date(expires).toLocaleDateString();
         addTypingMessage(
-          `<div class="foxy-promo">
-             <p>🎁 Напоминаю: у тебя ещё действует промокод <strong>${promoCode}</strong><br><small>Срок до ${deadline}</small></p>
-             <div class="buttons-wrapper mt-2">
-               <button class="ai-btn" data-promo-action="used">✅ Активирован</button>
-               <button class="ai-btn" data-promo-action="later">⏳ Пока нет</button>
-             </div>
-           </div>`,
-          450,
-          true
-        );
+  `<div class="foxy-promo p-3 bg-yellow-50 border border-yellow-200 rounded-xl text-sm text-gray-800 leading-snug">
+     <p class="block mb-2">
+       🎁 <strong>Напоминаю</strong>: у тебя ещё действует промокод
+       <strong class="text-pink-600">${promoCode}</strong><br>
+       <small class="text-gray-500">Срок до ${deadline}</small>
+     </p>
+     <div class="buttons-wrapper mt-2 flex gap-2 flex-wrap">
+       <button class="ai-btn bg-green-100 text-green-800" data-promo-action="used">✅ Активирован</button>
+       <button class="ai-btn bg-gray-200 text-gray-800" data-promo-action="later">⏳ Пока нет</button>
+     </div>
+   </div>`,
+  450,
+  true
+);
+
       }
     }
   }, delay);
