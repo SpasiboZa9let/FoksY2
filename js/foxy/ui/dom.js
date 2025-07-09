@@ -25,6 +25,15 @@ export function addMessage(text, isHTML = false, fromUser = false) {
   const bubble = document.createElement("div");
   bubble.className = `chat-bubble foxy-fade-in ${fromUser ? 'from-user' : 'from-foxy'}`;
 
+  // 💎 Применяем оформление для приветствия
+  const lower = text.toLowerCase();
+  const isFoxyGreeting = text.includes("Фокси:") && text.includes("порадовать");
+  const isUserGreeting = lower.includes("как тебя зовут") || lower.includes("евлампий") || lower.includes("меня зовут");
+
+  if ((isFoxyGreeting && !fromUser) || (isUserGreeting && fromUser)) {
+    bubble.classList.add("welcome-message");
+  }
+
   if (isHTML) {
     bubble.innerHTML = text;
   } else {
@@ -34,6 +43,7 @@ export function addMessage(text, isHTML = false, fromUser = false) {
   chat.appendChild(bubble);
   chat.scrollTop = chat.scrollHeight;
 }
+
 
 /**
  * Очищает контейнер с кнопками (реакциями)
