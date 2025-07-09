@@ -1,23 +1,31 @@
 /* js/foxy/ui/chat.css */
 
+/* Контейнер сообщений */
 #pseudo-chat {
   padding-top: 0;
   position: relative;
+
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
 }
 
+/* Первое «приветственное» сообщение по центру */
 #pseudo-chat > .foxy-fade-in:first-child {
   position: sticky;
   top: 0;
   z-index: 10;
+
   background: #fff0f4;
   padding: 0.5rem 1rem;
   border-radius: 1rem;
   margin-bottom: 1rem;
+
+  /* Выравниваем по центру */
+  align-self: center;
 }
 
+/* Оформление контейнера чата */
 .chat-wrapper.neon-box {
   border-radius: 1.5rem;
   padding: 1rem;
@@ -41,6 +49,7 @@
   overflow-y: auto;
 }
 
+/* Кнопка сброса */
 .foxy-reset-btn {
   background: transparent;
   border: none;
@@ -55,25 +64,18 @@
   text-decoration: underline;
 }
 
-/* Белый фон и тёмный текст для всех пузырьков */
-.from-user {
-  background: #ffffff;
-  color: #333333;
-  align-self: flex-end;
-}
-
-.from-foxy {
-  background: #ffffff;
-  color: #333333;
-  align-self: flex-start;
-}
-
-/* Общие стили для пузырьков */
+/* Пузырьки сообщений (и от пользователя, и от Фокси) — белый фон, тёмный текст, справа */
 .from-user,
 .from-foxy {
+  background: #ffffff;
+  color: #333333;
+
   max-width: 80%;
   padding: 0.5rem 1rem;
   border-radius: 1rem;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   white-space: pre-line;
+
+  /* Оба выравниваются вправо */
+  align-self: flex-end;
 }
