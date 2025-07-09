@@ -105,14 +105,14 @@ export function addTypingMessage(text, delay = 500, isHTML = false) {
     }
     bubble.classList.remove("opacity-50");
 
-    // 🎯 Welcome-класс — после печати
-    if (
-      text.includes("Фокси:") &&
-      text.includes("порадовать")
-    ) {
-      bubble.classList.add("welcome-message");
-      console.log("🧪 Класс bubble:", bubble.className);
+    // 🎯 Добавляем welcome-класс, если это приветствие
+    const lower = text.toLowerCase();
+    const isFoxyGreeting = lower.includes("фокси") && lower.includes("порадовать");
 
+    if (isFoxyGreeting) {
+      bubble.classList.add("welcome-message");
+      console.log("🎯 welcome-message добавлен:", bubble.className);
     }
   }, delay);
 }
+
