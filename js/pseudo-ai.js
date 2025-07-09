@@ -167,4 +167,29 @@ form?.addEventListener('submit', e => {
   if (!text) return;
   handleUserInput(text);
   input.value = '';
+  document.addEventListener("DOMContentLoaded", () => {
+  const btn = document.getElementById("toggle-fullscreen");
+  const chatWrapper = document.querySelector(".chat-wrapper");
+
+  let expanded = false;
+
+  btn?.addEventListener("click", () => {
+    expanded = !expanded;
+    chatWrapper.classList.toggle("fullscreen");
+
+    const icon = btn.querySelector("i");
+    icon.setAttribute("data-lucide", expanded ? "minimize" : "maximize");
+    lucide.createIcons(); // обновить иконку
+  });
+
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && expanded) {
+      expanded = false;
+      chatWrapper.classList.remove("fullscreen");
+      const icon = btn.querySelector("i");
+      icon.setAttribute("data-lucide", "maximize");
+      lucide.createIcons();
+    }
+  });
+});
 });
