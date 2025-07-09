@@ -1,0 +1,24 @@
+.service-item {
+  background: #fff;
+  border-radius: 1rem;
+  padding: 1rem;
+  box-shadow: 0 1px 4px rgba(0,0,0,.05);
+  cursor: pointer;
+  transition: background .3s;
+}
+
+.service-item:hover {
+  background: #fdf6f9;
+}
+
+.service-details {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height .5s ease, opacity .3s ease;
+  opacity: 0;
+}
+
+.service-item.active .service-details {
+  max-height: 200px;
+  opacity: 1;
+}
