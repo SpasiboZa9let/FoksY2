@@ -92,3 +92,16 @@
   width: 100%;
   box-sizing: border-box;
 }
+.chat-bubble.welcome-message {
+  align-self: center !important;
+  text-align: center;
+  background: #e0f2fe;
+  color: #0c4a6e;
+  font-weight: 500;
+  box-shadow:
+    0 0 6px rgba(0, 180, 255, 0.4),
+    0 0 10px rgba(0, 180, 255, 0.3),
+    0 0 14px rgba(0, 180, 255, 0.2);
+  transition: all 0.3s ease;
+}
+
