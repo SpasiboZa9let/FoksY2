@@ -213,15 +213,24 @@
     </a>
   </section>
 
- <!-- Скрипты -->
-<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js" defer></script>
-<script src="https://cdn.tailwindcss.com" defer></script>
+   <!-- Скрипты -->
+  <!-- Tailwind CSS (сразу, без defer) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Lucide icons (сразу, без defer) -->
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
 
-<script src="js/reviews-scroll.js" defer></script>
-<script src="js/modal.js" defer></script>
-<script type="module" src="js/pseudo-ai.js" defer></script>
+  <!-- Локальные скрипты (defer) -->
+  <script defer src="js/reviews-scroll.js"></script>
+  <script defer src="js/modal.js"></script>
+  <script defer type="module" src="js/pseudo-ai.js"></script>
 
-<script>
+  <!-- Инициализация иконок Lucide -->
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      lucide.createIcons();
+    });
+  </script>
+
   document.addEventListener("DOMContentLoaded", () => {
     if (window.lucide) {
       lucide.createIcons();
