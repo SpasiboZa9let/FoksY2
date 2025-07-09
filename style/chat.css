@@ -1,8 +1,10 @@
+/* Контейнер чата */
 #pseudo-chat {
   padding-top: 0;
   position: relative;
 }
 
+/* Первый "пузырь" — подсказка — закрепляется */
 #pseudo-chat > .foxy-fade-in:first-child {
   position: sticky;
   top: 0;
@@ -12,6 +14,8 @@
   border-radius: 1rem;
   margin-bottom: 1rem;
 }
+
+/* Основная обёртка чата */
 .chat-wrapper.neon-box {
   border-radius: 1.5rem;
   padding: 1rem;
@@ -22,6 +26,8 @@
     0 0 18px rgba(255, 105, 180, 0.15);
   transition: box-shadow 0.3s ease;
 }
+
+/* Полноэкранный режим */
 .chat-wrapper.fullscreen {
   position: fixed;
   top: 0;
@@ -33,6 +39,8 @@
   padding: 2rem 1rem;
   overflow-y: auto;
 }
+
+/* Кнопка сброса */
 .foxy-reset-btn {
   background: transparent;
   border: none;
@@ -46,8 +54,15 @@
 .foxy-reset-btn:hover {
   text-decoration: underline;
 }
+
+/* Поле ввода пользователя */
 #pseudo-input {
   background: #fff;
   border: 1px solid #ddd;
+  border-radius: 0.75rem;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+  color: #333;
+  width: 100%;
+  box-sizing: border-box;
 }
-
