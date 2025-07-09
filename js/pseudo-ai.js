@@ -82,11 +82,12 @@ function checkPromoReminder(delay = 0) {
 }
 
 function initFoxyAfterName(name) {
-  addTypingMessage(
-    `<strong>${emoji()} Фокси:</strong> ${randomGreeting(name)}`,
-    500,
-    true
-  );
+  addMessage(
+  `${emoji()} Фокси: ${randomGreeting(name)}`,
+  false,
+  false
+);
+
   checkPromoReminder(1300);
   showSuggestions(2100);
 }
