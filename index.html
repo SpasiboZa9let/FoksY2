@@ -60,6 +60,13 @@
   <section class="mt-10">
   <div class="chat-wrapper neon-box">
     <h2 class="text-lg font-semibold mb-3 text-pink-600">Спроси у Фокси</h2>
+      <div class="relative">
+    <button id="toggle-fullscreen"
+            class="absolute top-2 right-2 bg-white/70 hover:bg-white text-pink-600 p-1 rounded-full shadow transition"
+            title="Развернуть">
+      <i data-lucide="maximize" class="w-5 h-5"></i>
+    </button>
+  </div>
     <div id="pseudo-chat" class="flex flex-col space-y-2 max-h-64 overflow-y-auto mb-3"></div>
     <form id="pseudo-form" class="flex space-x-2 mb-3">
       <input id="pseudo-input" type="text" placeholder="Ваш ответ..."
