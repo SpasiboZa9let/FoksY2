@@ -213,16 +213,18 @@
     </a>
   </section>
 
-   <!-- Скрипты -->
-  <!-- Tailwind CSS (сразу, без defer) -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Lucide icons (сразу, без defer) -->
-  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+     <!-- Скрипты: -->
+  <!-- Tailwind (если нужен только для стилей; лучше один раз в <head> или здесь): -->
+  <script defer src="https://cdn.tailwindcss.com"></script>
+  <!-- Lucide: после загрузки сразу рендерим иконки -->
+  <script defer src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"
+          onload="lucide.createIcons()"></script>
 
-  <!-- Локальные скрипты (defer) -->
+  <!-- Ваши локальные скрипты -->
   <script defer src="js/reviews-scroll.js"></script>
   <script defer src="js/modal.js"></script>
-  <script defer type="module" src="js/pseudo-ai.js"></script>
+  <script type="module" defer src="js/pseudo-ai.js"></script>
+
 
   <!-- Инициализация иконок Lucide -->
   <script>
