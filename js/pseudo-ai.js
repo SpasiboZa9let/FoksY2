@@ -1,5 +1,12 @@
 // js/pseudo-ai.js
 
+console.log('[DEBUG] pseudo-ai.js загружен!');
+window.addEventListener("beforeunload", e => {
+  console.warn('[BLOCKED] попытка перезагрузки');
+  e.preventDefault(); e.returnValue = '';
+});
+
+
 import { handleUserInput } from './foxy/handlers/mainHandler.js';
 import { addTypingMessage } from './foxy/ui/dom.js';
 import { emoji } from './foxy/core/services.js';
