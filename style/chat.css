@@ -7,7 +7,6 @@
   gap: 0.5rem;
 }
 
-
 /* Первый "пузырь" — подсказка — закрепляется */
 #pseudo-chat > .foxy-fade-in:first-child {
   position: sticky;
@@ -43,6 +42,8 @@
   padding: 2rem 1rem;
   overflow-y: auto;
 }
+
+/* Пузырь сообщения */
 .chat-bubble {
   max-width: 80%;
   padding: 0.5rem 0.75rem;
@@ -53,18 +54,33 @@
   display: inline-block;
 }
 
+/* Сообщения от Фокси */
 .from-foxy {
   align-self: flex-start;
-  background: #fff0f4;
-  color: #333;
+  background: #fff0f4 !important;
+  color: #333 !important;
 }
 
+/* Сообщения от пользователя */
 .from-user {
   align-self: flex-end;
-  background: #e0f2fe;
-  color: #111;
+  background: #ffffff !important;
+  color: #111 !important;
 }
 
+/* Приветственное сообщение (от Фокси или пользователя) */
+.chat-bubble.welcome-message {
+  align-self: center !important;
+  text-align: center;
+  background: #e0f2fe !important;
+  color: #0c4a6e !important;
+  font-weight: 500;
+  box-shadow:
+    0 0 6px rgba(0, 180, 255, 0.4),
+    0 0 10px rgba(0, 180, 255, 0.3),
+    0 0 14px rgba(0, 180, 255, 0.2);
+  transition: all 0.3s ease;
+}
 
 /* Кнопка сброса */
 .foxy-reset-btn {
@@ -92,16 +108,3 @@
   width: 100%;
   box-sizing: border-box;
 }
-.chat-bubble.welcome-message {
-  align-self: center !important;
-  text-align: center;
-  background: #e0f2fe;
-  color: #0c4a6e;
-  font-weight: 500;
-  box-shadow:
-    0 0 6px rgba(0, 180, 255, 0.4),
-    0 0 10px rgba(0, 180, 255, 0.3),
-    0 0 14px rgba(0, 180, 255, 0.2);
-  transition: all 0.3s ease;
-}
-
