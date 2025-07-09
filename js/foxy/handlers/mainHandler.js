@@ -67,7 +67,7 @@ export function handleUserInput(message) {
   const prevIntent = getLastIntent();
   setLastInput(input.toLowerCase());
 
-  addMessage(`Вы: ${message}`);
+  addMessage(`Вы: ${message}`, false, true);
 
   // Определяем новый интент
   const intent = matchIntent(input);
