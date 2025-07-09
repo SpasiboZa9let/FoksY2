@@ -52,15 +52,16 @@ export function handleUserInput(message) {
 
   // Фаза ввода имени
   if (getLastIntent() === 'askName') {
-    const name = message.trim();
-    setUserName(name);
-    localStorage.setItem('foxy_userName', name);
-    addMessage(`Приятно познакомиться, ${name}! 💖`, false);
-    addTypingMessage(`<strong>${emoji()} Фокси:</strong> ${randomGreeting(name)}`, 300, true);
-    showSuggestions();
-    setLastIntent('');        // сброс интента
-    return;
-  }
+  const name = message.trim();
+  setUserName(name);
+  localStorage.setItem('foxy_userName', name);
+  addMessage(`Приятно познакомиться, ${name}! 💖`, false);
+
+  initFoxyAfterName(name); // ✅ вместо дублирования
+  setLastIntent('');
+  return;
+}
+
 
   const input = message.trim();
   if (!input || input.toLowerCase() === getLastInput()) return;
