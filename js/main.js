@@ -1,7 +1,7 @@
 import { initFoxyChat } from './pseudo-ai.js';
 import { initReviewsScroll } from './reviews-scroll.js';
 import { initGalleryModal } from './modal.js';
-// import { initPriceAccordion } from './services.js'; ← если понадобится
+import { initPriceAccordion } from './foxy/ui/accordion.js';
 
 async function loadSection(id, url) {
   const container = document.getElementById(id);
@@ -28,7 +28,7 @@ window.addEventListener('DOMContentLoaded', async () => {
   initGalleryModal();
 
   await loadSection('services-container','sections/services.html');
-  // initPriceAccordion(); // по желанию
+  initPriceAccordion();
 
   await loadSection('map-container',     'sections/map.html');
 });
