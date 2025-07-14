@@ -128,10 +128,10 @@ btn?.addEventListener("click", () => {
 
 document.addEventListener("keydown", e => {
   if (e.key === "Escape" && expanded) {
-    expanded = false;
-    wrapper.classList.remove("fullscreen");
-    document.body.classList.remove("no-scroll");
-
+  expanded = false;
+  wrapper.classList.remove("fullscreen");
+  document.body.classList.remove("no-scroll");
+  document.body.classList.remove("fullscreen-fix"); //
     const icon = btn.querySelector("i");
     if (icon) {
       icon.setAttribute("data-lucide", "maximize");
