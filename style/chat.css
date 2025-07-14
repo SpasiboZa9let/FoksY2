@@ -54,6 +54,17 @@
   border-top: 1px solid #fbcfe8;
   background: #fff0f4;
 }
+.chat-wrapper.fullscreen #toggle-fullscreen {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  z-index: 100;
+  background: rgba(255, 255, 255, 0.9);
+  color: #ec4899;
+  padding: 0.4rem;
+  border-radius: 9999px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
 
 
 /* Пузырь сообщения */
