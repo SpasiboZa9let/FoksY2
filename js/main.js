@@ -3,13 +3,14 @@ import { initReviewsScroll } from './reviews-scroll.js';
 import { initGalleryModal } from './modal.js';
 import { initPriceAccordion } from './foxy/ui/accordion.js';
 
-async function loadSection(id, url) {
+async function loadSection(id, url, onReady) {
   const container = document.getElementById(id);
   if (!container) return;
   try {
     const res = await fetch(url);
     const html = await res.text();
     container.innerHTML = html;
+    if (typeof onReady === 'function') onReady();
   } catch (err) {
     console.error(err);
     container.innerHTML = `<p style="color:red">Ошибка загрузки ${url}</p>`;
@@ -18,18 +19,9 @@ async function loadSection(id, url) {
 
 window.addEventListener('DOMContentLoaded', async () => {
   await loadSection('hero-container',    'sections/hero.html');
-  await loadSection('chat-container',    'sections/chat.html');
-  initFoxyChat();
-
-  await loadSection('reviews-container', 'sections/reviews.html'); 
-  initReviewsScroll();
-
-  await loadSection('gallery-container', 'sections/gallery.html');
-  initGalleryModal();
-
-  await loadSection('services-container','sections/services.html');
-  await new Promise(r => requestAnimationFrame(() => setTimeout(r, 50)));
-  initPriceAccordion();
-
-  await loadSection('map-container', 'sections/map.html');
+  await loadSection('chat-container',    'sections/chat.html', initFoxyChat);
+  await loadSection('reviews-container', 'sections/reviews.html', initReviewsScroll);
+  await loadSection('gallery-container', 'sections/gallery.html', initGalleryModal);
+  await loadSection('services-container','sections/services.html', initPriceAccordion);
+  await loadSection('map-container',     'sections/map.html');
 });
