@@ -1,10 +1,11 @@
 // js/modal.js
-
-document.addEventListener("DOMContentLoaded", () => {
+export function initGalleryModal() {
   const modal    = document.getElementById("gallery-modal");
   const modalImg = document.getElementById("gallery-modal-img");
   const thumbs   = document.querySelectorAll(".gallery-img");
   const ANIM_PROP = 'opacity';
+
+  if (!modal || !modalImg || thumbs.length === 0) return;
 
   // Открытие мгновенно по touchstart/pointerdown
   thumbs.forEach(thumb => {
@@ -40,4 +41,4 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
   }
-});
+}
