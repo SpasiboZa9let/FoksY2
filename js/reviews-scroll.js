@@ -1,7 +1,8 @@
-/* Горизонтальная бесконечная карусель отзывов */
-document.addEventListener('DOMContentLoaded', async () => {
+export async function initReviewsScroll() {
   const wrapper = document.getElementById('reviews-wrapper');
   if (!wrapper) return;
+
+  wrapper.innerHTML = ''; // очистить перед загрузкой
 
   /* 1. Загружаем фрагмент с 9 картинками */
   const res  = await fetch('reviews.html');
@@ -10,7 +11,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   /* 2. Создаём трек и дублируем содержимое, чтобы анимация была бесконечной */
   const track = document.createElement('div');
   track.classList.add('reviews-track', 'flex', 'items-center');
-  track.innerHTML = html + html;          // удвоение = «лента по кругу»
+  track.innerHTML = html + html; // удвоение для бесконечной прокрутки
   wrapper.appendChild(track);
 
   /* 3. Пауза при наведении/таче */
@@ -19,7 +20,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   track.addEventListener('pointerdown',  () => track.classList.add('paused'));
   track.addEventListener('pointerup',    () => track.classList.remove('paused'));
 
-  /* 4. Клик по кругу — полноэкранный просмотр */
+  /* 4. Клик по картинке — полноэкранный просмотр */
   track.addEventListener('click', (e) => {
     const img = e.target.closest('img');
     if (!img) return;
@@ -43,7 +44,10 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     /* Закрытие по Escape */
     document.addEventListener('keydown', function esc(ev) {
-      if (ev.key === 'Escape') { close(); document.removeEventListener('keydown', esc); }
+      if (ev.key === 'Escape') { 
+        close(); 
+        document.removeEventListener('keydown', esc); 
+      }
     });
   });
-});
+}
