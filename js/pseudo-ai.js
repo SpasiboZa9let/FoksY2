@@ -82,81 +82,78 @@ function checkPromoReminder(delay = 0) {
 
 function initFoxyAfterName(name) {
   addTypingMessage(
-  `<strong>${emoji()} Фокси:</strong> ${randomGreeting(name)}`,
-  500,
-  true,
-  false
-);
-
+    `<strong>${emoji()} Фокси:</strong> ${randomGreeting(name)}`,
+    500,
+    true,
+    false
+  );
 
   checkPromoReminder(1300);
   showSuggestions(2100);
 }
 
-window.addEventListener('DOMContentLoaded', () => {
-  console.log('[DEBUG] pseudo-ai.js загружен!');
+// Объявляем главную функцию инициализации чата
+export function initFoxyChat() {
+  console.log('[DEBUG] Инициализация Фокси-чата');
 
   const name = localStorage.getItem('foxy_userName');
   if (!name || name.trim().length < 2) {
     addTypingMessage('🦊 Привет! Как тебя зовут?', 500);
-    setLastIntent('askName');            // ← теперь через сеттер
+    setLastIntent('askName');
   } else {
     setUserName(name);
     initFoxyAfterName(name);
   }
 
   // Fullscreen-кнопка
-  // Fullscreen-кнопка
-const btn     = document.getElementById("toggle-fullscreen");
-const wrapper = document.querySelector(".chat-wrapper");
-let expanded = false;
+  const btn = document.getElementById("toggle-fullscreen");
+  const wrapper = document.querySelector(".chat-wrapper");
+  let expanded = false;
 
-btn?.addEventListener("click", () => {
-  expanded = !expanded;
-  wrapper.classList.toggle("fullscreen");
-  document.body.classList.toggle("no-scroll", expanded);
-  document.body.classList.toggle("fullscreen-fix", expanded); // 👈 вот это
+  btn?.addEventListener("click", () => {
+    expanded = !expanded;
+    wrapper.classList.toggle("fullscreen");
+    document.body.classList.toggle("no-scroll", expanded);
+    document.body.classList.toggle("fullscreen-fix", expanded);
 
-  const icon = btn.querySelector("i");
-  if (icon) {
-    icon.setAttribute("data-lucide", expanded ? "minimize" : "maximize");
-    lucide.createIcons();
-  }
-});
-
-
-
-document.addEventListener("keydown", e => {
-  if (e.key === "Escape" && expanded) {
-  expanded = false;
-  wrapper.classList.remove("fullscreen");
-  document.body.classList.remove("no-scroll");
-  document.body.classList.remove("fullscreen-fix"); //
     const icon = btn.querySelector("i");
     if (icon) {
-      icon.setAttribute("data-lucide", "maximize");
+      icon.setAttribute("data-lucide", expanded ? "minimize" : "maximize");
       lucide.createIcons();
     }
-  }
-});
+  });
 
+  document.addEventListener("keydown", e => {
+    if (e.key === "Escape" && expanded) {
+      expanded = false;
+      wrapper.classList.remove("fullscreen");
+      document.body.classList.remove("no-scroll");
+      document.body.classList.remove("fullscreen-fix");
 
-  // ОБРАБОТКА ВВОДА БЕЗ <form>
-  const input     = document.getElementById('pseudo-input');
+      const icon = btn.querySelector("i");
+      if (icon) {
+        icon.setAttribute("data-lucide", "maximize");
+        lucide.createIcons();
+      }
+    }
+  });
+
+  // Обработка ввода без <form>
+  const input = document.getElementById('pseudo-input');
   const submitBtn = document.getElementById('pseudo-submit');
 
   function handleSubmit() {
     const text = input.value.trim();
     if (!text) return;
 
-    const intent = getLastIntent();      // ← теперь через геттер
+    const intent = getLastIntent();
     console.log('[DEBUG] Submit intent:', intent);
 
     if (intent === 'askName') {
       localStorage.setItem('foxy_userName', text);
-      setLastIntent('');                // ← сброс интента через сеттер
-      clearChat();                      // очищаем все предыдущие сообщения
-      input.value = '';                 // убираем текст из поля
+      setLastIntent('');
+      clearChat();
+      input.value = '';
       setUserName(text);
       initFoxyAfterName(text);
     } else {
@@ -173,11 +170,12 @@ document.addEventListener("keydown", e => {
     }
   });
 
-  // Обработка меню и промо-кнопок
+  // Обработка кнопок и промо-кнопок через делегирование
   document.body.addEventListener('click', event => {
     const actionBtn = event.target.closest('[data-action]');
     if (actionBtn) {
       handleUserInput(actionBtn.getAttribute('data-action'));
+      return;
     }
     const promoBtn = event.target.closest('[data-promo-action]');
     if (promoBtn) {
@@ -194,16 +192,16 @@ document.addEventListener("keydown", e => {
     }
   });
 
-  // СБРОС ДАННЫХ
+  // Сброс данных
   const resetBtn = document.getElementById('foxy-reset');
   resetBtn?.addEventListener('click', () => {
     if (!confirm('Вы точно хотите сбросить все ваши данные?')) return;
-    ['foxy_userName','promoCode','promoExpires','promoUsed']
+    ['foxy_userName', 'promoCode', 'promoExpires', 'promoUsed']
       .forEach(key => localStorage.removeItem(key));
-    setLastIntent('');                // ← сброс интента через сеттер
-    clearChat();                      // очищаем чат
-    input.value = '';                 // очищаем поле ввода
+    setLastIntent('');
+    clearChat();
+    input.value = '';
     addTypingMessage('🦊 Данные сброшены. Привет! Как тебя зовут?', 300);
-    setLastIntent('askName');         // ← запускаем фазу ввода имени
+    setLastIntent('askName');
   });
-});
+}
