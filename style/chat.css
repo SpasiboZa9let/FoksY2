@@ -74,6 +74,12 @@
   box-shadow: 0 2px 8px rgba(0,0,0,0.05);
 }
 
+body.fullscreen-fix {
+  max-width: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
 /* Пузырь сообщения */
 .chat-bubble {
   max-width: 80%;
