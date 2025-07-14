@@ -61,6 +61,10 @@
   border-top: 1px solid #fbcfe8;
   background: #fff0f4;
 }
+.chat-wrapper.fullscreen #pseudo-form {
+  margin-bottom: 0 !important;
+}
+
 
 .chat-wrapper.fullscreen #toggle-fullscreen {
   position: absolute;
