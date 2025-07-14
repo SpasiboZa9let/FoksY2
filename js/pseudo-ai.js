@@ -115,12 +115,15 @@ btn?.addEventListener("click", () => {
   expanded = !expanded;
   wrapper.classList.toggle("fullscreen");
   document.body.classList.toggle("no-scroll", expanded);
+  document.body.classList.toggle("fullscreen-fix", expanded); // 👈 вот это
+
   const icon = btn.querySelector("i");
   if (icon) {
     icon.setAttribute("data-lucide", expanded ? "minimize" : "maximize");
     lucide.createIcons();
   }
 });
+
 
 
 document.addEventListener("keydown", e => {
