@@ -1,7 +1,7 @@
 import { initFoxyChat } from './pseudo-ai.js';
 import { initReviewsScroll } from './reviews-scroll.js';
 import { initGalleryModal } from './modal.js';
-import { initPriceAccordion } from './js/foxy/ui/accordion.js';
+import { initPriceAccordion } from './foxy/ui/accordion.js';
 
 
 async function loadSection(id, url) {
