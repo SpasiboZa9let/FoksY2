@@ -28,7 +28,8 @@ window.addEventListener('DOMContentLoaded', async () => {
   initGalleryModal();
 
   await loadSection('services-container','sections/services.html');
-setTimeout(() => initPriceAccordion(), 100); // ← задержка
+  await new Promise(r => requestAnimationFrame(() => setTimeout(r, 50)));
+  initPriceAccordion();
 
-  await loadSection('map-container',     'sections/map.html');
+  await loadSection('map-container', 'sections/map.html');
 });
