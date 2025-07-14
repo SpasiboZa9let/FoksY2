@@ -1,10 +1,10 @@
-// foxy/ui/accordion.js
 export function initPriceAccordion() {
+  console.log('[Accordion] initPriceAccordion вызван');
+
   const items = document.querySelectorAll('.service-item');
-  if (!items.length) {
-    console.warn('[Accordion] service-item not found');
-    return;
-  }
+  console.log(`[Accordion] найдено элементов: ${items.length}`);
+
+  if (!items.length) return;
 
   items.forEach(item => {
     item.addEventListener('click', () => {
