@@ -7,7 +7,7 @@
 
   <!-- Критичные стили inline -->
   <style>
-    /* Базовые шрифты и фон */
+    /* базовые стили (как было) */
     body {
       font-family: 'Inter', sans-serif;
       background: #FAF7F9;
@@ -19,7 +19,6 @@
       font-family: 'Playfair Display', serif;
       margin: 0;
     }
-    /* Контейнер чата */
     .chat-wrapper {
       background: #fff0f4;
       border-radius: 1.5rem;
@@ -29,20 +28,7 @@
         0 0 12px rgba(255,105,180,0.2),
         0 0 18px rgba(255,105,180,0.15);
     }
-    /* Подсказки */
-    .foxy-suggestions {
-      background: #fff0f4;
-      border-radius: 1rem;
-    }
-    /* Базовый сброс для инпутов и кнопок */
-    input, button {
-      font-family: inherit;
-      font-size: 1rem;
-      border: none;
-      background: none;
-      padding: 0;
-      margin: 0;
-    }
+    /* ... остальные стили */
   </style>
 
   <!-- Шрифты -->
@@ -53,200 +39,29 @@
   <script src="https://cdn.tailwindcss.com" defer></script>
   <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js" defer></script>
 
-  <!-- Предзагрузка основного CSS -->
-  <link rel="preload" href="style/style.css" as="style" onload="this.rel='stylesheet'">
-  <noscript>
-    <link rel="stylesheet" href="style/style.css">
-  </noscript>
+  <!-- Основные стили -->
+  <link rel="stylesheet" href="style/style.css" />
 </head>
 
 <body class="antialiased tracking-tight max-w-md mx-auto p-4">
 
-  <!-- Hero -->
-  <section class="flex flex-col items-center text-center">
-    <div class="w-32 h-32 rounded-full shadow-md ring-4 ring-pink-100 overflow-hidden"
-         style="animation:fadeUp .8s forwards .1s;opacity:0;">
-      <img src="gallery/avatar/avatar.jpg" alt="Фото мастера" class="w-full h-full object-cover" />
-    </div>
-    <h1 class="mt-4 text-2xl font-semibold text-gray-900 lux"
-        style="animation:fadeUp .8s forwards .25s;opacity:0;">
-      Анна&nbsp;Фоксольд
-    </h1>
-    <p class="mt-2 text-sm text-gray-600 leading-relaxed px-6"
-       style="animation:fadeUp .8s forwards .35s;opacity:0;">
-      Сертифицированный мастер маникюра. Забочусь о красоте и здоровье ваших ногтей — с вниманием, теплом и точностью.
-    </p>
-    <a href="https://t.me/foxold_a" target="_blank"
-       class="mt-6 w-full max-w-xs py-4 bg-pink-400 text-white rounded-full shadow-lg text-base font-medium text-center block
-              active:scale-95 transition duration-150 hover:bg-pink-500 focus:outline-none focus:ring-2 focus:ring-pink-300"
-       style="animation:fadeUp .8s forwards .45s;opacity:0;">
-      Записаться
-    </a>
-  </section>
+  <!--#include virtual="sections/hero.html" -->
+  <!--#include virtual="sections/chat.html" -->
+  <!--#include virtual="sections/services.html" -->
+  <!--#include virtual="sections/reviews.html" -->
+  <!--#include virtual="sections/gallery.html" -->
+  <!--#include virtual="sections/map.html" -->
 
-  <!-- Фокси-чат -->
-  <section class="mt-10">
-    <div class="chat-wrapper neon-box relative">
-      <button id="toggle-fullscreen"
-              class="absolute top-2 right-2 bg-white/70 hover:bg-white text-pink-600 p-1 rounded-full shadow transition z-20"
-              title="Развернуть">
-        <i data-lucide="maximize" class="w-5 h-5"></i>
-      </button>
-
-      <h2 class="text-lg font-semibold mb-3 text-pink-600">Спроси у Фокси</h2>
-      <div id="pseudo-chat" class="flex flex-col items-start space-y-2 overflow-y-auto"></div>
-
-      <!-- Интерфейс ввода без <form> -->
-      <div id="pseudo-form" class="flex space-x-2 mb-3">
-        <input id="pseudo-input" type="text" placeholder="Ваш ответ…"
-               class="flex-1 rounded-xl border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-pink-300" />
-        <button id="pseudo-submit"
-                class="bg-pink-500 text-white px-4 py-2 rounded-xl text-sm hover:bg-pink-600 focus:outline-none">
-          Ок
-        </button>
-      </div>
-
-      <div id="pseudo-reactions" class="flex flex-wrap gap-2 text-sm text-pink-600 font-medium"></div>
-      <button id="foxy-reset" class="foxy-reset-btn">Сброс данных</button>
-    </div>
-  </section>
-
-  <!-- Прайс -->
- <!-- Services ---------------------------------------------------------- -->
-  <section class="mt-10">
-    <h2 class="font-semibold text-gray-900 mb-4">Прайс</h2>
-
-    <div class="space-y-4">
-      <div class="service-item" onclick="toggleService(this)">
-        <div class="font-semibold">Комби маникюр</div>
-        <div class="service-details text-sm mt-2 text-gray-700">
-          Снятие + комби-маникюр<br>Цена: <strong>1000₽</strong>
-        </div>
-      </div>
-
-      <div class="service-item" onclick="toggleService(this)">
-        <div class="font-semibold">Маникюр с покрытием</div>
-        <div class="service-details text-sm mt-2 text-gray-700">
-          Снятие + комби + укрепление коротких ногтей + дизайн (френч, стемпинг, втирка, стразы, наклейки)<br>
-          Цена: <strong>от 1700₽</strong>
-        </div>
-      </div>
-
-      <div class="service-item" onclick="toggleService(this)">
-        <div class="font-semibold">Коррекция длины</div>
-        <div class="service-details text-sm mt-2 text-gray-700">
-          Снятие + комби + укрепление средних и длинных ногтей + дизайн (френч, стемпинг, втирка, стразы, наклейки)<br>
-          Цена: <strong>от 2100₽</strong>
-        </div>
-      </div>
-
-      <div class="service-item" onclick="toggleService(this)">
-        <div class="font-semibold">Наращивание ногтей</div>
-        <div class="service-details text-sm mt-2 text-gray-700">
-          Полный комплекс + индивидуальный дизайн<br>
-          Цена: <strong>3000₽</strong>
-        </div>
-      </div>
-
-      <div class="service-item" onclick="toggleService(this)">
-        <div class="font-semibold">Снятие покрытия</div>
-        <div class="service-details text-sm mt-2 text-gray-700">
-          Без дальнейшего покрытия<br>
-          Цена: <strong>500₽</strong>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Отзывы -->
-  <section class="mt-10">
-    <h2 class="font-semibold text-gray-900 mb-3 lux"
-        style="animation:fadeUp .8s forwards 1s;opacity:0;">Отзывы</h2>
-    <div id="reviews-wrapper"></div>
-  </section>
-
-    <!-- Gallery ----------------------------------------------------------- -->
-  <section class="mt-10 mb-6">
-    <h2 class="font-semibold text-gray-900 mb-3 lux"
-        style="animation:fadeUp .8s forwards 1.2s;opacity:0;">Галерея</h2>
-
-    <div class="grid grid-cols-3 gap-2">
-      <img src="gallery/1.jpg" alt="Ногти 1"
-           class="gallery-img w-full h-24 object-cover rounded-xl shadow-sm" />
-      <img src="gallery/2.jpg" alt="Ногти 2"
-           class="gallery-img w-full h-24 object-cover rounded-xl shadow-sm" />
-      <img src="gallery/3.jpg" alt="Ногти 3"
-           class="gallery-img w-full h-24 object-cover rounded-xl shadow-sm" />
-      <img src="gallery/4.jpg" alt="Ногти 4"
-           class="gallery-img w-full h-24 object-cover rounded-xl shadow-sm" />
-      <img src="gallery/5.jpg" alt="Ногти 5"
-           class="gallery-img w-full h-24 object-cover rounded-xl shadow-sm" />
-      <img src="gallery/6.jpg" alt="Ногти 6"
-           class="gallery-img w-full h-24 object-cover rounded-xl shadow-sm" />
-      <img src="gallery/7.jpg" alt="Ногти 7"
-           class="gallery-img w-full h-24 object-cover rounded-xl shadow-sm" />
-      <img src="gallery/8.jpg" alt="Ногти 8"
-           class="gallery-img w-full h-24 object-cover rounded-xl shadow-sm" />
-    </div>
-  </section>
-
-  <!-- Модал галереи -->
-  <div id="gallery-modal"
-       class="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50
-              opacity-0 pointer-events-none transition-opacity duration-300">
-    <img id="gallery-modal-img"
-         class="max-w-full max-h-full transform scale-0 transition-transform duration-300 rounded-lg shadow-lg"
-         src="" alt="Большое изображение" />
-  </div>
-
-  <!-- Карта -->
-  <section class="mt-10 mb-6">
-    <h2 class="font-semibold text-gray-900 mb-3 lux">Как найти</h2>
-    <div class="w-full rounded-xl overflow-hidden shadow-sm">
-      <iframe src="https://yandex.ru/map-widget/v1/?um=constructor%3Aa4363f5e433d4141977c59310cdd52b34d5ecac8605bbf0baaa63348dae2e7ca&amp;source=constructor"
-              width="100%" height="300" frameborder="0" style="border:0;" allowfullscreen></iframe>
-    </div>
-    <a href="https://yandex.ru/maps/?text=Октябрьская%2017а%20209%20Ухта"
-       target="_blank"
-       class="block mt-4 text-sm text-pink-500 text-center underline hover:text-pink-600">
-      Открыть в Яндекс.Картах
-    </a>
-  </section>
-
-     <!-- Скрипты: -->
-  <!-- Tailwind (если нужен только для стилей; лучше один раз в <head> или здесь): -->
-  <script defer src="https://cdn.tailwindcss.com"></script>
-  <!-- Lucide: после загрузки сразу рендерим иконки -->
-  <script defer src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"
-          onload="lucide.createIcons()"></script>
-
-  <!-- Ваши локальные скрипты -->
+  <!-- Скрипты -->
   <script defer src="js/reviews-scroll.js"></script>
   <script defer src="js/modal.js"></script>
   <script type="module" defer src="js/pseudo-ai.js"></script>
 
-
-  <!-- Инициализация иконок Lucide -->
   <script>
     document.addEventListener("DOMContentLoaded", () => {
-      lucide.createIcons();
+      if (window.lucide) lucide.createIcons();
     });
   </script>
-
-  document.addEventListener("DOMContentLoaded", () => {
-    if (window.lucide) {
-      lucide.createIcons();
-    }
-  });
-
-  // Прайс-аккордеон
-  function toggleService(el) {
-    document.querySelectorAll('.service-item').forEach(item => {
-      if (item !== el) item.classList.remove('active');
-    });
-    el.classList.toggle('active');
-  }
-</script>
 
 </body>
 </html>
