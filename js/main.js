@@ -21,7 +21,7 @@ window.addEventListener('DOMContentLoaded', async () => {
   await loadSection('chat-container',    'sections/chat.html');
   initFoxyChat();
 
-  await loadSection('reviews-container', 'sections/reviews.html');
+  await loadSection('reviews-container', 'sections/reviews.html'); 
   initReviewsScroll();
 
   await loadSection('gallery-container', 'sections/gallery.html');
