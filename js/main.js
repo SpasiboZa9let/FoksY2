@@ -28,7 +28,7 @@ window.addEventListener('DOMContentLoaded', async () => {
   initGalleryModal();
 
   await loadSection('services-container','sections/services.html');
-  initPriceAccordion();
+setTimeout(() => initPriceAccordion(), 100); // ← задержка
 
   await loadSection('map-container',     'sections/map.html');
 });
