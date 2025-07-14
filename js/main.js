@@ -28,7 +28,9 @@ window.addEventListener('DOMContentLoaded', async () => {
   initGalleryModal();
 
   await loadSection('services-container','sections/services.html');
-  initPriceAccordion(); // вызываем строго после
+  console.log('[main.js] services загружен, вызываем initPriceAccordion');
+  initPriceAccordion();
+
 
   await loadSection('map-container',     'sections/map.html');
 });
