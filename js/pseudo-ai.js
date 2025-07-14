@@ -127,6 +127,8 @@ document.addEventListener("keydown", e => {
   if (e.key === "Escape" && expanded) {
     expanded = false;
     wrapper.classList.remove("fullscreen");
+    document.body.classList.remove("no-scroll");
+
     const icon = btn.querySelector("i");
     if (icon) {
       icon.setAttribute("data-lucide", "maximize");
@@ -134,6 +136,7 @@ document.addEventListener("keydown", e => {
     }
   }
 });
+
 
   // ОБРАБОТКА ВВОДА БЕЗ <form>
   const input     = document.getElementById('pseudo-input');
