@@ -48,43 +48,7 @@
     });
   </script>
 
-  <!-- Главный модуль -->
-  <script type="module">
-    import { initFoxyChat } from './js/pseudo-ai.js';
-    import { initReviewsScroll } from './js/reviews-scroll.js';
-    import { initGalleryModal } from './js/modal.js';
-
-    async function loadSection(id, url) {
-      const container = document.getElementById(id);
-      if (!container) return;
-      try {
-        const resp = await fetch(url);
-        if (!resp.ok) throw new Error(`Ошибка загрузки ${url}: ${resp.status}`);
-        const html = await resp.text();
-        container.innerHTML = html;
-      } catch (e) {
-        console.error(e);
-        container.innerHTML = `<p style="color:red; text-align:center;">Не удалось загрузить раздел.</p>`;
-      }
-    }
-
-    window.addEventListener('DOMContentLoaded', async () => {
-      await loadSection('hero-container', 'sections/hero.html');
-
-      await loadSection('chat-container', 'sections/chat.html');
-      initFoxyChat();
-
-      await loadSection('services-container', 'sections/services.html');
-
-      await loadSection('reviews-container', 'sections/reviews.html');
-      initReviewsScroll();
-
-      await loadSection('gallery-container', 'sections/gallery.html');
-      initGalleryModal();
-
-      await loadSection('map-container', 'sections/map.html');
-    });
-  </script>
-
+  <!-- ✅ Подключаем внешний main.js -->
+  <script type="module" src="js/main.js"></script>
 </body>
 </html>
