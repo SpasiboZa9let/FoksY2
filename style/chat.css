@@ -7,6 +7,11 @@
   flex-direction: column;
   gap: 0.5rem;
 }
+.chat-wrapper:not(.fullscreen) #pseudo-chat {
+  max-height: 16rem; /* или 256px */
+  overflow-y: auto;
+}
+
 
 /* Первый "пузырь" — подсказка — закрепляется */
 #pseudo-chat > .foxy-fade-in:first-child {
