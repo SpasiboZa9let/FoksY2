@@ -13,6 +13,14 @@ export function getReactions() {
 }
 
 /**
+ * Прокручивает чат вниз
+ */
+export function scrollToBottom() {
+  const chat = getChat();
+  if (chat) chat.scrollTop = chat.scrollHeight;
+}
+
+/**
  * Добавляет в чат новое сообщение.
  * @param {string} text — текст сообщения (или HTML, если isHTML=true)
  * @param {boolean} [isHTML=false] — вставлять как HTML
@@ -25,7 +33,6 @@ export function addMessage(text, isHTML = false, fromUser = false) {
   const bubble = document.createElement("div");
   bubble.className = `chat-bubble foxy-fade-in ${fromUser ? 'from-user' : 'from-foxy'}`;
 
-  // 💎 Все сообщения, содержащие "Фокси:", считаем приветственными
   if (!fromUser && text.includes('Фокси:')) {
     bubble.classList.add("welcome-message");
   }
@@ -36,10 +43,8 @@ export function addMessage(text, isHTML = false, fromUser = false) {
     bubble.textContent = text;
   }
 
-  console.log("class:", bubble.className);
-
   chat.appendChild(bubble);
-  chat.scrollTop = chat.scrollHeight;
+  scrollToBottom();
 }
 
 /**
@@ -92,10 +97,9 @@ export function addTypingMessage(text, delay = 500, isHTML = false, fromUser = f
   bubble.textContent = "Фокси печатает...";
 
   chat.appendChild(bubble);
-  chat.scrollTop = chat.scrollHeight;
+  scrollToBottom();
 
   setTimeout(() => {
-    // 1. Вставляем содержимое
     if (isHTML) {
       bubble.innerHTML = text;
     } else {
@@ -104,10 +108,10 @@ export function addTypingMessage(text, delay = 500, isHTML = false, fromUser = f
 
     bubble.classList.remove("opacity-50");
 
-    // 2. Любое сообщение с "Фокси:" делаем приветственным
     if (!fromUser && text.includes('Фокси:')) {
       bubble.classList.add("welcome-message");
-      console.log("🎯 welcome (typing):", bubble.className);
     }
+
+    scrollToBottom();
   }, delay);
 }
