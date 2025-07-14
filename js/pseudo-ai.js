@@ -114,12 +114,14 @@ let expanded = false;
 btn?.addEventListener("click", () => {
   expanded = !expanded;
   wrapper.classList.toggle("fullscreen");
+  document.body.classList.toggle("no-scroll", expanded);
   const icon = btn.querySelector("i");
   if (icon) {
     icon.setAttribute("data-lucide", expanded ? "minimize" : "maximize");
     lucide.createIcons();
   }
 });
+
 
 document.addEventListener("keydown", e => {
   if (e.key === "Escape" && expanded) {
