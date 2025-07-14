@@ -94,6 +94,7 @@ function initFoxyAfterName(name) {
 
 // Объявляем главную функцию инициализации чата
 export function initFoxyChat() {
+  lucide.createIcons();
   console.log('[DEBUG] Инициализация Фокси-чата');
 
   const name = localStorage.getItem('foxy_userName');
