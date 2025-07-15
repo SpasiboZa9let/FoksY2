@@ -7,6 +7,7 @@ import {
   getLastService, setLastService,
   getUserName, setUserName
 } from "../core/state.js";
+import { calculateDiscount } from "../core/calc.js";
 
 import { addMessage, clearButtons } from "../ui/dom.js";
 import { renderBookingOptions, renderServiceList } from "../ui/ui.js";
