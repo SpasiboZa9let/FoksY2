@@ -154,6 +154,10 @@ if (inquireRe.test(input)) {
     case "points":
       showCurrentPoints();
       break;
+      case "calc":
+  setLastIntent("awaitingCalc");
+  addMessage("Введи цену услуги и количество баллов через пробел, например:\n1500 300");
+  return;
 
     case "mood":
       handleMood();
