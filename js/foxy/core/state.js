@@ -1,24 +1,20 @@
 // foxy/core/state.js
 
-// Локальные переменные для остальных состояний
 let lastInput = "";
 let lastService = null;
 let lastReplyType = null;
 let foxyMood = "default";
-
-// Переменная для имени пользователя
 let userName = "";
 
-// Работа с lastIntent через localStorage
+// localStorage: интент
 export function getLastIntent() {
   return localStorage.getItem('foxy_lastIntent') || "";
 }
-
 export function setLastIntent(intent) {
   localStorage.setItem('foxy_lastIntent', intent);
 }
 
-// Сеттеры/геттеры для других состояний, если нужно
+// Состояния
 export function setLastInput(input) {
   lastInput = input;
 }
@@ -47,10 +43,20 @@ export function getFoxyMood() {
   return foxyMood;
 }
 
-// Работа с именем пользователя
+// Имя пользователя
 export function setUserName(name) {
   userName = name;
 }
 export function getUserName() {
   return userName;
+}
+
+// 🔁 Сброс
+export function resetState() {
+  lastInput = "";
+  lastService = null;
+  lastReplyType = null;
+  foxyMood = "default";
+  userName = "";
+  localStorage.removeItem('foxy_lastIntent');
 }
