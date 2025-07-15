@@ -1,27 +1,9 @@
 export async function sendBooking({ name, service, date }) {
-  try {
-    const res = await fetch('http://localhost:3000/webhook', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name, service, date })
-    });
-    return await res.json();
-  } catch (err) {
-    console.error('[sendBooking] ошибка:', err.message);
-    return { success: false, error: err.message };
-  }
+  console.log(`[sendBooking] ➤`, { name, service, date });
+  return { success: true, mocked: true };
 }
 
 export async function requestVisitConfirmation(name, date) {
-  try {
-    const res = await fetch('http://localhost:3000/confirm-visit', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name, date })
-    });
-    return await res.json();
-  } catch (err) {
-    console.error('[requestVisitConfirmation] ошибка:', err.message);
-    return { success: false, error: err.message };
-  }
+  console.log(`[requestVisitConfirmation] ➤`, { name, date });
+  return { success: true, mocked: true };
 }
