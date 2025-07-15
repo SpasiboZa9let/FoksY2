@@ -58,6 +58,8 @@ function checkPromoReminder(delay = 0) {
 
     if (localStorage.getItem("promoUsed") !== 'true') {
       const deadline = new Date(expires).toLocaleDateString();
+
+      // 1. Показ блока
       addTypingMessage(
         `<div class="foxy-promo no-opacity">
            <p>🎁 Промокод <strong>${promoCode}</strong> до ${deadline}</p>
@@ -69,6 +71,8 @@ function checkPromoReminder(delay = 0) {
         450,
         true
       );
+
+      // 2. Плавное появление
       setTimeout(() => {
         const el = document.querySelector('.foxy-promo');
         if (el) {
@@ -76,9 +80,23 @@ function checkPromoReminder(delay = 0) {
           el.classList.add('foxy-fade-in');
         }
       }, 550);
+
+      // 3. Автоматическое скрытие
+      setTimeout(() => {
+        const promo = document.querySelector('.foxy-promo');
+        if (!promo || localStorage.getItem('promoUsed') === 'true') return;
+
+        promo.style.transition = 'opacity 0.6s ease';
+        promo.style.opacity = '0';
+
+        setTimeout(() => {
+          promo.remove();
+        }, 600);
+      }, 7000);
     }
   }, delay);
 }
+
 
 function initFoxyAfterName(name) {
   const bubbleHTML = `<strong>${emoji()} Фокси:</strong> ${randomGreeting(name)}`;
