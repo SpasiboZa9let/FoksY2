@@ -16,7 +16,6 @@ import { handleDesign } from "./design.js";
 import { handleMood } from "./mood.js";
 import { handleSmalltalk } from "./smalltalk.js";
 import { handleServiceInput, showServiceDetails } from "./servicesHandler.js";
-import { handleDiscount } from "./discount.js";
 
 const greetings = [
   `Привет, %NAME%! 💖 Чем сегодня порадовать твои ноготки?`,
@@ -78,11 +77,6 @@ export function handleUserInput(message) {
     return;
   }
 
-  // Промо / скидка
-  if (intent === "discount") {
-    handleDiscount();
-    return;
-  }
 
   // Smalltalk
   if (handleSmalltalk(intent)) return;
