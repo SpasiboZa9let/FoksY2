@@ -40,7 +40,7 @@ function showSuggestions() {
          <button class="ai-btn" data-action="дизайн">🎨 Вдохновиться идеями дизайна</button>
          <button class="ai-btn" data-action="записаться">📅 Записаться на удобное время</button>
          <button class="ai-btn" data-action="что ты умеешь">❓ Узнать все мои возможности</button>
-         <button class="ai-btn" data-action="скидка">🏷️ Скидка</button>
+         <button class="ai-btn" data-action="баллы">⭐ Мои баллы</button>
        </div>
        <div class="footer">Выбери, что тебе по душе, и я всё покажу 💖</div>
      </div>`,
