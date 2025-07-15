@@ -11,7 +11,7 @@ import { calculateDiscount } from "../core/calc.js";
 import { addMessage, clearButtons, clearChat } from "../ui/dom.js";
 import { renderBookingOptions, renderServiceList } from "../ui/ui.js";
 import { showCurrentPoints } from "../core/rewards.js";
-import { addLoyaltyPoints } from "../core/rewards.js";
+import { addLoyaltyPoints, redeemCode } from "../core/rewards.js";
 
 import { handleDesign } from "./design.js";
 import { handleMood } from "./mood.js";
@@ -221,6 +221,16 @@ export async function handleUserInput(message) {
       addMessage(randomReply("fallback"));
       renderServiceList();
   }
+}
+
+// Обработка промокодов (например, AB94, FOXY22)
+function handlePromoCode(input) {
+  const clean = input.trim().toUpperCase();
+  if (/^[A-Z0-9]{4,10}$/.test(clean)) {
+    redeemCode(clean);
+    return true;
+  }
+  return false;
 }
 
 
