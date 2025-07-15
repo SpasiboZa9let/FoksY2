@@ -26,6 +26,7 @@ export function handleSmalltalk(intent) {
         { text: "📅 Запись",       callback: () => renderBookingOptions() },
         { text: "⭐ Мои баллы",    callback: () => handleUserInput("баллы") },
         { text: "🧮 Калькулятор",  callback: () => handleUserInput("калькулятор") },
+        { text: "🎉 Я уже записана",   callback: () => handleUserInput("уже записана") },
         { text: "❓ Помощь",       callback: () => handleUserInput("помощь") }
       ]);
     },
