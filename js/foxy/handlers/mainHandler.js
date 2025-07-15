@@ -1,4 +1,3 @@
-// js/foxy/handlers/mainHandler.js
 import { matchIntent } from "../core/intents.js";
 import { matchService, emoji, services, randomReply } from "../core/services.js";
 import {
@@ -9,7 +8,7 @@ import {
 } from "../core/state.js";
 import { calculateDiscount } from "../core/calc.js";
 
-import { addMessage, clearButtons } from "../ui/dom.js";
+import { addMessage, clearButtons, clearChat } from "../ui/dom.js";
 import { renderBookingOptions, renderServiceList } from "../ui/ui.js";
 import { showCurrentPoints } from "../core/rewards.js";
 
@@ -31,6 +30,11 @@ function randomGreeting(name) {
   return tpl.replace("%NAME%", name);
 }
 
+export function startCalc() {
+  setLastIntent("awaitingCalc");
+  addMessage("Введи цену услуги и количество баллов через пробел, например:\n1500 300");
+}
+
 function showSuggestions() {
   addMessage(
     `<div class="foxy-suggestions">
@@ -41,6 +45,7 @@ function showSuggestions() {
          <button class="ai-btn" data-action="записаться">📅 Записаться на удобное время</button>
          <button class="ai-btn" data-action="что ты умеешь">❓ Узнать все мои возможности</button>
          <button class="ai-btn" data-action="баллы">⭐ Мои баллы</button>
+         <button class="ai-btn" data-action="калькулятор">🧮 Калькулятор скидки</button>
        </div>
        <div class="footer">Выбери, что тебе по душе, и я всё покажу 💖</div>
      </div>`,
@@ -51,7 +56,6 @@ function showSuggestions() {
 export function handleUserInput(message) {
   clearButtons();
 
-  // Имя
   if (getLastIntent() === 'askName') {
     const name = message.trim();
     setUserName(name);
@@ -65,24 +69,39 @@ export function handleUserInput(message) {
   const input = message.trim();
   if (!input || input.toLowerCase() === getLastInput()) return;
 
-  const prevIntent = getLastIntent();
   setLastInput(input.toLowerCase());
   addMessage(`Вы: ${message}`, false, true);
+
+  // калькулятор (шаг 2)
+  if (getLastIntent() === "awaitingCalc") {
+    const match = input.match(/(\d+)[^\d]+(\d+)/);
+    if (match) {
+      const price = parseInt(match[1]);
+      const points = parseInt(match[2]);
+      const res = calculateDiscount(points, price);
+      addMessage(
+        `🎯 Скидка: ${res.discountRub}₽ (${res.discountPercent}%)\n` +
+        `Итоговая цена: ${res.finalPrice}₽\n` +
+        `Будет списано: ${res.usedPoints} баллов`
+      );
+    } else {
+      addMessage("Формат не понятен. Напиши, например:\n1200 300");
+    }
+    setLastIntent("");
+    return;
+  }
 
   const intent = matchIntent(input);
   setLastIntent(intent);
 
   // Подтверждение услуги
-  if (intent === 'confirm' && prevIntent === 'service') {
+  if (intent === 'confirm' && getLastIntent() === 'service') {
     showServiceDetails(getLastService());
     return;
   }
 
-
-  // Smalltalk
   if (handleSmalltalk(intent)) return;
 
-  // Показ услуг
   if (intent === "showSomething" || intent === "showServices") {
     const svc2 = matchService(input);
     if (svc2) {
@@ -98,30 +117,28 @@ export function handleUserInput(message) {
     return;
   }
 
-  // Запрос цены
+  // запрос цены
   const inquireRe = /(сколько|сколк[оья]|стоимост|цена)/i;
-if (inquireRe.test(input)) {
-  const svc2 = matchService(input);
-  if (svc2) {
-    setLastService(svc2.name);
+  if (inquireRe.test(input)) {
+    const svc2 = matchService(input);
+    if (svc2) setLastService(svc2.name);
+
+    const svcName = getLastService();
+    if (svcName && services[svcName]) {
+      addMessage(`${emoji()} ${randomReply("inquireDetails")}`, true);
+      addMessage(`«${svcName}» 💅\n${services[svcName]}`);
+      setTimeout(() => {
+        addMessage(`Хочешь записаться на ${svcName}? 😊`);
+      }, 1200);
+      renderBookingOptions();
+    } else {
+      addMessage(randomReply("fallback"));
+      renderServiceList();
+    }
+    return;
   }
 
-  const svcName = getLastService();
-  if (svcName && services[svcName]) {
-    addMessage(`${emoji()} ${randomReply("inquireDetails")}`, true);
-    addMessage(`«${svcName}» 💅\n${services[svcName]}`);
-    setTimeout(() => {
-      addMessage(`Хочешь записаться на ${svcName}? 😊`);
-    }, 1200);
-    renderBookingOptions();
-  } else {
-    addMessage(randomReply("fallback"));
-    renderServiceList();
-  }
-  return;
-}
-
-  // Ключевое слово-услуга
+  // ключевое слово — услуга
   const svc = matchService(input);
   if (svc) {
     setLastService(svc.name);
@@ -133,7 +150,7 @@ if (inquireRe.test(input)) {
     return;
   }
 
-  // Явное "записаться"
+  // явное "записаться"
   if (intent === "booking" || intent === "confirmBooking") {
     if (getLastService()) {
       addMessage(`Записываю на ${getLastService()}! 🗓️ Уточни дату, и я всё оформлю.`);
@@ -145,8 +162,7 @@ if (inquireRe.test(input)) {
     return;
   }
 
-
-  // Остальное
+  // Остальные команды
   switch (intent) {
     case "design":
       handleDesign();
@@ -154,30 +170,15 @@ if (inquireRe.test(input)) {
     case "points":
       showCurrentPoints();
       break;
-      case "calc":
-  setLastIntent("awaitingCalc");
-  addMessage("Введи цену услуги и количество баллов через пробел, например:\n1500 300");
-  return;
-if (getLastIntent() === "awaitingCalc") {
-  const match = input.match(/(\d+)[^\d]+(\d+)/); // ищем две группы чисел
-  if (match) {
-    const price = parseInt(match[1]);
-    const points = parseInt(match[2]);
-    const res = calculateDiscount(points, price);
-    addMessage(
-      `🎯 Скидка: ${res.discountRub}₽ (${res.discountPercent}%)\n` +
-      `Итоговая цена: ${res.finalPrice}₽\n` +
-      `Будет списано: ${res.usedPoints} баллов`
-    );
-  } else {
-    addMessage("Формат не понятен. Напиши, например:\n1200 260");
-  }
-  setLastIntent("");
-  return;
-}
-
+    case "calc":
+      startCalc();
+      break;
     case "mood":
       handleMood();
+      break;
+    case "help":
+      addMessage("🦊 Я помогу с выбором! Вот что могу предложить:");
+      showSuggestions();
       break;
     default:
       addMessage(randomReply("fallback"));
