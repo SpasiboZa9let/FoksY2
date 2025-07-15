@@ -103,24 +103,27 @@ export function handleUserInput(message) {
   }
 
   // Запрос цены
-  const inquireRe = /(сколько|сколк[оья]|стоимост|цена)/i;
-  if (inquireRe.test(input)) {
-    const svc2 = matchService(input);
-    if (svc2) setLastService(svc2.name);
-
-    if (getLastService() && services[getLastService()]) {
-      addMessage(`${emoji()} ${randomReply("inquireDetails")}`, true);
-      addMessage(`«${getLastService()}» 💅\n${services[getLastService()]}`);
-      setTimeout(() => {
-        addMessage(`Хочешь записаться на ${getLastService()}? 😊`);
-      }, 1500);
-      renderBookingOptions();
-    } else {
-      addMessage(randomReply("fallback"));
-      renderServiceList();
-    }
-    return;
+  cconst inquireRe = /(сколько|сколк[оья]|стоимост|цена)/i;
+if (inquireRe.test(input)) {
+  const svc2 = matchService(input);
+  if (svc2) {
+    setLastService(svc2.name);
   }
+
+  const svcName = getLastService();
+  if (svcName && services[svcName]) {
+    addMessage(`${emoji()} ${randomReply("inquireDetails")}`, true);
+    addMessage(`«${svcName}» 💅\n${services[svcName]}`);
+    setTimeout(() => {
+      addMessage(`Хочешь записаться на ${svcName}? 😊`);
+    }, 1200);
+    renderBookingOptions();
+  } else {
+    addMessage(randomReply("fallback"));
+    renderServiceList();
+  }
+  return;
+}
 
   // Ключевое слово-услуга
   const svc = matchService(input);
@@ -146,6 +149,12 @@ export function handleUserInput(message) {
     return;
   }
 
+    if (/^\d{1,2}$/.test(input)) {
+    addMessage(`Принято! Я запишу это как <strong>${input}</strong> число месяца. 🗓️`);
+    addMessage(`Фиксирую запись. Скоро с тобой свяжемся 💬`);
+    return;
+  }
+
   // Остальное
   switch (intent) {
     case "design":
@@ -158,4 +167,3 @@ export function handleUserInput(message) {
       addMessage(randomReply("fallback"));
       renderServiceList();
   }
-}
