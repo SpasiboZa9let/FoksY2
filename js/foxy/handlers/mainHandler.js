@@ -191,17 +191,6 @@ export async function handleUserInput(message) {
     return;
   }
 
-  if (intent === "confirmedBooking") {
-    const name = getUserName();
-    if (!name) {
-      addMessage("Как тебя зовут? 😊 Напиши своё имя.");
-      setLastIntent("askName");
-      return;
-    }
-    addMessage("На какую дату ты была у нас? (в формате ГГГГ-ММ-ДД)");
-    setLastIntent("awaitingVisitDate");
-    return;
-  }
 
   switch (intent) {
     case "design":
