@@ -162,26 +162,28 @@ export function handleUserInput(message) {
     return;
   }
 
-  // Остальные команды
-  switch (intent) {
-    case "design":
-      handleDesign();
-      break;
-    case "points":
-      showCurrentPoints();
-      break;
-    case "calc":
-      startCalc();
-      break;
-    case "mood":
-      handleMood();
-      break;
-    case "help":
-      addMessage("🦊 Я помогу с выбором! Вот что могу предложить:");
-      showSuggestions();
-      break;
-    default:
-      addMessage(randomReply("fallback"));
-      renderServiceList();
-  }
+ switch (intent) {
+  case "design":
+    handleDesign();
+    break;
+  case "points":
+    showCurrentPoints();
+    break;
+  case "calc":
+    startCalc();
+    break;
+  case "mood":
+    handleMood();
+    break;
+  case "help":
+    addMessage("🦊 Я помогу с выбором! Вот что могу предложить:");
+    showSuggestions();
+    break;
+  case "confirmedBooking":
+    addLoyaltyPoints(100);
+    addMessage("🎉 Отлично! Я добавила тебе 100 баллов за визит 💖");
+    break;
+  default:
+    addMessage(randomReply("fallback"));
+    renderServiceList();
 }
