@@ -1,5 +1,3 @@
-// js/pseudo-ai.js
-
 import { handleUserInput } from './foxy/handlers/mainHandler.js';
 import { addTypingMessage, addMessage, clearChat } from './foxy/ui/dom.js';
 import { emoji } from './foxy/core/services.js';
@@ -8,8 +6,6 @@ import {
   getLastIntent,
   setLastIntent
 } from './foxy/core/state.js';
-
-import { checkVisitPoints } from './foxy/core/rewards.js';
 
 const greetings = [
   `Привет, %NAME%! 💖 Чем сегодня порадовать твои ноготки?`,
@@ -46,13 +42,10 @@ function showSuggestions(delay = 0) {
     setTimeout(() => {
       const sugg = document.querySelector('.foxy-suggestions');
       if (!sugg) return;
-
       const bubble = sugg.closest('.chat-bubble');
       if (!bubble) return;
-
       sugg.style.transition = 'opacity 0.5s ease';
       sugg.style.opacity = '0';
-
       setTimeout(() => bubble.remove(), 500);
     }, 8000);
   }, delay);
@@ -70,7 +63,6 @@ function initFoxyAfterName(name) {
     setTimeout(() => bubble.remove(), 500);
   }, 5500);
 
-  checkVisitPoints(); // 🎯 начисление баллов
   showSuggestions(2100);
 }
 
@@ -161,7 +153,7 @@ export function initFoxyChat() {
   const resetBtn = document.getElementById('foxy-reset');
   resetBtn?.addEventListener('click', () => {
     if (!confirm('Вы точно хотите сбросить все ваши данные?')) return;
-    ['foxy_userName', 'foxy_points', 'foxy_pointsLast']
+    ['foxy_userName', 'foxy_points']
       .forEach(key => localStorage.removeItem(key));
     setLastIntent('');
     clearChat();
