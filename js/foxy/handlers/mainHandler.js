@@ -17,6 +17,7 @@ import { handleDesign } from "./design.js";
 import { handleMood } from "./mood.js";
 import { handleSmalltalk } from "./smalltalk.js";
 import { handleServiceInput, showServiceDetails } from "./servicesHandler.js";
+import { requestVisitConfirmation, sendBooking } from "./booking.js";
 
 const greetings = [
   `Привет, %NAME%! 💖 Чем сегодня порадовать твои ноготки?`,
@@ -54,6 +55,7 @@ function showSuggestions() {
   );
 }
 
+
 export async function handleUserInput(message) {
   clearButtons();
 
@@ -67,13 +69,27 @@ export async function handleUserInput(message) {
     return;
   }
 
+  if (getLastIntent() === "awaitingVisitDate") {
+    const date = message.trim();
+    const name = getUserName();
+
+    setLastIntent("");
+    const res = await requestVisitConfirmation(name, date);
+
+    if (res.success) {
+      addMessage("✅ Я отправила мастеру. Ждём подтверждения! 💅");
+    } else {
+      addMessage("⚠️ Не удалось отправить мастеру. Попробуй позже.");
+    }
+    return;
+  }
+
   const input = message.trim();
   if (!input || input.toLowerCase() === getLastInput()) return;
 
   setLastInput(input.toLowerCase());
   addMessage(`Вы: ${message}`, false, true);
 
-  // калькулятор (шаг 2)
   if (getLastIntent() === "awaitingCalc") {
     const match = input.match(/(\d+)[^\d]+(\d+)/);
     if (match) {
@@ -148,7 +164,6 @@ export async function handleUserInput(message) {
     return;
   }
 
-  // 📅 Отправка заявки на сервер
   if (intent === "booking" || intent === "confirmBooking") {
     const service = getLastService();
     const name = getUserName();
@@ -173,6 +188,18 @@ export async function handleUserInput(message) {
     return;
   }
 
+  if (intent === "confirmedBooking") {
+    const name = getUserName();
+    if (!name) {
+      addMessage("Как тебя зовут? 😊 Напиши своё имя.");
+      setLastIntent("askName");
+      return;
+    }
+    addMessage("На какую дату ты была у нас? (в формате ГГГГ-ММ-ДД)");
+    setLastIntent("awaitingVisitDate");
+    return;
+  }
+
   switch (intent) {
     case "design":
       handleDesign();
@@ -190,14 +217,10 @@ export async function handleUserInput(message) {
       addMessage("🦊 Я помогу с выбором! Вот что могу предложить:");
       showSuggestions();
       break;
-    case "confirmedBooking":
-      if (addLoyaltyPoints(100)) {
-        addMessage("🎉 Отлично! Я добавила тебе 100 баллов за визит 💖");
-      }
-      break;
     default:
       addMessage(randomReply("fallback"));
       renderServiceList();
   }
 }
+
 
