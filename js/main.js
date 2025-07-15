@@ -2,7 +2,7 @@ import { initFoxyChat } from './pseudo-ai.js';
 import { initReviewsScroll } from './reviews-scroll.js';
 import { initGalleryModal } from './modal.js';
 import { initPriceAccordion } from './foxy/ui/accordion.js';
-import { checkVisitPoints } from './foxy/core/rewards.js'; // ← добавили
+import { checkVisitPoints } from './foxy/core/rewards.js';
 
 async function loadSection(id, url) {
   const container = document.getElementById(id);
@@ -21,7 +21,6 @@ window.addEventListener('DOMContentLoaded', async () => {
   await loadSection('hero-container',    'sections/hero.html');
   await loadSection('chat-container',    'sections/chat.html');
   initFoxyChat();
-  checkVisitPoints(); // ← вот здесь
 
   await loadSection('reviews-container', 'sections/reviews.html');
   initReviewsScroll();
@@ -34,4 +33,6 @@ window.addEventListener('DOMContentLoaded', async () => {
   initPriceAccordion();
 
   await loadSection('map-container',     'sections/map.html');
+
+  checkVisitPoints(); // теперь вызывается в самом конце, после всех секций
 });
