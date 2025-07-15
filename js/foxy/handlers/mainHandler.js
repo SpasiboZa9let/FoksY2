@@ -59,8 +59,17 @@ function showSuggestions() {
 export async function handleUserInput(message) {
   clearButtons();
 
-  if (getLastIntent() === 'askName') {
-    const name = message.trim();
+  const input = message.trim();
+  if (!input || input.toLowerCase() === getLastInput()) return;
+
+  setLastInput(input.toLowerCase());
+  addMessage(`Вы: ${message}`, false, true);
+
+  // Проверка промокода
+  if (handlePromoCode(input)) return;
+
+  if (getLastIntent() === "askName") {
+    const name = input;
     setUserName(name);
     localStorage.setItem('foxy_userName', name);
     clearChat();
@@ -70,25 +79,19 @@ export async function handleUserInput(message) {
   }
 
   if (getLastIntent() === "awaitingVisitDate") {
-    const date = message.trim();
+    const date = input;
     const name = getUserName();
 
     setLastIntent("");
     const res = await requestVisitConfirmation(name, date);
 
     if (res.success) {
-      
+      // Заглушка: сервер больше не обрабатывает
     } else {
-     
+      // Заглушка
     }
     return;
   }
-
-  const input = message.trim();
-  if (!input || input.toLowerCase() === getLastInput()) return;
-
-  setLastInput(input.toLowerCase());
-  addMessage(`Вы: ${message}`, false, true);
 
   if (getLastIntent() === "awaitingCalc") {
     const match = input.match(/(\d+)[^\d]+(\d+)/);
@@ -174,7 +177,7 @@ export async function handleUserInput(message) {
       const res = await sendBooking({ name, service, date });
 
       if (res.success) {
-        addMessage("✅ Готово! Я сообщила мастеру 💅");
+        addMessage("📬 Заявка отправлена! Ждём подтверждения.");
       } else {
         addMessage("⚠️ Не удалось отправить заявку. Попробуй позже!");
       }
