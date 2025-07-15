@@ -17,22 +17,17 @@ export function handleSmalltalk(intent) {
     softWarning:   () => addMessage("🧸 Хочу оставаться вежливой. Давай говорить по-доброму?"),
     // Заменили поведение abilities:
     abilities: () => {
-      addMessage(`${emoji()} Вот что я умею:`);
-      renderReactions([
-        {
-          text: "💅 Показать прайс",
-          callback: () => renderServiceList()
-        },
-        {
-          text: "🎨 Идеи дизайна",
-          callback: () => handleDesign()
-        },
-        {
-          text: "📅 Записаться",
-          callback: () => renderBookingOptions()
-        }
-      ]);
-    },
+  addMessage(`${emoji()} Вот что я умею:`);
+  renderReactions([
+    { text: "💅 Прайс",          callback: () => renderServiceList() },
+    { text: "🎨 Дизайн",         callback: () => handleDesign() },
+    { text: "📅 Запись",         callback: () => renderBookingOptions() },
+    { text: "⭐ Мои баллы",      callback: () => handleUserInput("баллы") },
+    { text: "🧮 Калькулятор",    callback: () => handleUserInput("калькулятор") },
+    { text: "❓ Помощь",         callback: () => handleUserInput("помощь") }
+  ]);
+},
+
     help: () => {
       addMessage(`${emoji()} Я помогу с выбором! Вот мои команды:`);
       renderReactions([
