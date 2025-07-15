@@ -26,5 +26,5 @@ export function checkVisitPoints() {
 
 export function showCurrentPoints() {
   const points = parseInt(localStorage.getItem("foxy_points") || "0");
-  addMessage(`⭐ У тебя <strong>${points} из 5</strong> баллов.<br>Когда будет 5 — я подарю тебе бонус 🎁`);
+  addMessage(`⭐ У тебя ${points} из 5 баллов.\nКогда будет 5 — я подарю тебе бонус 🎁`);
 }
