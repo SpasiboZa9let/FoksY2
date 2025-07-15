@@ -248,7 +248,8 @@ resetBtn?.addEventListener('click', () => {
 
 // ⬇️ кнопка "что ты умеешь"
 const abilitiesBtn = document.getElementById('foxy-show-abilities');
-abilitiesBtn?.addEventListener('click', () => {
-  handleUserInput('что ты умеешь');
-});
+  abilitiesBtn?.addEventListener('click', () => {
+    handleUserInput('что ты умеешь');
+  });
+}); // 
 
