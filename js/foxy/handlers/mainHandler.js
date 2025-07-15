@@ -186,4 +186,5 @@ export function handleUserInput(message) {
   default:
     addMessage(randomReply("fallback"));
     renderServiceList();
-}
+  }
+} 
