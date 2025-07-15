@@ -77,9 +77,9 @@ export async function handleUserInput(message) {
     const res = await requestVisitConfirmation(name, date);
 
     if (res.success) {
-      addMessage("✅ Я отправила мастеру. Ждём подтверждения! 💅");
+      
     } else {
-      addMessage("⚠️ Не удалось отправить мастеру. Попробуй позже.");
+     
     }
     return;
   }
