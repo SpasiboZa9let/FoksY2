@@ -7,7 +7,7 @@ export function addLoyaltyPoints(count = 100) {
 
   if (lastBonus === today) {
     addMessage("🦊 Я уже начисляла баллы сегодня 😊");
-    return;
+    return false;
   }
 
   const current = parseInt(localStorage.getItem("foxy_points") || "0");
@@ -17,7 +17,9 @@ export function addLoyaltyPoints(count = 100) {
   localStorage.setItem("foxy_bonusDate", today);
 
   addMessage(`⭐ Начислено ${count} баллов!\nТеперь у тебя ${updated} баллов.`);
+  return true;
 }
+
 
 
 export function showCurrentPoints() {
