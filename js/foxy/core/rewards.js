@@ -38,3 +38,25 @@ function getPlural(n, forms) {
   if (mod10 >= 2 && mod10 <= 4 && (mod100 < 10 || mod100 >= 20)) return forms[1];
   return forms[2];
 }
+
+const validCodes = ["AB94", "FOXY22", "HAPPY100", "SUMMER5"];
+
+export function redeemCode(code) {
+  const trimmed = code.trim().toUpperCase();
+  const used = JSON.parse(localStorage.getItem("foxy_usedCodes") || "[]");
+
+  if (!validCodes.includes(trimmed)) {
+    addMessage("❌ Такого кода нет — проверь внимательно!");
+    return;
+  }
+
+  if (used.includes(trimmed)) {
+    addMessage("⚠️ Этот код уже использовался.");
+    return;
+  }
+
+  used.push(trimmed);
+  localStorage.setItem("foxy_usedCodes", JSON.stringify(used));
+
+  addLoyaltyPoints(100);
+}
