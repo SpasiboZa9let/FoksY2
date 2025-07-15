@@ -11,7 +11,7 @@ export function addLoyaltyPoints(count = 100) {
 
 export function showCurrentPoints() {
   const points = parseInt(localStorage.getItem("foxy_points") || "0");
-  const percent = Math.min((points / 100) * 5, 20);
+  const percent = Math.min((points / 100) * 5, 20).toFixed(1);
   const discount = percent >= 5 ? `${percent}% скидки` : "недостаточно баллов для скидки";
 
   const word = getPlural(points, ["балл", "балла", "баллов"]);
