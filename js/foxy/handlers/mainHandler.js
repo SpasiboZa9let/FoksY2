@@ -181,8 +181,9 @@ export function handleUserInput(message) {
     showSuggestions();
     break;
   case "confirmedBooking":
-    addLoyaltyPoints(100);
-    addMessage("🎉 Отлично! Я добавила тебе 100 баллов за визит 💖");
+    if (addLoyaltyPoints(100)) {
+  addMessage("🎉 Отлично! Я добавила тебе 100 баллов за визит 💖");
+}
     break;
   default:
     addMessage(randomReply("fallback"));
