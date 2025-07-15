@@ -54,7 +54,7 @@ function showSuggestions() {
   );
 }
 
-export function handleUserInput(message) {
+export async function handleUserInput(message) {
   clearButtons();
 
   if (getLastIntent() === 'askName') {
@@ -95,7 +95,6 @@ export function handleUserInput(message) {
   const intent = matchIntent(input);
   setLastIntent(intent);
 
-  // Подтверждение услуги
   if (intent === 'confirm' && getLastIntent() === 'service') {
     showServiceDetails(getLastService());
     return;
@@ -118,7 +117,6 @@ export function handleUserInput(message) {
     return;
   }
 
-  // запрос цены
   const inquireRe = /(сколько|сколк[оья]|стоимост|цена)/i;
   if (inquireRe.test(input)) {
     const svc2 = matchService(input);
@@ -139,7 +137,6 @@ export function handleUserInput(message) {
     return;
   }
 
-  // ключевое слово — услуга
   const svc = matchService(input);
   if (svc) {
     setLastService(svc.name);
@@ -151,42 +148,56 @@ export function handleUserInput(message) {
     return;
   }
 
-  // явное "записаться"
+  // 📅 Отправка заявки на сервер
   if (intent === "booking" || intent === "confirmBooking") {
-    if (getLastService()) {
-      addMessage(`Записываю на ${getLastService()}! 🗓️ Уточни дату, и я всё оформлю.`);
-      renderBookingOptions();
-    } else {
+    const service = getLastService();
+    const name = getUserName();
+    const date = new Date().toISOString().split("T")[0];
+
+    if (service && name) {
+      addMessage(`Отправляю заявку на «${service}» для ${name}... 📨`);
+      const res = await sendBooking({ name, service, date });
+
+      if (res.success) {
+        addMessage("✅ Готово! Я сообщила мастеру 💅");
+      } else {
+        addMessage("⚠️ Не удалось отправить заявку. Попробуй позже!");
+      }
+    } else if (!service) {
       addMessage(`На какую услугу тебя записать? 💅`);
       renderServiceList();
+    } else {
+      addMessage(`Как тебя зовут? 😊 Напиши своё имя.`);
+      setLastIntent("askName");
     }
     return;
   }
 
- switch (intent) {
-  case "design":
-    handleDesign();
-    break;
-  case "points":
-    showCurrentPoints();
-    break;
-  case "calc":
-    startCalc();
-    break;
-  case "mood":
-    handleMood();
-    break;
-  case "help":
-    addMessage("🦊 Я помогу с выбором! Вот что могу предложить:");
-    showSuggestions();
-    break;
-  case "confirmedBooking":
-    if (addLoyaltyPoints(100)) {
-  addMessage("🎉 Отлично! Я добавила тебе 100 баллов за визит 💖");
-}
-    break;
-  default:
-    addMessage(randomReply("fallback"));
-    renderServiceList();
+  switch (intent) {
+    case "design":
+      handleDesign();
+      break;
+    case "points":
+      showCurrentPoints();
+      break;
+    case "calc":
+      startCalc();
+      break;
+    case "mood":
+      handleMood();
+      break;
+    case "help":
+      addMessage("🦊 Я помогу с выбором! Вот что могу предложить:");
+      showSuggestions();
+      break;
+    case "confirmedBooking":
+      if (addLoyaltyPoints(100)) {
+        addMessage("🎉 Отлично! Я добавила тебе 100 баллов за визит 💖");
+      }
+      break;
+    default:
+      addMessage(randomReply("fallback"));
+      renderServiceList();
   }
-} 
+}
+
