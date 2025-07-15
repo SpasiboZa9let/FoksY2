@@ -167,3 +167,4 @@ if (inquireRe.test(input)) {
       addMessage(randomReply("fallback"));
       renderServiceList();
   }
+}
