@@ -2,7 +2,7 @@ import { initFoxyChat } from './pseudo-ai.js';
 import { initReviewsScroll } from './reviews-scroll.js';
 import { initGalleryModal } from './modal.js';
 import { initPriceAccordion } from './foxy/ui/accordion.js';
-
+import { checkVisitPoints } from './foxy/core/rewards.js'; // ← добавили
 
 async function loadSection(id, url) {
   const container = document.getElementById(id);
