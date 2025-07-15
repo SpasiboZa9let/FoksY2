@@ -81,12 +81,19 @@ function checkPromoReminder(delay = 0) {
 }
 
 function initFoxyAfterName(name) {
-  addTypingMessage(
-    `<strong>${emoji()} Фокси:</strong> ${randomGreeting(name)}`,
-    500,
-    true,
-    false
-  );
+  const bubbleHTML = `<strong>${emoji()} Фокси:</strong> ${randomGreeting(name)}`;
+addTypingMessage(bubbleHTML, 500, true, false);
+
+setTimeout(() => {
+  const bubble = document.querySelector('.chat-bubble.welcome-message');
+  if (!bubble) return;
+
+  bubble.style.transition = 'opacity 0.5s ease';
+  bubble.style.opacity = '0';
+
+  setTimeout(() => bubble.remove(), 500);
+}, 5500);
+
 
   checkPromoReminder(1300);
   showSuggestions(2100);
