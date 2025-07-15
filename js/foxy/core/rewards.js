@@ -2,12 +2,23 @@
 import { addMessage } from "../ui/dom.js";
 
 export function addLoyaltyPoints(count = 100) {
+  const today = new Date().toISOString().slice(0, 10);
+  const lastBonus = localStorage.getItem("foxy_bonusDate");
+
+  if (lastBonus === today) {
+    addMessage("🦊 Я уже начисляла баллы сегодня 😊");
+    return;
+  }
+
   const current = parseInt(localStorage.getItem("foxy_points") || "0");
   const updated = current + count;
+
   localStorage.setItem("foxy_points", updated.toString());
+  localStorage.setItem("foxy_bonusDate", today);
 
   addMessage(`⭐ Начислено ${count} баллов!\nТеперь у тебя ${updated} баллов.`);
 }
+
 
 export function showCurrentPoints() {
   const points = parseInt(localStorage.getItem("foxy_points") || "0");
