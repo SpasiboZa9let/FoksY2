@@ -158,6 +158,23 @@ if (inquireRe.test(input)) {
   setLastIntent("awaitingCalc");
   addMessage("Введи цену услуги и количество баллов через пробел, например:\n1500 300");
   return;
+if (getLastIntent() === "awaitingCalc") {
+  const match = input.match(/(\d+)[^\d]+(\d+)/); // ищем две группы чисел
+  if (match) {
+    const price = parseInt(match[1]);
+    const points = parseInt(match[2]);
+    const res = calculateDiscount(points, price);
+    addMessage(
+      `🎯 Скидка: ${res.discountRub}₽ (${res.discountPercent}%)\n` +
+      `Итоговая цена: ${res.finalPrice}₽\n` +
+      `Будет списано: ${res.usedPoints} баллов`
+    );
+  } else {
+    addMessage("Формат не понятен. Напиши, например:\n1200 260");
+  }
+  setLastIntent("");
+  return;
+}
 
     case "mood":
       handleMood();
