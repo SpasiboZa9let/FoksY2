@@ -246,10 +246,10 @@ export function initFoxyChat() {
     setLastIntent('askName');
   });
 
-  // Кнопка "что ты умеешь"
+   // Кнопка "что ты умеешь"
   const abilitiesBtn = document.getElementById('foxy-show-abilities');
   abilitiesBtn?.addEventListener('click', () => {
     handleUserInput('что ты умеешь');
   });
 
-}); // ← ЗАКРЫВАЕТ window.addEventListener('DOMContentLoaded', ...)
+} // ← закрываем initFoxyChat
