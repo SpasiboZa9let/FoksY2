@@ -233,7 +233,7 @@ export function initFoxyChat() {
     }
   });
 
-  /  // Сброс данных
+  // Сброс данных
   const resetBtn = document.getElementById('foxy-reset');
   resetBtn?.addEventListener('click', () => {
     if (!confirm('Вы точно хотите сбросить все ваши данные?')) return;
