@@ -103,7 +103,7 @@ export function handleUserInput(message) {
   }
 
   // Запрос цены
-  cconst inquireRe = /(сколько|сколк[оья]|стоимост|цена)/i;
+  const inquireRe = /(сколько|сколк[оья]|стоимост|цена)/i;
 if (inquireRe.test(input)) {
   const svc2 = matchService(input);
   if (svc2) {
