@@ -11,6 +11,7 @@ import { calculateDiscount } from "../core/calc.js";
 import { addMessage, clearButtons, clearChat } from "../ui/dom.js";
 import { renderBookingOptions, renderServiceList } from "../ui/ui.js";
 import { showCurrentPoints } from "../core/rewards.js";
+import { addLoyaltyPoints } from "../core/rewards.js";
 
 import { handleDesign } from "./design.js";
 import { handleMood } from "./mood.js";
