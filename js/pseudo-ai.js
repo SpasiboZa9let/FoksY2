@@ -32,6 +32,7 @@ function showSuggestions(delay = 0) {
            <button class="ai-btn" data-action="что ты умеешь">❓ Возможности</button>
            <button class="ai-btn" data-action="баллы">⭐ Мои баллы</button>
            <button class="ai-btn" data-action="калькулятор">🧮 Калькулятор скидки</button>
+           <button class="ai-btn" data-action="уже записана">🎉 Я уже записана</button>
          </div>
          <div class="footer">Выбери что-то, и я покажу 💖</div>
        </div>`,
