@@ -233,22 +233,23 @@ export function initFoxyChat() {
     }
   });
 
-  // Сброс данных
-const resetBtn = document.getElementById('foxy-reset');
-resetBtn?.addEventListener('click', () => {
-  if (!confirm('Вы точно хотите сбросить все ваши данные?')) return;
-  ['foxy_userName', 'promoCode', 'promoExpires', 'promoUsed']
-    .forEach(key => localStorage.removeItem(key));
-  setLastIntent('');
-  clearChat();
-  input.value = '';
-  addTypingMessage('🦊 Данные сброшены. Привет! Как тебя зовут?', 300);
-  setLastIntent('askName');
-});
+  /  // Сброс данных
+  const resetBtn = document.getElementById('foxy-reset');
+  resetBtn?.addEventListener('click', () => {
+    if (!confirm('Вы точно хотите сбросить все ваши данные?')) return;
+    ['foxy_userName', 'promoCode', 'promoExpires', 'promoUsed']
+      .forEach(key => localStorage.removeItem(key));
+    setLastIntent('');
+    clearChat();
+    input.value = '';
+    addTypingMessage('🦊 Данные сброшены. Привет! Как тебя зовут?', 300);
+    setLastIntent('askName');
+  });
 
-// ⬇️ кнопка "что ты умеешь"
-const abilitiesBtn = document.getElementById('foxy-show-abilities');
+  // Кнопка "что ты умеешь"
+  const abilitiesBtn = document.getElementById('foxy-show-abilities');
   abilitiesBtn?.addEventListener('click', () => {
     handleUserInput('что ты умеешь');
   });
 
+}); // ← ЗАКРЫВАЕТ window.addEventListener('DOMContentLoaded', ...)
