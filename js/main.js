@@ -21,6 +21,7 @@ window.addEventListener('DOMContentLoaded', async () => {
   await loadSection('hero-container',    'sections/hero.html');
   await loadSection('chat-container',    'sections/chat.html');
   initFoxyChat();
+  checkVisitPoints(); // ← вот здесь
 
   await loadSection('reviews-container', 'sections/reviews.html');
   initReviewsScroll();
@@ -31,7 +32,6 @@ window.addEventListener('DOMContentLoaded', async () => {
   await loadSection('services-container','sections/services.html');
   console.log('[main.js] services загружен, вызываем initPriceAccordion');
   initPriceAccordion();
-
 
   await loadSection('map-container',     'sections/map.html');
 });
