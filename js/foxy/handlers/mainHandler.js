@@ -55,6 +55,15 @@ function showSuggestions() {
   );
 }
 
+// Обработка промокодов (например, AB94, FOXY22)
+function handlePromoCode(input) {
+  const clean = input.trim().toUpperCase();
+  if (/^[A-Z0-9]{4,10}$/.test(clean)) {
+    redeemCode(clean);
+    return true;
+  }
+  return false;
+}
 // Главная функция обработки ввода
 export async function handleUserInput(message) {
   clearButtons();
@@ -200,5 +209,3 @@ export async function handleUserInput(message) {
       renderServiceList();
   }
 }
-
-// Обработка промокодов (например, AB94, FO
