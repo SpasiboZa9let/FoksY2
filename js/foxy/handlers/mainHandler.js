@@ -10,6 +10,7 @@ import {
 
 import { addMessage, clearButtons } from "../ui/dom.js";
 import { renderBookingOptions, renderServiceList } from "../ui/ui.js";
+import { showCurrentPoints } from "../core/rewards.js";
 
 import { handleDesign } from "./design.js";
 import { handleMood } from "./mood.js";
@@ -155,6 +156,10 @@ if (inquireRe.test(input)) {
     case "design":
       handleDesign();
       break;
+    case "points":
+      showCurrentPoints();
+      break;
+
     case "mood":
       handleMood();
       break;
