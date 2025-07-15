@@ -50,44 +50,40 @@ function showSuggestions() {
 export function handleUserInput(message) {
   clearButtons();
 
-  // Фаза ввода имени
+  // Имя
   if (getLastIntent() === 'askName') {
-  const name = message.trim();
-  setUserName(name);
-  localStorage.setItem('foxy_userName', name);
-  clearChat();            // очищаем предыдущее
-  addMessage(`Приятно познакомиться, ${name}! 💖`, false);
-  // НЕ вызываем initFoxyAfterName — этим займётся pseudo-ai.js
-  setLastIntent('');
-  return;
-}
-
-
+    const name = message.trim();
+    setUserName(name);
+    localStorage.setItem('foxy_userName', name);
+    clearChat();
+    addMessage(`Приятно познакомиться, ${name}! 💖`, false);
+    setLastIntent('');
+    return;
+  }
 
   const input = message.trim();
   if (!input || input.toLowerCase() === getLastInput()) return;
+
   const prevIntent = getLastIntent();
   setLastInput(input.toLowerCase());
-
   addMessage(`Вы: ${message}`, false, true);
 
-  // Определяем новый интент
   const intent = matchIntent(input);
   setLastIntent(intent);
 
-  // 🚦 Подтверждение услуги
+  // Подтверждение услуги
   if (intent === 'confirm' && prevIntent === 'service') {
     showServiceDetails(getLastService());
     return;
   }
 
-  // 🎁 Промо / скидка
+  // Промо / скидка
   if (intent === "discount") {
     handleDiscount();
     return;
   }
 
-  // Общение
+  // Smalltalk
   if (handleSmalltalk(intent)) return;
 
   // Показ услуг
@@ -97,13 +93,16 @@ export function handleUserInput(message) {
       setLastService(svc2.name);
       setLastIntent("service");
       handleServiceInput(svc2.name);
+      setTimeout(() => {
+        addMessage(`Записать тебя на ${svc2.name}? 💖`);
+      }, 1000);
     } else {
       renderServiceList();
     }
     return;
   }
 
-  // Уточнение цены
+  // Запрос цены
   const inquireRe = /(сколько|сколк[оья]|стоимост|цена)/i;
   if (inquireRe.test(input)) {
     const svc2 = matchService(input);
@@ -112,6 +111,9 @@ export function handleUserInput(message) {
     if (getLastService() && services[getLastService()]) {
       addMessage(`${emoji()} ${randomReply("inquireDetails")}`, true);
       addMessage(`«${getLastService()}» 💅\n${services[getLastService()]}`);
+      setTimeout(() => {
+        addMessage(`Хочешь записаться на ${getLastService()}? 😊`);
+      }, 1500);
       renderBookingOptions();
     } else {
       addMessage(randomReply("fallback"));
@@ -120,26 +122,37 @@ export function handleUserInput(message) {
     return;
   }
 
-  // Прямая услуга по ключевому слову
+  // Ключевое слово-услуга
   const svc = matchService(input);
   if (svc) {
     setLastService(svc.name);
     setLastIntent("service");
     handleServiceInput(svc.name);
+    setTimeout(() => {
+      addMessage(`Записать тебя на ${svc.name}? 💖`);
+    }, 1000);
     return;
   }
 
-  // Остальные команды
+  // Явное "записаться"
+  if (intent === "booking" || intent === "confirmBooking") {
+    if (getLastService()) {
+      addMessage(`Записываю на ${getLastService()}! 🗓️ Уточни дату, и я всё оформлю.`);
+      renderBookingOptions();
+    } else {
+      addMessage(`На какую услугу тебя записать? 💅`);
+      renderServiceList();
+    }
+    return;
+  }
+
+  // Остальное
   switch (intent) {
     case "design":
       handleDesign();
       break;
     case "mood":
       handleMood();
-      break;
-    case "booking":
-    case "confirmBooking":
-      renderBookingOptions();
       break;
     default:
       addMessage(randomReply("fallback"));
