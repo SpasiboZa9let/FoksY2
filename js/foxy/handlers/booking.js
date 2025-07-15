@@ -20,3 +20,4 @@ export async function sendBooking({ name, service, date }) {
     return { success: false, error: err.message };
   }
 }
+ 
