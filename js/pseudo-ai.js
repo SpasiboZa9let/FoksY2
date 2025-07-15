@@ -38,8 +38,23 @@ function showSuggestions(delay = 0) {
       600,
       true
     );
+
+    // Автоскрытие через 8 сек
+    setTimeout(() => {
+      const sugg = document.querySelector('.foxy-suggestions');
+      if (!sugg) return;
+
+      const bubble = sugg.closest('.chat-bubble');
+      if (!bubble) return;
+
+      sugg.style.transition = 'opacity 0.5s ease';
+      sugg.style.opacity = '0';
+
+      setTimeout(() => bubble.remove(), 500);
+    }, 8000);
   }, delay);
 }
+
 
 function checkPromoReminder(delay = 0) {
   setTimeout(() => {
