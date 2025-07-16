@@ -72,3 +72,16 @@ export function randomFrom(arr) {
 export function randomGreeting(name) {
   return randomFrom(greetings).replace("%NAME%", name);
 }
+
+// ... randomGreeting
+
+export const suggestionsHTML = `
+  <div class="foxy-suggestions">
+    <div class="description">Вот что я могу показать прямо сейчас:</div>
+    <div class="buttons-wrapper">
+      <button class='btn' data-intent="booking">Записаться</button>
+      <button class='btn' data-intent="portfolio">Альбом</button>
+      <button class='btn' data-intent="rewards">Бонусы</button>
+    </div>
+  </div>
+`;
