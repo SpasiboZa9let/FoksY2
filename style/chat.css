@@ -171,3 +171,15 @@ body.no-scroll {
   width: 100%;
   box-sizing: border-box;
 }
+
+.chat-bubble.welcome-message {
+  position: sticky;
+  top: 0rem;
+  z-index: 30;
+}
+
+.chat-bubble.welcome-secondary {
+  position: sticky;
+  top: 3.5rem;
+  z-index: 20;
+}
