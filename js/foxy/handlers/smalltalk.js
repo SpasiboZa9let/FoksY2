@@ -21,8 +21,6 @@ export function handleSmalltalk(intent) {
     question: () => addMessage(randomSmalltalk("question")),
   
     abilities: () => {
-  addMessage(`${emoji()} Я помогу с выбором! Вот что могу предложить:`, "info-message");
-
   addMessage(`
 🦊 Я умею:
 — ловить твои комплименты и отвечать с теплом 💖
@@ -34,7 +32,8 @@ export function handleSmalltalk(intent) {
 — просто болтать, когда хочется 😊
 
 Выбирай, что хочешь, и жми кнопки ниже 👇
-  `);
+  `, false, false, "foxy-abilities"); // ← здесь добавлен класс
+
   renderReactions([
     { text: "💅 Прайс",        callback: () => renderServiceList() },
     { text: "🎨 Дизайн",       callback: () => handleDesign() },
@@ -45,8 +44,6 @@ export function handleSmalltalk(intent) {
     { text: "❓ Помощь",       callback: () => handleUserInput("помощь") }
   ]);
 },
-
-
 
     about: () => {
       addMessage("🦊 Я Фокси — виртуальная подружка и мастер маникюра 💅");
