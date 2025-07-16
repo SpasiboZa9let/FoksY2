@@ -15,7 +15,7 @@ import {
 
 function showSuggestions(delay = 0) {
   setTimeout(() => {
-    addTypingMessage(`<strong>${emoji()} Фокси:</strong> ${helpIntro()}`, 300, true, false, "welcome-secondary");
+    addTypingMessage(`<strong>${emoji()} Фокси:</strong> ${helpIntro()}`, 300, true);
     addTypingMessage(suggestionsHTML, 600, true);
 
     setTimeout(() => {
@@ -33,7 +33,7 @@ function showSuggestions(delay = 0) {
 
 function initFoxyAfterName(name) {
   const bubbleHTML = `<strong>${emoji()} Фокси:</strong> ${randomGreeting(name)}`;
-  addTypingMessage(bubbleHTML, 500, true, false, "welcome-message");
+  addTypingMessage(bubbleHTML, 500, true, false);
 
   setTimeout(() => {
     const bubble = document.querySelector('.chat-bubble.welcome-message');
