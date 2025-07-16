@@ -100,10 +100,16 @@ body.fullscreen-fix {
 }
 
 /* Сообщения от Фокси */
-.from-foxy {
-  align-self: flex-start;
-  background: #fff0f4 !important;
-  color: #333 !important;
+.from-user {
+  align-self: flex-end; /* сообщения справа */
+  background: #ffffff !important;
+  color: #111 !important;
+  max-width: 80%;
+  padding: 0.5rem 0.75rem;
+  border-radius: 1rem;
+  font-size: 0.875rem;
+  white-space: pre-line;
+  margin: 0.25rem 0;
 }
 
 /* Сообщения от пользователя */
