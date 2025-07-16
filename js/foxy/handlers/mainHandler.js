@@ -11,7 +11,7 @@ import { calculateDiscount } from "../core/calc.js";
 import { addMessage, clearButtons, clearChat } from "../ui/dom.js";
 import { renderBookingOptions, renderServiceList } from "../ui/ui.js";
 import { showCurrentPoints } from "../core/rewards.js";
-import { addLoyaltyPoints, redeemCode } from "../core/rewards.js";
+import { redeemCode } from "../core/rewards.js";
 
 import { handleDesign } from "./design.js";
 import { handleMood } from "./mood.js";
@@ -25,7 +25,16 @@ import {
   pointsReplies,
   calcInstructions,
   helpIntro,
-  randomFrom
+  randomFrom,
+  askForName,
+  askForService,
+  bookingConfirmed,
+  bookingFollowup,
+  serviceConfirmTemplate,
+  priceInquiryTemplate,
+  priceInquiryFollowup,
+  calcFormatError,
+  userSaid
 } from "../core/phrases.js";
 
 export function startCalc() {
@@ -67,7 +76,7 @@ export async function handleUserInput(message) {
   if (!input || input.toLowerCase() === getLastInput()) return;
 
   setLastInput(input.toLowerCase());
-  addMessage(`Вы: ${message}`, false, true);
+  addMessage(userSaid(message), false, true);
 
   if (handlePromoCode(input)) return;
 
@@ -93,7 +102,7 @@ export async function handleUserInput(message) {
         `Будет списано: ${res.usedPoints} баллов`
       );
     } else {
-      addMessage("Формат не понятен. Напиши, например:\n1200 300");
+      addMessage(calcFormatError);
     }
     setLastIntent("");
     return;
@@ -121,7 +130,7 @@ export async function handleUserInput(message) {
       setLastIntent("service");
       handleServiceInput(svc2.name);
       setTimeout(() => {
-        addMessage(`Записать тебя на ${svc2.name}? 💖`);
+        addMessage(serviceConfirmTemplate(svc2.name));
       }, 1000);
     } else {
       renderServiceList();
@@ -137,9 +146,9 @@ export async function handleUserInput(message) {
     const svcName = getLastService();
     if (svcName && services[svcName]) {
       addMessage(`${emoji()} ${randomReply("inquireDetails")}`, true);
-      addMessage(`«${svcName}» 💅\n${services[svcName]}`);
+      addMessage(priceInquiryTemplate(svcName, services[svcName]));
       setTimeout(() => {
-        addMessage(`Хочешь записаться на ${svcName}? 😊`);
+        addMessage(priceInquiryFollowup(svcName));
       }, 1200);
       renderBookingOptions();
     } else {
@@ -155,7 +164,7 @@ export async function handleUserInput(message) {
     setLastIntent("service");
     handleServiceInput(svc.name);
     setTimeout(() => {
-      addMessage(`Записать тебя на ${svc.name}? 💖`);
+      addMessage(serviceConfirmTemplate(svc.name));
     }, 1000);
     return;
   }
@@ -165,13 +174,13 @@ export async function handleUserInput(message) {
     const name = getUserName();
 
     if (service && name) {
-      addMessage(`📌 Записала тебя на «${service}», ${name}! 💅`);
-      addMessage("Хочешь ещё что-то посмотреть? 🌟");
+      addMessage(bookingConfirmed(service, name));
+      addMessage(bookingFollowup);
     } else if (!service) {
-      addMessage(`На какую услугу тебя записать? 💅`);
+      addMessage(askForService);
       renderServiceList();
     } else {
-      addMessage(`Как тебя зовут? 😊 Напиши своё имя.`);
+      addMessage(askForName);
       setLastIntent("askName");
     }
     return;
