@@ -18,22 +18,19 @@ import { handleMood } from "./mood.js";
 import { handleSmalltalk } from "./smalltalk.js";
 import { handleServiceInput, showServiceDetails } from "./servicesHandler.js";
 
-const greetings = [
-  `Привет, %NAME%! 💖 Чем сегодня порадовать твои ноготки?`,
-  `Салют, %NAME%! 🌟 Готова создавать красоту вместе?`,
-  `Здравствуй, %NAME%! ✨ Что выберем для твоего идеального маникюра?`,
-  `Хэй, %NAME%! 💅 Готова к стильному преображению?`,
-  `Добро пожаловать, %NAME%! 😊 Давай сделаем ноготки особенными!`
-];
-
-function randomGreeting(name) {
-  const tpl = greetings[Math.floor(Math.random() * greetings.length)];
-  return tpl.replace("%NAME%", name);
-}
+import {
+  randomGreeting,
+  fallbackReplies,
+  promoReplies,
+  pointsReplies,
+  calcInstructions,
+  helpIntro,
+  randomFrom
+} from "../core/phrases.js";
 
 export function startCalc() {
   setLastIntent("awaitingCalc");
-  addMessage("Введи цену услуги и количество баллов через пробел, например:\n1500 300");
+  addMessage(calcInstructions);
 }
 
 function showSuggestions() {
@@ -54,7 +51,6 @@ function showSuggestions() {
   );
 }
 
-// Обработка промокодов (например, AB94, FOXY22)
 function handlePromoCode(input) {
   const clean = input.trim().toUpperCase();
   if (/^[A-Z0-9]{4,10}$/.test(clean)) {
@@ -64,7 +60,6 @@ function handlePromoCode(input) {
   return false;
 }
 
-// Главная функция обработки ввода
 export async function handleUserInput(message) {
   clearButtons();
 
@@ -74,10 +69,8 @@ export async function handleUserInput(message) {
   setLastInput(input.toLowerCase());
   addMessage(`Вы: ${message}`, false, true);
 
-  // Промокод
   if (handlePromoCode(input)) return;
 
-  // Имя пользователя
   if (getLastIntent() === "askName") {
     const name = input;
     setUserName(name);
@@ -88,7 +81,6 @@ export async function handleUserInput(message) {
     return;
   }
 
-  // Калькулятор скидки
   if (getLastIntent() === "awaitingCalc") {
     const match = input.match(/(\d+)[^\d]+(\d+)/);
     if (match) {
@@ -110,9 +102,8 @@ export async function handleUserInput(message) {
   const intent = matchIntent(input);
   setLastIntent(intent);
 
-  // Подсказка при "я уже была" и т.п.
   if (intent === "promoHint") {
-    addMessage("🦊 Сейчас баллы начисляются только по промокодам 🎁\nВведи его, если есть!");
+    addMessage(promoReplies.hint);
     return;
   }
 
@@ -152,7 +143,7 @@ export async function handleUserInput(message) {
       }, 1200);
       renderBookingOptions();
     } else {
-      addMessage(randomReply("fallback"));
+      addMessage(randomFrom(fallbackReplies));
       renderServiceList();
     }
     return;
@@ -169,7 +160,6 @@ export async function handleUserInput(message) {
     return;
   }
 
-  // Заявка (без сервера)
   if (intent === "booking" || intent === "confirmBooking") {
     const service = getLastService();
     const name = getUserName();
@@ -187,7 +177,6 @@ export async function handleUserInput(message) {
     return;
   }
 
-  // Остальные интенты
   switch (intent) {
     case "design":
       handleDesign();
@@ -202,11 +191,11 @@ export async function handleUserInput(message) {
       handleMood();
       break;
     case "help":
-      addMessage("🦊 Я помогу с выбором! Вот что могу предложить:");
+      addMessage(helpIntro);
       showSuggestions();
       break;
     default:
-      addMessage(randomReply("fallback"));
+      addMessage(randomFrom(fallbackReplies));
       renderServiceList();
   }
 }
