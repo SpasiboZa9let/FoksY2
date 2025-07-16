@@ -44,6 +44,10 @@ function initFoxyAfterName(name) {
 
   showSuggestions(2100);
 }
+  setTimeout(() => {
+    addMessage(randomFrom(talkSuggestions), true);
+  }, 6500);
+
 
 export function initFoxyChat() {
   lucide.createIcons();
