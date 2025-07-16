@@ -34,31 +34,16 @@ import {
   priceInquiryTemplate,
   priceInquiryFollowup,
   calcFormatError,
-  userSaid
+  userSaid,
+  suggestionsHTML
 } from "../core/phrases.js";
+
 
 export function startCalc() {
   setLastIntent("awaitingCalc");
   addMessage(calcInstructions);
 }
 
-function showSuggestions() {
-  addMessage(
-    `<div class="foxy-suggestions">
-       <div class="description">Вот что я могу показать прямо сейчас:</div>
-       <div class="buttons-wrapper">
-         <button class="ai-btn" data-action="прайс">💅 Заглянуть в прайс-лист</button>
-         <button class="ai-btn" data-action="дизайн">🎨 Вдохновиться идеями дизайна</button>
-         <button class="ai-btn" data-action="записаться">📅 Записаться на удобное время</button>
-         <button class="ai-btn" data-action="что ты умеешь">❓ Узнать все мои возможности</button>
-         <button class="ai-btn" data-action="баллы">⭐ Мои баллы</button>
-         <button class="ai-btn" data-action="калькулятор">🧮 Калькулятор скидки</button>
-       </div>
-       <div class="footer">Выбери, что тебе по душе, и я всё покажу 💖</div>
-     </div>`,
-    true
-  );
-}
 
 function handlePromoCode(input) {
   const clean = input.trim().toUpperCase();
@@ -200,9 +185,10 @@ export async function handleUserInput(message) {
       handleMood();
       break;
     case "help":
-      addMessage(helpIntro);
-      showSuggestions();
-      break;
+  addMessage(helpIntro);
+  addMessage(suggestionsHTML, true);
+  break;
+
     default:
       addMessage(randomFrom(fallbackReplies));
       renderServiceList();
