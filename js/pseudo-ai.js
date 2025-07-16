@@ -6,39 +6,14 @@ import {
   getLastIntent,
   setLastIntent
 } from './foxy/core/state.js';
-
-const greetings = [
-  `Привет, %NAME%! 💖 Чем сегодня порадовать твои ноготки?`,
-  `Салют, %NAME%! 🌟 Готова создавать красоту вместе?`,
-  `Здравствуй, %NAME%! ✨ Что выберем для твоего идеального маникюра?`,
-  `Хэй, %NAME%! 💅 Готова к стильному преображению?`,
-  `Добро пожаловать, %NAME%! 😊 Давай сделаем ноготки особенными!`
-];
-
-function randomGreeting(name) {
-  return greetings[Math.floor(Math.random() * greetings.length)]
-    .replace('%NAME%', name);
-}
+import {
+  randomGreeting,
+  suggestionsHTML
+} from './foxy/core/phrases.js';
 
 function showSuggestions(delay = 0) {
   setTimeout(() => {
-    addTypingMessage(
-      `<div class="foxy-suggestions">
-         <div class="description">Вот что я могу показать прямо сейчас:</div>
-         <div class="buttons-wrapper">
-           <button class="ai-btn" data-action="прайс">💅 Прайс-лист</button>
-           <button class="ai-btn" data-action="дизайн">🎨 Идеи дизайна</button>
-           <button class="ai-btn" data-action="записаться">📅 Запись на время</button>
-           <button class="ai-btn" data-action="что ты умеешь">❓ Возможности</button>
-           <button class="ai-btn" data-action="баллы">⭐ Мои баллы</button>
-           <button class="ai-btn" data-action="калькулятор">🧮 Калькулятор скидки</button>
-           <button class="ai-btn" data-action="уже записана">🎉 Я уже записана</button>
-         </div>
-         <div class="footer">Выбери что-то, и я покажу 💖</div>
-       </div>`,
-      600,
-      true
-    );
+    addTypingMessage(suggestionsHTML, 600, true);
 
     setTimeout(() => {
       const sugg = document.querySelector('.foxy-suggestions');
