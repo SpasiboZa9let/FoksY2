@@ -44,42 +44,36 @@
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
 }
 
-/* Специальное сообщение — приветствие */
+/* Закреплённое приветствие */
 .chat-bubble.welcome-message {
-  align-self: center !important;
-  text-align: center !important;
+  position: sticky;
+  top: 0;
+  z-index: 30;
   background: #e0f2fe !important;
   color: #0c4a6e !important;
   font-weight: 600 !important;
+  text-align: center !important;
   box-shadow:
     0 0 6px rgba(0, 180, 255, 0.4),
     0 0 10px rgba(0, 180, 255, 0.3),
     0 0 14px rgba(0, 180, 255, 0.2) !important;
+  margin-bottom: 0.5rem;
+}
+
+/* Закреплённое сообщение про способности */
+.chat-bubble.welcome-secondary {
   position: sticky;
-  top: 0.5rem;
+  top: 3.25rem;
   z-index: 20;
-}
-
-/* Закреплённый подсказочный пузырь */
-#pseudo-chat > .foxy-fade-in:first-child {
-  position: sticky;
-  top: 0;
-  z-index: 10;
-  background: #fff0f4;
-  padding: 0.5rem 1rem;
-  border-radius: 1rem;
-  margin-bottom: 1rem;
-}
-
-/* Сообщение-описание возможностей */
-.chat-bubble.foxy-abilities {
   background: #fce7f3 !important;
   border: 1px solid #f9a8d4;
   font-weight: 500;
+  text-align: center;
   border-radius: 1rem;
   box-shadow:
     0 0 8px rgba(236, 72, 153, 0.3),
     0 0 12px rgba(236, 72, 153, 0.2);
+  margin-bottom: 0.5rem;
 }
 
 /* Контейнер чата */
@@ -170,18 +164,4 @@ body.no-scroll {
   color: #333;
   width: 100%;
   box-sizing: border-box;
-}
-
-.chat-bubble.welcome-message {
-  position: sticky;
-  top: 0;
-  z-index: 30;
-  margin-bottom: 0.5rem;
-}
-
-.chat-bubble.welcome-secondary {
-  position: sticky;
-  top: 3.25rem; /* учтён реальный размер welcome-message */
-  z-index: 20;
-  margin-bottom: 0.5rem;
 }
