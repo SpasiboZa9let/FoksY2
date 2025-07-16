@@ -33,7 +33,7 @@ function showSuggestions(delay = 0) {
 
 function initFoxyAfterName(name) {
   const bubbleHTML = `<strong>${emoji()} Фокси:</strong> ${randomGreeting(name)}`;
-  addTypingMessage(bubbleHTML, 500, true, false);
+  addTypingMessage(bubbleHTML, 500, true, false, "welcome-message");
 
   setTimeout(() => {
     const bubble = document.querySelector('.chat-bubble.welcome-message');
