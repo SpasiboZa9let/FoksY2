@@ -31,7 +31,8 @@ export function addMessage(text, isHTML = false, fromUser = false, extraClass = 
   if (!chat) return;
 
   const bubble = document.createElement("div");
-  bubble.className = `chat-bubble foxy-fade-in ${fromUser ? 'from-user' : 'from-foxy'} ${extraClass}`.trim();
+  bubble.className = `chat-bubble foxy-fade-in ${fromUser ? 'from-user' : 'from-foxy'} ${extraClass}`;
+
 
   if (!fromUser && text.includes('Фокси:')) {
     bubble.classList.add("welcome-message");
