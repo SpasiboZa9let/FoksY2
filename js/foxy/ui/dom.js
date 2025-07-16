@@ -1,97 +1,53 @@
-/**
- * Возвращает контейнер для сообщений
- */
-export function getChat() {
-  return document.getElementById("pseudo-chat");
-}
+export function getChat()      { return document.getElementById("pseudo-chat"); }
+export function getReactions() { return document.getElementById("pseudo-reactions"); }
+export function scrollToBottom(){ const c=getChat(); if(c) c.scrollTop=c.scrollHeight; }
 
-/**
- * Возвращает контейнер для кнопок-реакций
- */
-export function getReactions() {
-  return document.getElementById("pseudo-reactions");
-}
+/* мгновенное сообщение */
+export function addMessage(text,isHTML=false,fromUser=false,extra=""){
+  const chat=getChat(); if(!chat) return;
+  const b=document.createElement("div");
+  b.className=`chat-bubble foxy-fade-in ${fromUser?'from-user':'from-foxy'} ${extra}`;
+  isHTML?b.innerHTML=text:b.textContent=text;
 
-/**
- * Прокручивает чат вниз
- */
-export function scrollToBottom() {
-  const chat = getChat();
-  if (chat) chat.scrollTop = chat.scrollHeight;
-}
+  if(extra==="welcome-message"){
+    chat.insertBefore(b,chat.firstChild);
+  }else if(extra==="welcome-secondary"){
+    const top=chat.querySelector(".welcome-message");
+    top?(top.nextSibling?chat.insertBefore(b,top.nextSibling):chat.appendChild(b))
+        :chat.insertBefore(b,chat.firstChild);
+  }else chat.appendChild(b);
 
-/**
- * Добавляет сообщение с эффектом печати
- */
-export function addTypingMessage(text, delay = 500, isHTML = false, fromUser = false, extraClass = "") {
-  const chat = getChat();
-  if (!chat) return;
-
-  const bubble = document.createElement("div");
-  bubble.className = `chat-bubble foxy-fade-in opacity-50 ${fromUser ? 'from-user' : 'from-foxy'} ${extraClass}`;
-  bubble.textContent = "Фокси печатает...";
-
-  // не вставляем сразу
   scrollToBottom();
+}
 
-  setTimeout(() => {
-    if (isHTML) {
-      bubble.innerHTML = text;
-    } else {
-      bubble.textContent = text;
-    }
+/* печатающееся сообщение */
+export function addTypingMessage(text,delay=500,isHTML=false,fromUser=false,extra=""){
+  const chat=getChat(); if(!chat) return;
+  const b=document.createElement("div");
+  b.className=`chat-bubble foxy-fade-in opacity-50 ${fromUser?'from-user':'from-foxy'} ${extra}`;
+  b.textContent="Фокси печатает...";
 
-    bubble.classList.remove("opacity-50");
+  setTimeout(()=>{
+    isHTML?b.innerHTML=text:b.textContent=text;
+    b.classList.remove("opacity-50");
 
-    if (extraClass === "welcome-message") {
-      chat.insertBefore(bubble, chat.firstChild);
-    } else if (extraClass === "welcome-secondary") {
-      const welcome = chat.querySelector(".welcome-message");
-      if (welcome && welcome.nextSibling) {
-        chat.insertBefore(bubble, welcome.nextSibling);
-      } else if (welcome) {
-        chat.appendChild(bubble);
-      } else {
-        chat.insertBefore(bubble, chat.firstChild);
-      }
-    } else {
-      chat.appendChild(bubble);
-    }
+    if(extra==="welcome-message"){
+      chat.insertBefore(b,chat.firstChild);
+    }else if(extra==="welcome-secondary"){
+      const top=chat.querySelector(".welcome-message");
+      top?(top.nextSibling?chat.insertBefore(b,top.nextSibling):chat.appendChild(b))
+          :chat.insertBefore(b,chat.firstChild);
+    }else chat.appendChild(b);
 
     scrollToBottom();
-  }, delay);
+  },delay);
 }
 
-/**
- * Очищает контейнер с кнопками
- */
-export function clearButtons() {
-  const reactions = getReactions();
-  if (!reactions) return;
-  reactions.innerHTML = "";
+/* утилиты */
+export function clearButtons(){const r=getReactions(); if(r) r.innerHTML="";}
+export function renderReactions(opts=[]){
+  const r=getReactions(); if(!r) return; r.innerHTML="";
+  opts.forEach(o=>{const btn=document.createElement("button");
+    btn.className="ai-btn"; btn.textContent=o.text; btn.onclick=o.callback; r.appendChild(btn);});
 }
-
-/**
- * Отрисовывает кнопки-реакции
- */
-export function renderReactions(options = []) {
-  const reactions = getReactions();
-  if (!reactions) return;
-  reactions.innerHTML = "";
-  for (const opt of options) {
-    const btn = document.createElement("button");
-    btn.className = "ai-btn";
-    btn.textContent = opt.text;
-    btn.addEventListener("click", opt.callback);
-    reactions.appendChild(btn);
-  }
-}
-
-/**
- * Полностью очищает чат
- */
-export function clearChat() {
-  const chat = getChat();
-  if (!chat) return;
-  chat.innerHTML = "";
-}
+export function clearChat(){const c=getChat(); if(c) c.innerHTML="";}
