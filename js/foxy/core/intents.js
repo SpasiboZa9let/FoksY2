@@ -36,6 +36,8 @@ const intentMatchers = {
 
 export function matchIntent(input) {
   const normalized = normalize(input);
+  console.log("[DEBUG] Normalized input:", normalized); // ← добавь это
+
   const words = normalized.split(/\s+/);
 
   for (const [intent, patterns] of Object.entries(intentMatchers)) {
@@ -43,10 +45,8 @@ export function matchIntent(input) {
       const pattern = normalize(rawPattern);
 
       if (pattern.includes(" ")) {
-        // многословные фразы ищем как подстроку
         if (normalized.includes(pattern)) return intent;
       } else {
-        // одиночные слова — точное совпадение в массивах слов
         if (words.includes(pattern)) return intent;
       }
     }
