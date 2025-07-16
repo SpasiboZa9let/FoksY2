@@ -89,6 +89,17 @@ body.fullscreen-fix {
 }
 
 /* Пузырь сообщения */
+
+.chat-bubble.info-message {
+  background: #f0f9ff;
+  color: #0369a1;
+  font-weight: 500;
+  border-left: 4px solid #38bdf8;
+  border-radius: 0.75rem;
+  padding: 0.5rem 0.75rem;
+}
+
+
 .chat-bubble {
   max-width: 80%;
   padding: 0.5rem 0.75rem;
