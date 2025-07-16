@@ -78,11 +78,15 @@ export function randomGreeting(name) {
 export const suggestionsHTML = `
   <div class="foxy-suggestions">
     <div class="buttons-wrapper">
-      <button class='btn' data-intent="booking">Записаться</button>
-      <button class='btn' data-intent="portfolio">Альбом</button>
-      <button class='btn' data-intent="rewards">Бонусы</button>
+      <button class='btn' data-action="записаться">📅 Записаться</button>
+      <button class='btn' data-action="альбом">📸 Альбом</button>
+      <button class='btn' data-action="баллы">⭐ Бонусы</button>
+      <button class='btn' data-action="дизайн">🎨 Идеи дизайна</button>
+      <button class='btn' data-action="калькулятор">🧮 Калькулятор</button>
+      <button class='btn' data-action="что ты умеешь">❓ Возможности</button>
     </div>
     <div class="footer">Выбери что-то, и я покажу 💖</div>
   </div>
 `;
+
 
