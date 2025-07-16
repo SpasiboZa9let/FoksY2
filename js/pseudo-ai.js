@@ -9,7 +9,8 @@ import {
 import {
   randomGreeting,
   suggestionsHTML,
-  helpIntro
+  helpIntro, talkSuggestions,
+  randomFrom
 } from './foxy/core/phrases.js';
 
 function showSuggestions(delay = 0) {
