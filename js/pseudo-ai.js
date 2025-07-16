@@ -33,21 +33,21 @@ function showSuggestions(delay = 0) {
 
 function initFoxyAfterName(name) {
   const bubbleHTML = `<strong>${emoji()} Фокси:</strong> ${randomGreeting(name)}`;
-  addTypingMessage(bubbleHTML, 500, true, false);
+  addTypingMessage(bubbleHTML, 500, true);
 
+  // скрываем приветственную «плашку»
   setTimeout(() => {
-    const bubble = document.querySelector('.chat-bubble.welcome-message');
-    if (!bubble) return;
-    bubble.style.transition = 'opacity 0.5s ease';
-    bubble.style.opacity = '0';
-    setTimeout(() => bubble.remove(), 500);
+    document.querySelector('.chat-bubble.welcome-message')?.remove();
   }, 5500);
 
   showSuggestions(2100);
-}
+
+  // ➜ вывод случайной подсказки после приветствия
   setTimeout(() => {
     addMessage(randomFrom(talkSuggestions), true);
   }, 6500);
+}
+
 
 
 export function initFoxyChat() {
