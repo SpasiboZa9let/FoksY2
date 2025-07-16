@@ -107,11 +107,21 @@ body.fullscreen-fix {
 }
 
 /* Сообщения от пользователя */
-.from-user {
-  align-self: flex-end;
-  background: #ffffff !important;
-  color: #111 !important;
+.from-foxy {
+  align-self: flex-start;
+  background: #ffd1e8 !important;      /* более насыщенный розовый */
+  border: 2px solid #e0529f !important; /* яркая рамка Фокси */
+  color: #5a004a !important;           /* чуть темнее для контраста */
+  box-shadow: 0 4px 10px rgba(224, 82, 159, 0.4);
+  padding: 0.5rem 0.75rem;
+  border-radius: 1rem;
+  max-width: 80%;
+  font-weight: 600;
+  font-size: 0.9rem;
+  white-space: pre-line;
+  margin: 0.25rem 0;
 }
+
 
 /* Приветственное сообщение */
 .chat-bubble.welcome-message {
