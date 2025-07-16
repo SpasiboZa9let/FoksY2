@@ -41,10 +41,20 @@ export function addMessage(text, isHTML = false, fromUser = false, extraClass = 
   }
 
   if (extraClass === "welcome-message") {
-    chat.insertBefore(bubble, chat.firstChild);
-  } else {
+  chat.insertBefore(bubble, chat.firstChild);
+} else if (extraClass === "welcome-secondary") {
+  const welcome = chat.querySelector(".welcome-message");
+  if (welcome && welcome.nextSibling) {
+    chat.insertBefore(bubble, welcome.nextSibling);
+  } else if (welcome) {
     chat.appendChild(bubble);
+  } else {
+    chat.insertBefore(bubble, chat.firstChild);
   }
+} else {
+  chat.appendChild(bubble);
+}
+
 
   scrollToBottom();
 }
