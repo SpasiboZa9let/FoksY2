@@ -21,6 +21,8 @@ export function handleSmalltalk(intent) {
     question: () => addMessage(randomSmalltalk("question")),
   
     abilities: () => {
+  addMessage(`${emoji()} Я помогу с выбором! Вот что могу предложить:`, "info-message");
+
   addMessage(`
 🦊 Я умею:
 — ловить твои комплименты и отвечать с теплом 💖
@@ -43,6 +45,7 @@ export function handleSmalltalk(intent) {
     { text: "❓ Помощь",       callback: () => handleUserInput("помощь") }
   ]);
 },
+
 
 
     about: () => {
