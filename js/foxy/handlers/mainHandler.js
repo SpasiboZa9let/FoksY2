@@ -185,10 +185,10 @@ export async function handleUserInput(message) {
       handleMood();
       break;
     case "help":
-  addMessage(helpIntro);
+  addMessage(helpIntro());
   addMessage(suggestionsHTML, true);
   break;
-
+      
     default:
       addMessage(randomFrom(fallbackReplies));
       renderServiceList();
