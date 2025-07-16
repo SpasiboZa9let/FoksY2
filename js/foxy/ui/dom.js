@@ -25,6 +25,37 @@ export function scrollToBottom() {
  * @param {string} text — текст сообщения (или HTML, если isHTML=true)
  * @param {boolean} [isHTML=false] — вставлять как HTML
  * @param {boolean} [fromUser=false] — сообщение от пользователя
+ * @param {string} [extraClass=""] — доп. CSS класс
+ */
+export function addMessage(text, isHTML = false, fromUser = false, extraClass = "") {
+  const chat = getChat();
+  if (!chat) return;
+
+  const bubble = document.createElement("div");
+  bubble.className = `chat-bubble foxy-fade-in ${fromUser ? 'from-user' : 'from-foxy'} ${extraClass}`;
+
+  if (isHTML) {
+    bubble.innerHTML = text;
+  } else {
+    bubble.textContent = text;
+  }
+
+  if (extraClass === "welcome-message") {
+    chat.insertBefore(bubble, chat.firstChild);
+  } else {
+    chat.appendChild(bubble);
+  }
+
+  scrollToBottom();
+}
+
+/**
+ * Добавляет сообщение с эффектом печати
+ * @param {string} text
+ * @param {number} delay
+ * @param {boolean} [isHTML=false]
+ * @param {boolean} [fromUser=false]
+ * @param {string} [extraClass=""]
  */
 export function addTypingMessage(text, delay = 500, isHTML = false, fromUser = false, extraClass = "") {
   const chat = getChat();
@@ -45,12 +76,14 @@ export function addTypingMessage(text, delay = 500, isHTML = false, fromUser = f
     }
 
     bubble.classList.remove("opacity-50");
+
+    if (extraClass === "welcome-message") {
+      chat.insertBefore(bubble, chat.firstChild);
+    }
+
     scrollToBottom();
   }, delay);
 }
-
-
-
 
 /**
  * Очищает контейнер с кнопками
@@ -84,39 +117,4 @@ export function clearChat() {
   const chat = getChat();
   if (!chat) return;
   chat.innerHTML = "";
-}
-
-/**
- * Добавляет сообщение с эффектом печати
- * @param {string} text — финальный текст
- * @param {number} delay — задержка в мс
- * @param {boolean} [isHTML=false]
- * @param {boolean} [fromUser=false]
- */
-export function addTypingMessage(text, delay = 500, isHTML = false, fromUser = false) {
-  const chat = getChat();
-  if (!chat) return;
-
-  const bubble = document.createElement("div");
-  bubble.className = `chat-bubble foxy-fade-in opacity-50 ${fromUser ? 'from-user' : 'from-foxy'}`;
-  bubble.textContent = "Фокси печатает...";
-
-  chat.appendChild(bubble);
-  scrollToBottom();
-
-  setTimeout(() => {
-    if (isHTML) {
-      bubble.innerHTML = text;
-    } else {
-      bubble.textContent = text;
-    }
-
-    bubble.classList.remove("opacity-50");
-
-    if (!fromUser && text.includes('Фокси:')) {
-      bubble.classList.add("welcome-message");
-    }
-
-    scrollToBottom();
-  }, delay);
 }
