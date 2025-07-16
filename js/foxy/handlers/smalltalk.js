@@ -1,23 +1,21 @@
-// foxy/handlers/smalltalk.js
-
-import { randomReply, emoji } from "../core/services.js";
+import { emoji } from "../core/services.js";
 import { addMessage, renderReactions } from "../ui/dom.js";
 import { renderServiceList, renderBookingOptions } from "../ui/ui.js";
 import { handleDesign } from "./design.js";
-import { handleUserInput } from "./mainHandler.js"; // ✅ добавили — для кнопок
+import { handleUserInput } from "./mainHandler.js";
+import { randomSmalltalk } from "../core/phrases.js";
 
 export function handleSmalltalk(intent) {
   if (!intent) return false;
 
   const handlers = {
-    greeting:      () => addMessage(randomReply("greeting")),
-    smalltalkLite: () => addMessage(randomReply("smalltalkLite")),
-    thanks:        () => addMessage(randomReply("thanks")),
-    bye:           () => addMessage(randomReply("bye")),
-    mood:          () => addMessage(randomReply("mood")),
+    greeting:      () => addMessage(randomSmalltalk("greeting")),
+    smalltalkLite: () => addMessage(randomSmalltalk("smalltalkLite")),
+    thanks:        () => addMessage(randomSmalltalk("thanks")),
+    bye:           () => addMessage(randomSmalltalk("bye")),
+    mood:          () => addMessage(randomSmalltalk("mood")),
     softWarning:   () => addMessage("🧸 Хочу оставаться вежливой. Давай говорить по-доброму?"),
 
-    // Главное меню
     abilities: () => {
       addMessage(`${emoji()} Вот что я умею:`);
       renderReactions([
@@ -26,7 +24,7 @@ export function handleSmalltalk(intent) {
         { text: "📅 Запись",       callback: () => renderBookingOptions() },
         { text: "⭐ Мои баллы",    callback: () => handleUserInput("баллы") },
         { text: "🧮 Калькулятор",  callback: () => handleUserInput("калькулятор") },
-        { text: "🎉 Я уже записана",   callback: () => handleUserInput("уже записана") },
+        { text: "🎉 Я уже записана", callback: () => handleUserInput("уже записана") },
         { text: "❓ Помощь",       callback: () => handleUserInput("помощь") }
       ]);
     },
