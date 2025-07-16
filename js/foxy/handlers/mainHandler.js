@@ -17,7 +17,6 @@ import { handleDesign } from "./design.js";
 import { handleMood } from "./mood.js";
 import { handleSmalltalk } from "./smalltalk.js";
 import { handleServiceInput, showServiceDetails } from "./servicesHandler.js";
-import { sendBooking } from "./booking.js";
 
 const greetings = [
   `Привет, %NAME%! 💖 Чем сегодня порадовать твои ноготки?`,
@@ -64,6 +63,7 @@ function handlePromoCode(input) {
   }
   return false;
 }
+
 // Главная функция обработки ввода
 export async function handleUserInput(message) {
   clearButtons();
@@ -109,6 +109,12 @@ export async function handleUserInput(message) {
 
   const intent = matchIntent(input);
   setLastIntent(intent);
+
+  // Подсказка при "я уже была" и т.п.
+  if (intent === "promoHint") {
+    addMessage("🦊 Сейчас баллы начисляются только по промокодам 🎁\nВведи его, если есть!");
+    return;
+  }
 
   if (intent === "confirm" && getLastService()) {
     showServiceDetails(getLastService());
@@ -163,20 +169,14 @@ export async function handleUserInput(message) {
     return;
   }
 
+  // Заявка (без сервера)
   if (intent === "booking" || intent === "confirmBooking") {
     const service = getLastService();
     const name = getUserName();
-    const date = new Date().toISOString().split("T")[0];
 
     if (service && name) {
-      addMessage(`Отправляю заявку на «${service}» для ${name}... 📨`);
-      const res = await sendBooking({ name, service, date });
-
-      if (res.success) {
-        addMessage("📬 Заявка отправлена! Ждём подтверждения.");
-      } else {
-        addMessage("⚠️ Не удалось отправить заявку. Попробуй позже!");
-      }
+      addMessage(`📌 Записала тебя на «${service}», ${name}! 💅`);
+      addMessage("Хочешь ещё что-то посмотреть? 🌟");
     } else if (!service) {
       addMessage(`На какую услугу тебя записать? 💅`);
       renderServiceList();
@@ -187,6 +187,7 @@ export async function handleUserInput(message) {
     return;
   }
 
+  // Остальные интенты
   switch (intent) {
     case "design":
       handleDesign();
