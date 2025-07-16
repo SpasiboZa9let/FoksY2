@@ -26,12 +26,12 @@ export function scrollToBottom() {
  * @param {boolean} [isHTML=false] — вставлять как HTML
  * @param {boolean} [fromUser=false] — сообщение от пользователя
  */
-export function addMessage(text, isHTML = false, fromUser = false) {
+export function addMessage(text, isHTML = false, fromUser = false, extraClass = "") {
   const chat = getChat();
   if (!chat) return;
 
   const bubble = document.createElement("div");
-  bubble.className = `chat-bubble foxy-fade-in ${fromUser ? 'from-user' : 'from-foxy'}`;
+  bubble.className = `chat-bubble foxy-fade-in ${fromUser ? 'from-user' : 'from-foxy'} ${extraClass}`.trim();
 
   if (!fromUser && text.includes('Фокси:')) {
     bubble.classList.add("welcome-message");
@@ -46,6 +46,7 @@ export function addMessage(text, isHTML = false, fromUser = false) {
   chat.appendChild(bubble);
   scrollToBottom();
 }
+
 
 /**
  * Очищает контейнер с кнопками
