@@ -8,75 +8,23 @@
   gap: 0.5rem;
 }
 .chat-wrapper:not(.fullscreen) #pseudo-chat {
-  max-height: 16rem;
+  max-height: 16rem; /* или 256px */
   overflow-y: auto;
 }
 
-/* Сообщения от Фокси */
-.from-foxy {
-  align-self: flex-start;
-  background: #ffd1e8 !important;
-  border: 2px solid #e0529f !important;
-  color: #5a004a !important;
-  box-shadow: 0 4px 10px rgba(224, 82, 159, 0.4);
-  font-weight: 600;
-  font-size: 0.9rem;
-}
 
-/* Сообщения от пользователя */
-.from-user {
-  align-self: flex-end;
-  background: #d0ebff;
-  color: #0c3c6e;
-  font-weight: 500;
-  box-shadow: 0 2px 6px rgba(0, 123, 255, 0.2);
-}
-
-/* Общие стили для пузырей */
-.chat-bubble {
-  max-width: 80%;
-  padding: 0.5rem 0.75rem;
-  border-radius: 1rem;
-  font-size: 0.875rem;
-  white-space: pre-line;
-  display: block;
-  margin: 0.25rem 0;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
-}
-
-/* Закреплённое приветствие */
-.chat-bubble.welcome-message {
+/* Первый "пузырь" — подсказка — закрепляется */
+#pseudo-chat > .foxy-fade-in:first-child {
   position: sticky;
   top: 0;
-  z-index: 30;
-  background: #e0f2fe !important;
-  color: #0c4a6e !important;
-  font-weight: 600 !important;
-  text-align: center !important;
-  box-shadow:
-    0 0 6px rgba(0, 180, 255, 0.4),
-    0 0 10px rgba(0, 180, 255, 0.3),
-    0 0 14px rgba(0, 180, 255, 0.2) !important;
-  margin-bottom: 0.5rem;
-}
-
-/* Закреплённое сообщение про способности */
-.chat-bubble.welcome-secondary {
-  position: sticky;
-  top: 3.25rem;
-  z-index: 20;
-  background: #fce7f3 !important;
-  border: 1px solid #f9a8d4;
-  font-weight: 500;
-  text-align: center;
+  z-index: 10;
+  background: #fff0f4;
+  padding: 0.5rem 1rem;
   border-radius: 1rem;
-  box-shadow:
-    0 0 8px rgba(236, 72, 153, 0.3),
-    0 0 12px rgba(236, 72, 153, 0.2);
-  margin-bottom: 0.5rem;
+  margin-bottom: 1rem;
 }
 
-/* Контейнер чата */
+/* Обёртка чата */
 .chat-wrapper.neon-box {
   border-radius: 1.5rem;
   padding: 1rem;
@@ -102,22 +50,26 @@
   padding: 0;
   box-shadow: none;
 }
+
 .chat-wrapper.fullscreen #pseudo-chat {
   flex: 1 1 auto;
+  overflow-y: auto;
   padding: 1rem;
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
-  overflow-y: auto;
 }
+
 .chat-wrapper.fullscreen #pseudo-form {
   flex-shrink: 0;
   padding: 0.75rem 1rem 1.25rem;
   border-top: 1px solid #fbcfe8;
   background: #fff0f4;
+  margin-bottom: 0 !important;
 }
 
-/* Кнопка переключения полноэкранного режима */
+
+
 .chat-wrapper.fullscreen #toggle-fullscreen {
   position: absolute;
   top: 0.75rem;
@@ -127,15 +79,56 @@
   color: #ec4899;
   padding: 0.4rem;
   border-radius: 9999px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
 }
 
-/* Отключение скролла фона */
 body.fullscreen-fix {
   max-width: none !important;
   margin: 0 !important;
   padding: 0 !important;
 }
+
+/* Пузырь сообщения */
+.chat-bubble {
+  max-width: 80%;
+  padding: 0.5rem 0.75rem;
+  border-radius: 1rem;
+  font-size: 0.875rem;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  white-space: pre-line;
+  display: block;
+}
+
+/* Сообщения от Фокси */
+.from-foxy {
+  align-self: flex-start;
+  background: #fff0f4 !important;
+  color: #333 !important;
+}
+
+/* Сообщения от пользователя */
+.from-user {
+  align-self: flex-end;
+  background: #ffffff !important;
+  color: #111 !important;
+}
+
+/* Приветственное сообщение */
+.chat-bubble.welcome-message {
+  align-self: center !important;
+  text-align: center !important;
+  background: #e0f2fe !important;
+  color: #0c4a6e !important;
+  font-weight: 600 !important;
+  display: block !important;
+  box-shadow:
+    0 0 6px rgba(0, 180, 255, 0.4),
+    0 0 10px rgba(0, 180, 255, 0.3),
+    0 0 14px rgba(0, 180, 255, 0.2) !important;
+  transition: all 0.3s ease;
+}
+
+/* Блокировка скролла фона */
 body.no-scroll {
   overflow: hidden;
 }
@@ -147,6 +140,7 @@ body.no-scroll {
   color: #ec4899;
   font-size: 0.75rem;
   cursor: pointer;
+  padding: 0;
   margin: 0.5rem 0 0 auto;
   display: block;
 }
@@ -154,7 +148,7 @@ body.no-scroll {
   text-decoration: underline;
 }
 
-/* Поле ввода */
+/* Поле ввода пользователя */
 #pseudo-input {
   background: #fff;
   border: 1px solid #ddd;
@@ -164,12 +158,4 @@ body.no-scroll {
   color: #333;
   width: 100%;
   box-sizing: border-box;
-}
-
-/* резервируем пространство под welcome-блоки */
-#pseudo-chat::before{
-  content:"";
-  display:block;
-  height:6rem;      /* ≈ высота двух закреплённых пузырей */
-  flex-shrink:0;    /* чтобы не схлопывался при прокрутке */
 }
