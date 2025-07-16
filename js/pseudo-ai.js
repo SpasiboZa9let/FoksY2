@@ -8,11 +8,13 @@ import {
 } from './foxy/core/state.js';
 import {
   randomGreeting,
-  suggestionsHTML
+  suggestionsHTML,
+  helpIntro
 } from './foxy/core/phrases.js';
 
 function showSuggestions(delay = 0) {
   setTimeout(() => {
+    addTypingMessage(`<strong>${emoji()} Фокси:</strong> ${helpIntro}`, 300, true);
     addTypingMessage(suggestionsHTML, 600, true);
 
     setTimeout(() => {
@@ -26,6 +28,7 @@ function showSuggestions(delay = 0) {
     }, 8000);
   }, delay);
 }
+
 
 function initFoxyAfterName(name) {
   const bubbleHTML = `<strong>${emoji()} Фокси:</strong> ${randomGreeting(name)}`;
