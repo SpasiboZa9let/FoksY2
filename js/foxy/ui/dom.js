@@ -33,25 +33,21 @@ export function addMessage(text, isHTML = false, fromUser = false, extraClass = 
   const bubble = document.createElement("div");
   bubble.className = `chat-bubble foxy-fade-in ${fromUser ? 'from-user' : 'from-foxy'} ${extraClass}`;
 
-  const isWelcome = !fromUser && text.includes("Фокси:");
-  if (isWelcome) {
-    bubble.classList.add("welcome-message");
-  }
-
   if (isHTML) {
     bubble.innerHTML = text;
   } else {
     bubble.textContent = text;
   }
 
-  if (isWelcome) {
-    chat.insertBefore(bubble, chat.firstChild); // ⬅ закреплённое сообщение в начало
+  if (extraClass === "welcome-message") {
+    chat.insertBefore(bubble, chat.firstChild); // только если явно указан класс
   } else {
     chat.appendChild(bubble);
   }
 
   scrollToBottom();
 }
+
 
 
 
