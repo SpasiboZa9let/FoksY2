@@ -77,11 +77,12 @@ export function randomGreeting(name) {
 
 export const suggestionsHTML = `
   <div class="foxy-suggestions">
-    <div class="description">Вот что я могу показать прямо сейчас:</div>
     <div class="buttons-wrapper">
       <button class='btn' data-intent="booking">Записаться</button>
       <button class='btn' data-intent="portfolio">Альбом</button>
       <button class='btn' data-intent="rewards">Бонусы</button>
     </div>
+    <div class="footer">Выбери что-то, и я покажу 💖</div>
   </div>
 `;
+
