@@ -33,8 +33,8 @@ export function addMessage(text, isHTML = false, fromUser = false, extraClass = 
   const bubble = document.createElement("div");
   bubble.className = `chat-bubble foxy-fade-in ${fromUser ? 'from-user' : 'from-foxy'} ${extraClass}`;
 
-
-  if (!fromUser && text.includes('Фокси:')) {
+  const isWelcome = !fromUser && text.includes("Фокси:");
+  if (isWelcome) {
     bubble.classList.add("welcome-message");
   }
 
@@ -44,9 +44,15 @@ export function addMessage(text, isHTML = false, fromUser = false, extraClass = 
     bubble.textContent = text;
   }
 
-  chat.appendChild(bubble);
+  if (isWelcome) {
+    chat.insertBefore(bubble, chat.firstChild); // ⬅ закреплённое сообщение в начало
+  } else {
+    chat.appendChild(bubble);
+  }
+
   scrollToBottom();
 }
+
 
 
 /**
