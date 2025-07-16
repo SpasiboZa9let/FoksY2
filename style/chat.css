@@ -165,3 +165,11 @@ body.no-scroll {
   width: 100%;
   box-sizing: border-box;
 }
+
+/* резервируем пространство под welcome-блоки */
+#pseudo-chat::before{
+  content:"";
+  display:block;
+  height:6rem;      /* ≈ высота двух закреплённых пузырей */
+  flex-shrink:0;    /* чтобы не схлопывался при прокрутке */
+}
