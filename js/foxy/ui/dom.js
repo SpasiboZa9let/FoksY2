@@ -20,36 +20,46 @@ export function scrollToBottom() {
   if (chat) chat.scrollTop = chat.scrollHeight;
 }
 
-export function addMessage(text, isHTML = false, fromUser = false, extraClass = "") {
+export function addTypingMessage(text, delay = 500, isHTML = false, fromUser = false, extraClass = "") {
   const chat = getChat();
   if (!chat) return;
 
   const bubble = document.createElement("div");
-  bubble.className = `chat-bubble foxy-fade-in ${fromUser ? 'from-user' : 'from-foxy'} ${extraClass}`;
+  bubble.className = `chat-bubble foxy-fade-in opacity-50 ${fromUser ? 'from-user' : 'from-foxy'} ${extraClass}`;
+  bubble.textContent = "Фокси печатает...";
 
-  if (isHTML) {
-    bubble.innerHTML = text;
-  } else {
-    bubble.textContent = text;
-  }
-
-  if (extraClass === "welcome-message") {
-    chat.insertBefore(bubble, chat.firstChild);
-  } else if (extraClass === "welcome-secondary") {
-    const welcome = chat.querySelector(".welcome-message");
-    if (welcome && welcome.nextSibling) {
-      chat.insertBefore(bubble, welcome.nextSibling);
-    } else if (welcome) {
-      chat.appendChild(bubble);
-    } else {
-      chat.insertBefore(bubble, chat.firstChild);
-    }
-  } else {
-    chat.appendChild(bubble);
-  }
-
+  // ❌ НЕ append сразу — подождём, пока заполним текст
   scrollToBottom();
+
+  setTimeout(() => {
+    if (isHTML) {
+      bubble.innerHTML = text;
+    } else {
+      bubble.textContent = text;
+    }
+
+    bubble.classList.remove("opacity-50");
+
+    // ✅ Только теперь вставляем bubble в DOM
+    if (extraClass === "welcome-message") {
+      chat.insertBefore(bubble, chat.firstChild);
+    } else if (extraClass === "welcome-secondary") {
+      const welcome = chat.querySelector(".welcome-message");
+      if (welcome && welcome.nextSibling) {
+        chat.insertBefore(bubble, welcome.nextSibling);
+      } else if (welcome) {
+        chat.appendChild(bubble);
+      } else {
+        chat.insertBefore(bubble, chat.firstChild);
+      }
+    } else {
+      chat.appendChild(bubble);
+    }
+
+    scrollToBottom();
+  }, delay);
 }
+
 
 
 
