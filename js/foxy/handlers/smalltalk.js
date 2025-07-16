@@ -21,27 +21,29 @@ export function handleSmalltalk(intent) {
     question: () => addMessage(randomSmalltalk("question")),
   
     abilities: () => {
-      addMessage(`${emoji()} Вот что я умею:`);
-      renderReactions([
-        { text: "💅 Прайс",        callback: () => renderServiceList() },
-        { text: "🎨 Дизайн",       callback: () => handleDesign() },
-        { text: "📅 Запись",       callback: () => renderBookingOptions() },
-        { text: "⭐ Мои баллы",    callback: () => handleUserInput("баллы") },
-        { text: "🧮 Калькулятор",  callback: () => handleUserInput("калькулятор") },
-        { text: "🎉 Я уже записана", callback: () => handleUserInput("уже записана") },
-        { text: "❓ Помощь",       callback: () => handleUserInput("помощь") }
-      ]);
-    },
+  addMessage(`
+🦊 Я умею:
+— ловить твои комплименты и отвечать с теплом 💖
+— рассказывать шутки и поднимать настроение 😄
+— говорить о погоде и делиться вдохновением ☀️❄️
+— помогать записаться на услуги 💅
+— показывать идеи дизайна 🎨
+— считать скидки и бонусы ⭐
+— просто болтать, когда хочется 😊
 
-    help: () => {
-      addMessage(`${emoji()} Я помогу с выбором! Вот мои команды:`);
-      renderReactions([
-        { text: "💅 Прайс",        callback: () => renderServiceList() },
-        { text: "🎨 Дизайн",       callback: () => handleDesign() },
-        { text: "📅 Запись",       callback: () => renderBookingOptions() },
-        { text: "❓ Что я умею?",  callback: () => handlers.abilities() }
-      ]);
-    },
+Выбирай, что хочешь, и жми кнопки ниже 👇
+  `);
+  renderReactions([
+    { text: "💅 Прайс",        callback: () => renderServiceList() },
+    { text: "🎨 Дизайн",       callback: () => handleDesign() },
+    { text: "📅 Запись",       callback: () => renderBookingOptions() },
+    { text: "⭐ Мои баллы",    callback: () => handleUserInput("баллы") },
+    { text: "🧮 Калькулятор",  callback: () => handleUserInput("калькулятор") },
+    { text: "🎉 Я уже записана", callback: () => handleUserInput("уже записана") },
+    { text: "❓ Помощь",       callback: () => handleUserInput("помощь") }
+  ]);
+},
+
 
     about: () => {
       addMessage("🦊 Я Фокси — виртуальная подружка и мастер маникюра 💅");
