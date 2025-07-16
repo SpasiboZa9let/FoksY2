@@ -15,7 +15,7 @@ import {
 
 function showSuggestions(delay = 0) {
   setTimeout(() => {
-    addTypingMessage(`<strong>${emoji()} Фокси:</strong> ${helpIntro()}`, 300, true);
+    addTypingMessage(`<strong>${emoji()} Фокси:</strong> ${helpIntro()}`, 300, true, false, "welcome-message");
     addTypingMessage(suggestionsHTML, 600, true);
 
     setTimeout(() => {
