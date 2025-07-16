@@ -15,7 +15,11 @@ export function handleSmalltalk(intent) {
     bye:           () => addMessage(randomSmalltalk("bye")),
     mood:          () => addMessage(randomSmalltalk("mood")),
     softWarning:   () => addMessage("🧸 Хочу оставаться вежливой. Давай говорить по-доброму?"),
-
+    compliment: () => addMessage(randomSmalltalk("compliment")),
+    joke: () => addMessage(randomSmalltalk("joke")),
+    weather: () => addMessage(randomSmalltalk("weather")),
+    question: () => addMessage(randomSmalltalk("question")),
+  
     abilities: () => {
       addMessage(`${emoji()} Вот что я умею:`);
       renderReactions([
