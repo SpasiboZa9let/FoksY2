@@ -26,26 +26,27 @@ export function scrollToBottom() {
  * @param {boolean} [isHTML=false] — вставлять как HTML
  * @param {boolean} [fromUser=false] — сообщение от пользователя
  */
-export function addMessage(text, isHTML = false, fromUser = false, extraClass = "") {
+export function addTypingMessage(text, delay = 500, isHTML = false, fromUser = false, extraClass = "") {
   const chat = getChat();
   if (!chat) return;
 
   const bubble = document.createElement("div");
-  bubble.className = `chat-bubble foxy-fade-in ${fromUser ? 'from-user' : 'from-foxy'} ${extraClass}`;
+  bubble.className = `chat-bubble foxy-fade-in opacity-50 ${fromUser ? 'from-user' : 'from-foxy'} ${extraClass}`;
+  bubble.textContent = "Фокси печатает...";
 
-  if (isHTML) {
-    bubble.innerHTML = text;
-  } else {
-    bubble.textContent = text;
-  }
-
-  if (extraClass === "welcome-message") {
-    chat.insertBefore(bubble, chat.firstChild); // только если явно указан класс
-  } else {
-    chat.appendChild(bubble);
-  }
-
+  chat.appendChild(bubble);
   scrollToBottom();
+
+  setTimeout(() => {
+    if (isHTML) {
+      bubble.innerHTML = text;
+    } else {
+      bubble.textContent = text;
+    }
+
+    bubble.classList.remove("opacity-50");
+    scrollToBottom();
+  }, delay);
 }
 
 
