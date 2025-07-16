@@ -20,6 +20,9 @@ export function scrollToBottom() {
   if (chat) chat.scrollTop = chat.scrollHeight;
 }
 
+/**
+ * Добавляет сообщение с эффектом печати
+ */
 export function addTypingMessage(text, delay = 500, isHTML = false, fromUser = false, extraClass = "") {
   const chat = getChat();
   if (!chat) return;
@@ -28,7 +31,7 @@ export function addTypingMessage(text, delay = 500, isHTML = false, fromUser = f
   bubble.className = `chat-bubble foxy-fade-in opacity-50 ${fromUser ? 'from-user' : 'from-foxy'} ${extraClass}`;
   bubble.textContent = "Фокси печатает...";
 
-  // ❌ НЕ append сразу — подождём, пока заполним текст
+  // не вставляем сразу
   scrollToBottom();
 
   setTimeout(() => {
@@ -40,7 +43,6 @@ export function addTypingMessage(text, delay = 500, isHTML = false, fromUser = f
 
     bubble.classList.remove("opacity-50");
 
-    // ✅ Только теперь вставляем bubble в DOM
     if (extraClass === "welcome-message") {
       chat.insertBefore(bubble, chat.firstChild);
     } else if (extraClass === "welcome-secondary") {
@@ -59,9 +61,6 @@ export function addTypingMessage(text, delay = 500, isHTML = false, fromUser = f
     scrollToBottom();
   }, delay);
 }
-
-
-
 
 /**
  * Очищает контейнер с кнопками
@@ -95,40 +94,4 @@ export function clearChat() {
   const chat = getChat();
   if (!chat) return;
   chat.innerHTML = "";
-}
-export function addTypingMessage(text, delay = 500, isHTML = false, fromUser = false, extraClass = "") {
-  const chat = getChat();
-  if (!chat) return;
-
-  const bubble = document.createElement("div");
-  bubble.className = `chat-bubble foxy-fade-in opacity-50 ${fromUser ? 'from-user' : 'from-foxy'} ${extraClass}`;
-  bubble.textContent = "Фокси печатает...";
-
-  chat.appendChild(bubble);
-  scrollToBottom();
-
-  setTimeout(() => {
-    if (isHTML) {
-      bubble.innerHTML = text;
-    } else {
-      bubble.textContent = text;
-    }
-
-    bubble.classList.remove("opacity-50");
-
-    if (extraClass === "welcome-message") {
-      chat.insertBefore(bubble, chat.firstChild);
-    } else if (extraClass === "welcome-secondary") {
-      const welcome = chat.querySelector(".welcome-message");
-      if (welcome && welcome.nextSibling) {
-        chat.insertBefore(bubble, welcome.nextSibling);
-      } else if (welcome) {
-        chat.appendChild(bubble);
-      } else {
-        chat.insertBefore(bubble, chat.firstChild);
-      }
-    }
-
-    scrollToBottom();
-  }, delay);
 }
