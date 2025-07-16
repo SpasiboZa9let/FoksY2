@@ -132,7 +132,6 @@ body.fullscreen-fix {
 }
 
 
-/* Приветственное сообщение */
 .chat-bubble.welcome-message {
   align-self: center !important;
   text-align: center !important;
@@ -145,7 +144,12 @@ body.fullscreen-fix {
     0 0 10px rgba(0, 180, 255, 0.3),
     0 0 14px rgba(0, 180, 255, 0.2) !important;
   transition: all 0.3s ease;
+
+  position: sticky;
+  top: 0.5rem;
+  z-index: 20;
 }
+
 
 /* Блокировка скролла фона */
 body.no-scroll {
