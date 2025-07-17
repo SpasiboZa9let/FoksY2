@@ -13,43 +13,60 @@ export function initPriceAccordion() {
 }
 
 // Галерея-аккордеон с Fullscreen API
-export function initGalleryAccordion() {
-  // Найти все блоки галереи
-  const items = document.querySelectorAll('.accordion-item[data-type="gallery"]');
-  if (!items.length) return;
+// FoksY2/js/foxy/ui/accordion.js
 
-  items.forEach(item => {
+export function initGalleryAccordion() {
+  const modal    = document.getElementById('gallery-modal');
+  const modalImg = document.getElementById('gallery-modal-img');
+
+  // Функции открытия/закрытия модалки с учётом классов .open/.closing
+  function openModal(src) {
+    modalImg.src = src;
+    modal.classList.remove('closing');
+    modal.classList.add('open');
+  }
+  function closeModal() {
+    modal.classList.remove('open');
+    modal.classList.add('closing');
+    // по завершении transition удаляем класс closing
+    modal.addEventListener('transitionend', () => {
+      modal.classList.remove('closing');
+    }, { once: true });
+  }
+
+  // Закрытие по клику/тапу на фон или на изображение
+  ['click', 'touchstart'].forEach(evt => {
+    modal.addEventListener(evt, e => {
+      if (e.target === modal || e.target === modalImg) closeModal();
+    });
+  });
+
+  // Инициализация одного блока галереи-аккордеона
+  document.querySelectorAll('.accordion-item[data-type="gallery"]').forEach(item => {
     const header = item.querySelector('.accordion-header');
     const panel  = item.querySelector('.accordion-panel');
     if (!header || !panel) return;
 
-    // Скрыть по умолчанию
+    // скрываем панель по умолчанию
     panel.classList.add('hidden');
 
-    // Клик по заголовку: toggle аккордеон
+    // клики/тапы по миниатюрам
+    panel.querySelectorAll('.gallery-img').forEach(img => {
+      ['click', 'touchstart'].forEach(evt => {
+        img.addEventListener(evt, e => {
+          e.stopPropagation();
+          const isVisible = modal.classList.contains('open');
+          if (isVisible && modalImg.src === img.src) closeModal();
+          else openModal(img.src);
+        });
+      });
+    });
+
+    // клик по заголовку аккордеона
     header.addEventListener('click', () => {
       const isOpen = !panel.classList.contains('hidden');
       panel.classList.toggle('hidden', isOpen);
       item.classList.toggle('open', !isOpen);
-    });
-
-    // Клики по миниатюрам → Fullscreen API
-    panel.querySelectorAll('.gallery-img').forEach(img => {
-      img.style.cursor = 'pointer'; // подсказка, что кликабельно
-      img.addEventListener('click', e => {
-        e.stopPropagation(); // чтобы не трогать аккордеон
-
-        // Если сейчас нет full-screen, запрашиваем его
-        if (!document.fullscreenElement) {
-          img.requestFullscreen().catch(err => {
-            console.error('Не смог открыть Fullscreen:', err);
-          });
-        } else {
-          document.exitFullscreen().catch(err => {
-            console.error('Не смог выйти из Fullscreen:', err);
-          });
-        }
-      });
     });
   });
 }
