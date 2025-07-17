@@ -15,6 +15,8 @@ export function initPriceAccordion() {
 // Галерея-аккордеон с Fullscreen API
 // FoksY2/js/foxy/ui/accordion.js
 
+// FoksY2/js/foxy/ui/accordion.js
+
 export function initGalleryAccordion() {
   const modal    = document.getElementById('gallery-modal');
   const modalImg = document.getElementById('gallery-modal-img');
@@ -52,13 +54,17 @@ export function initGalleryAccordion() {
 
     // клики/тапы по миниатюрам
     panel.querySelectorAll('.gallery-img').forEach(img => {
-      ['click', 'touchstart'].forEach(evt => {
-        img.addEventListener(evt, e => {
-          e.stopPropagation();
-          const isVisible = modal.classList.contains('open');
-          if (isVisible && modalImg.src === img.src) closeModal();
-          else openModal(img.src);
-        });
+      // Открытие модалки по клику или тачу
+      img.addEventListener('click', e => {
+        e.stopPropagation();
+        toggleModal(img.src);
+      });
+      img.addEventListener('touchend', e => {
+        e.preventDefault(); // предотвращаем последующий click
+        e.stopPropagation();
+        toggleModal(img.src);
+      }, { passive: false });
+    });
       });
     });
 
