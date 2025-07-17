@@ -6,6 +6,12 @@
   overflow: hidden;
 }
 
+.chat-wrapper:not(.fullscreen) #pseudo-chat {
+  max-height: 16rem;
+  overflow-y: auto;
+}
+
+
 .chat-wrapper.neon-box {
   border-radius: 1.5rem;
   padding: 1rem;
