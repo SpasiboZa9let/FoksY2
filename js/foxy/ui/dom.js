@@ -1,62 +1,66 @@
-// dom.js — утилиты для работы с DOM (v2)
+// dom.js — утилиты для работы с DOM (v2‑fix)
 //
-// Основные изменения:
-// 1. addMessage / addTypingMessage принимают объект опций.
-// 2. Поддержка авто‑удаления через dismissAfter.
-// 3. Функции возвращают созданный bubble для дальнейшего управления.
-// 4. scrollToBottom использует requestAnimationFrame.
-// 5. Прочие оптимизации.
+// * Поддержка старого вызова addMessage(text, true)
+// * Авто‑удаление welcome‑сообщения по умолчанию (3 с)
+// ---------------------------------------------------
 
 const CHAT_ID = 'pseudo-chat';
 const REACTIONS_ID = 'pseudo-reactions';
 const $ = (id) => document.getElementById(id);
 
-/* Контейнеры */
+/** Контейнеры */
 export const getChat = () => $(CHAT_ID);
 export const getReactions = () => $(REACTIONS_ID);
 
-/* Скролл к последнему сообщению */
+/** Скролл к низу */
 export const scrollToBottom = () => {
   const chat = getChat();
   if (chat) requestAnimationFrame(() => (chat.scrollTop = chat.scrollHeight));
 };
 
-/* Вставляет bubble в чат */
-function appendBubble(text, { html, fromUser }) {
-  const bubble = document.createElement('div');
-  bubble.className = `chat-bubble foxy-fade-in ${fromUser ? 'from-user' : 'from-foxy'}`;
-  if (!fromUser && /Фокси:/.test(text)) bubble.classList.add('welcome-message');
-  html ? (bubble.innerHTML = text) : (bubble.textContent = text);
-  getChat()?.appendChild(bubble);
-  scrollToBottom();
-  return bubble;
-}
-
 /**
  * Добавляет сообщение
  * @param {string} text
- * @param {Object} [opts]
- * @param {boolean} [opts.html=false]            — интерпретировать как HTML
- * @param {boolean} [opts.fromUser=false]        — сообщение от пользователя
- * @param {number|null} [opts.dismissAfter=null] — авто‑удаление, мс
+ * @param {Object|boolean} [opts] — либо объект опций, либо legacy‑флаг «html=true»
+ * @param {boolean} [opts.html=false]
+ * @param {boolean} [opts.fromUser=false]
+ * @param {number|null} [opts.dismissAfter=null] — авто‑удалить (мс)
  * @returns {HTMLDivElement|null}
  */
 export function addMessage(text, opts = {}) {
-  const { html = false, fromUser = false, dismissAfter = null } = opts;
-  const bubble = appendBubble(text, { html, fromUser });
-  if (bubble && dismissAfter) setTimeout(() => bubble.remove(), dismissAfter);
+  // ↓ обратная совместимость с вызовами addMessage(text, true)
+  if (typeof opts === 'boolean') opts = { html: opts };
+
+  let { html = false, fromUser = false, dismissAfter = null } = opts;
+  const chat = getChat();
+  if (!chat) return null;
+
+  const bubble = document.createElement('div');
+  bubble.className = `chat-bubble foxy-fade-in ${fromUser ? 'from-user' : 'from-foxy'}`;
+
+  // маркер «welcome» + автозакрытие через 3 с, если не задано иначе
+  if (!fromUser && /Фокси:/.test(text)) {
+    bubble.classList.add('welcome-message');
+    if (dismissAfter === null) dismissAfter = 3000;
+  }
+
+  html ? (bubble.innerHTML = text) : (bubble.textContent = text);
+  chat.appendChild(bubble);
+  scrollToBottom();
+
+  if (dismissAfter) setTimeout(() => bubble.remove(), dismissAfter);
   return bubble;
 }
 
-/* Очистка реакций */
+/** Очистка реакций */
 export const clearButtons = () => {
   const box = getReactions();
   if (box) box.textContent = '';
 };
 
 /**
- * Отрисовывает кнопки‑реакции
- * @param {{text:string, callback:Function}[]} list
+ * Рендер кнопок‑реакций
+ * @param {{text:string,callback:Function}[]} list
  */
 export function renderReactions(list = []) {
   const box = getReactions();
@@ -71,37 +75,45 @@ export function renderReactions(list = []) {
   });
 }
 
-/* Полная очистка чата */
+/** Полная очистка чата */
 export const clearChat = () => {
   const chat = getChat();
   if (chat) chat.textContent = '';
 };
 
 /**
- * Добавляет сообщение с эффектом «печатает…»
+ * Сообщение с эффектом печати
  * @param {string} finalText
- * @param {number} [delay=500]                   — задержка перед появлением полного текста
- * @param {Object} [opts]
+ * @param {number} [delay=500]
+ * @param {Object|boolean} [opts] — либо объект, либо legacy‑html=true
  * @param {boolean} [opts.html=false]
  * @param {boolean} [opts.fromUser=false]
  * @param {number|null} [opts.dismissAfter=null]
  * @returns {HTMLDivElement|null}
  */
 export function addTypingMessage(finalText, delay = 500, opts = {}) {
-  const { html = false, fromUser = false, dismissAfter = null } = opts;
+  if (typeof opts === 'boolean') opts = { html: opts };
+  let { html = false, fromUser = false, dismissAfter = null } = opts;
+
   const chat = getChat();
   if (!chat) return null;
 
   const bubble = document.createElement('div');
   bubble.className = `chat-bubble foxy-fade-in opacity-50 ${fromUser ? 'from-user' : 'from-foxy'}`;
   bubble.textContent = 'Фокси печатает...';
+
   chat.appendChild(bubble);
   scrollToBottom();
 
   setTimeout(() => {
     html ? (bubble.innerHTML = finalText) : (bubble.textContent = finalText);
     bubble.classList.remove('opacity-50');
-    if (!fromUser && /Фокси:/.test(finalText)) bubble.classList.add('welcome-message');
+
+    if (!fromUser && /Фокси:/.test(finalText)) {
+      bubble.classList.add('welcome-message');
+      if (dismissAfter === null) dismissAfter = 3000;
+    }
+
     scrollToBottom();
     if (dismissAfter) setTimeout(() => bubble.remove(), dismissAfter);
   }, delay);
