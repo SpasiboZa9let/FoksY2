@@ -85,9 +85,10 @@ body.fullscreen-fix {
 
 .from-foxy {
   align-self: flex-start;
-  background: #fff0f4 !important;
-  color: #333 !important;
+  background: #f9a8d4 !important; /* насыщенно розовый */
+  color: #111 !important;
 }
+
 
 .from-foxy > * {
   position: relative;
