@@ -1,14 +1,14 @@
 .chat-bubble.welcome-message {
   align-self: center !important;
   text-align: center !important;
-  background: #e0f2fe !important;
-  color: #0c4a6e !important;
+  background: #e0f7fa !important;
+  color: #006064 !important;
   font-weight: 600 !important;
   display: block !important;
   box-shadow:
-    0 0 6px rgba(0, 180, 255, 0.4),
-    0 0 10px rgba(0, 180, 255, 0.3),
-    0 0 14px rgba(0, 180, 255, 0.2) !important;
+    0 0 6px rgba(0, 172, 193, 0.3),
+    0 0 10px rgba(0, 172, 193, 0.2),
+    0 0 14px rgba(0, 172, 193, 0.1) !important;
   transition: all 0.3s ease;
 }
 
@@ -16,9 +16,10 @@
   position: sticky;
   top: 0;
   z-index: 10;
-  background: #fff0f4;
+  background: #e0f7fa;
   padding: 0.5rem 1rem;
   border-radius: 1rem;
   margin-bottom: 1rem;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+  color: #006064;
+  box-shadow: 0 1px 6px rgba(0, 172, 193, 0.15);
 }
