@@ -84,9 +84,39 @@ body.fullscreen-fix {
 
 .from-foxy {
   align-self: flex-start;
-  background: #fff0f4 !important;
-  color: #333 !important;
+  background: #ec4899 !important; /* ярко-розовый */
+  color: #fff !important;
+  overflow: hidden;
+  box-shadow:
+    0 0 6px rgba(236, 72, 153, 0.4),
+    0 0 12px rgba(236, 72, 153, 0.3),
+    0 0 18px rgba(236, 72, 153, 0.2);
 }
+
+.from-foxy::before {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background-image: radial-gradient(rgba(255,255,255,0.1) 1px, transparent 1px);
+  background-size: 10px 10px;
+  animation: sparkle 4s linear infinite;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.from-foxy > * {
+  position: relative;
+  z-index: 1;
+}
+
+@keyframes sparkle {
+  from { transform: translate(0, 0); }
+  to   { transform: translate(10px, 10px); }
+}
+
 
 .from-user {
   align-self: flex-end;
