@@ -11,3 +11,13 @@
     0 0 14px rgba(0, 180, 255, 0.2) !important;
   transition: all 0.3s ease;
 }
+.foxy-fixed-top {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: #fff0f4;
+  padding: 0.5rem 1rem;
+  border-radius: 1rem;
+  margin-bottom: 1rem;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+}
