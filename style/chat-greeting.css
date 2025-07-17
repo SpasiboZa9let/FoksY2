@@ -11,6 +11,7 @@
     0 0 14px rgba(0, 180, 255, 0.2) !important;
   transition: all 0.3s ease;
 }
+
 .foxy-fixed-top {
   position: sticky;
   top: 0;
