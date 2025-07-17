@@ -1,7 +1,7 @@
-// dom.js — утилиты для работы с DOM (v2‑fix)
+// dom.js — утилиты для работы с DOM (v3)
 //
+// * addMessage/addTypingMessage с welcome-режимом (исчезает через 3 с)
 // * Поддержка старого вызова addMessage(text, true)
-// * Авто‑удаление welcome‑сообщения по умолчанию (3 с)
 // ---------------------------------------------------
 
 const CHAT_ID = 'pseudo-chat';
@@ -21,25 +21,32 @@ export const scrollToBottom = () => {
 /**
  * Добавляет сообщение
  * @param {string} text
- * @param {Object|boolean} [opts] — либо объект опций, либо legacy‑флаг «html=true»
+ * @param {Object|boolean} [opts]
  * @param {boolean} [opts.html=false]
  * @param {boolean} [opts.fromUser=false]
- * @param {number|null} [opts.dismissAfter=null] — авто‑удалить (мс)
+ * @param {boolean} [opts.welcome=false]
+ * @param {number|null} [opts.dismissAfter=null]
  * @returns {HTMLDivElement|null}
  */
 export function addMessage(text, opts = {}) {
-  // ↓ обратная совместимость с вызовами addMessage(text, true)
   if (typeof opts === 'boolean') opts = { html: opts };
 
-  let { html = false, fromUser = false, dismissAfter = null } = opts;
+  let {
+    html = false,
+    fromUser = false,
+    welcome = false,
+    dismissAfter = null,
+  } = opts;
+
   const chat = getChat();
   if (!chat) return null;
 
   const bubble = document.createElement('div');
-  bubble.className = `chat-bubble foxy-fade-in ${fromUser ? 'from-user' : 'from-foxy'}`;
+  bubble.className = `chat-bubble foxy-fade-in ${
+    fromUser ? 'from-user' : 'from-foxy'
+  }`;
 
-  // маркер «welcome» + автозакрытие через 3 с, если не задано иначе
-  if (!fromUser && /Фокси:/.test(text)) {
+  if (welcome) {
     bubble.classList.add('welcome-message');
     if (dismissAfter === null) dismissAfter = 3000;
   }
@@ -59,7 +66,7 @@ export const clearButtons = () => {
 };
 
 /**
- * Рендер кнопок‑реакций
+ * Рендер кнопок-реакций
  * @param {{text:string,callback:Function}[]} list
  */
 export function renderReactions(list = []) {
@@ -85,21 +92,30 @@ export const clearChat = () => {
  * Сообщение с эффектом печати
  * @param {string} finalText
  * @param {number} [delay=500]
- * @param {Object|boolean} [opts] — либо объект, либо legacy‑html=true
+ * @param {Object|boolean} [opts]
  * @param {boolean} [opts.html=false]
  * @param {boolean} [opts.fromUser=false]
+ * @param {boolean} [opts.welcome=false]
  * @param {number|null} [opts.dismissAfter=null]
  * @returns {HTMLDivElement|null}
  */
 export function addTypingMessage(finalText, delay = 500, opts = {}) {
   if (typeof opts === 'boolean') opts = { html: opts };
-  let { html = false, fromUser = false, dismissAfter = null } = opts;
+
+  let {
+    html = false,
+    fromUser = false,
+    welcome = false,
+    dismissAfter = null,
+  } = opts;
 
   const chat = getChat();
   if (!chat) return null;
 
   const bubble = document.createElement('div');
-  bubble.className = `chat-bubble foxy-fade-in opacity-50 ${fromUser ? 'from-user' : 'from-foxy'}`;
+  bubble.className = `chat-bubble foxy-fade-in opacity-50 ${
+    fromUser ? 'from-user' : 'from-foxy'
+  }`;
   bubble.textContent = 'Фокси печатает...';
 
   chat.appendChild(bubble);
@@ -109,7 +125,7 @@ export function addTypingMessage(finalText, delay = 500, opts = {}) {
     html ? (bubble.innerHTML = finalText) : (bubble.textContent = finalText);
     bubble.classList.remove('opacity-50');
 
-    if (!fromUser && /Фокси:/.test(finalText)) {
+    if (welcome) {
       bubble.classList.add('welcome-message');
       if (dismissAfter === null) dismissAfter = 3000;
     }
