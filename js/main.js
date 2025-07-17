@@ -1,15 +1,13 @@
-import { initFoxyChat } from './pseudo-ai.js';
-import { initReviewsScroll } from './reviews-scroll.js';
-import { initGalleryModal } from './modal.js';
-import { initPriceAccordion } from './foxy/ui/accordion.js';
-import './foxy/ui/galleryAccordion.js';
-
+// FoksY2/js/main.js
+import { initFoxyChat }          from './pseudo-ai.js';
+import { initReviewsScroll }     from './reviews-scroll.js';
+import { initPriceAccordion, initGalleryAccordion } from './foxy/ui/accordion.js';
 
 async function loadSection(id, url) {
   const container = document.getElementById(id);
   if (!container) return;
   try {
-    const res = await fetch(url);
+    const res  = await fetch(url);
     const html = await res.text();
     container.innerHTML = html;
   } catch (err) {
@@ -27,7 +25,7 @@ window.addEventListener('DOMContentLoaded', async () => {
   initReviewsScroll();
 
   await loadSection('gallery-container', 'sections/gallery.html');
-  initGalleryModal();
+  initGalleryAccordion();
 
   await loadSection('services-container','sections/services.html');
   console.log('[main.js] services загружен, вызываем initPriceAccordion');
