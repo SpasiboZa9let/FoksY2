@@ -73,6 +73,7 @@ body.fullscreen-fix {
 }
 
 .chat-bubble {
+  position: relative;
   max-width: 80%;
   padding: 0.5rem 0.75rem;
   border-radius: 1rem;
@@ -83,6 +84,7 @@ body.fullscreen-fix {
 }
 
 .from-foxy {
+  position: relative;
   align-self: flex-start;
   background: #ec4899 !important; /* ярко-розовый */
   color: #fff !important;
