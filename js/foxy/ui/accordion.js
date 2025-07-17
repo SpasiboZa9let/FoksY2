@@ -1,32 +1,27 @@
 // FoksY2/js/foxy/ui/accordion.js
 
-// 1) Прайс-аккордеон
+// Прайс-аккордеон
 export function initPriceAccordion() {
   console.log('[Accordion] initPriceAccordion вызван');
-
   const items = document.querySelectorAll('.service-item');
   console.log(`[Accordion] найдено элементов: ${items.length}`);
   if (!items.length) return;
-
   items.forEach(item => {
     item.addEventListener('click', () => {
-      items.forEach(el => {
-        if (el !== item) el.classList.remove('active');
-      });
+      items.forEach(el => { if (el !== item) el.classList.remove('active'); });
       item.classList.toggle('active');
     });
   });
 }
 
-// 2) Галерея-аккордеон
+// Галерея-аккордеон
 export function initGalleryAccordion() {
   console.log('[Accordion] initGalleryAccordion вызван');
-  console.log('[GalleryAccordion] старт');
 
-  const modal    = document.getElementById('gallery-modal');
+  const modal = document.getElementById('gallery-modal');
   const modalImg = document.getElementById('gallery-modal-img');
 
-  // Показ/скрытие модалки
+  // Показ и скрытие модалки
   function openModal(src) {
     if (!modal || !modalImg) return;
     modalImg.src = src;
@@ -38,43 +33,51 @@ export function initGalleryAccordion() {
     modal.classList.add('opacity-0', 'pointer-events-none');
     modalImg.classList.add('scale-0');
   }
-  // Закрытие по фону или по самому изображению
+
+  // Закрытие по клику на фон или на изображение
   if (modal) {
     modal.addEventListener('click', e => {
-      if (e.target === modal || e.target === modalImg) closeModal();
+      if (e.target === modal || e.target === modalImg) {
+        closeModal();
+      }
     });
   }
 
+  // Инициализация аккордеона-галереи
   const items = document.querySelectorAll('.accordion-item[data-type="gallery"]');
   console.log(`[Accordion] gallery items found: ${items.length}`);
   if (!items.length) return;
 
   items.forEach(item => {
     const header = item.querySelector('.accordion-header');
-    const panel  = item.querySelector('.accordion-panel');
+    const panel = item.querySelector('.accordion-panel');
     if (!header || !panel) return;
 
     // Скрываем панель по умолчанию
     panel.classList.add('hidden');
 
-    // Навешиваем клики на миниатюры
+    // Обработчики для миниатюр
     panel.querySelectorAll('.gallery-img').forEach(img => {
       img.addEventListener('click', e => {
         e.stopPropagation();
-        const isOpenSame = !modal.classList.contains('opacity-0') && modalImg.src === img.src;
-        if (isOpenSame) closeModal();
-        else           openModal(img.src);
+        // Переключаем модалку
+        if (!modal || !modalImg) return;
+        const isOpen = !modal.classList.contains('opacity-0');
+        if (isOpen && modalImg.src === img.src) {
+          closeModal();
+        } else {
+          openModal(img.src);
+        }
       });
     });
 
-    // Клик по заголовку — открываем/закрываем аккордеон
+    // Открытие/закрытие аккордеона
     header.addEventListener('click', () => {
-      const isOpen = !panel.classList.contains('hidden');
-      panel.classList.toggle('hidden', isOpen);
-      item.classList.toggle('open', !isOpen);
+      const isOpenPanel = !panel.classList.contains('hidden');
+      panel.classList.toggle('hidden', isOpenPanel);
+      item.classList.toggle('open', !isOpenPanel);
 
-      if (!isOpen) {
-        // При разворачивании сразу показываем первое изображение
+      if (!isOpenPanel) {
         const first = panel.querySelector('.gallery-img');
         if (first) openModal(first.src);
       }
