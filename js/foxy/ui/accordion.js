@@ -17,24 +17,30 @@ export function initPriceAccordion() {
 }
 // после initPriceAccordion
 export function initGalleryAccordion() {
-  // найдём модалку
+  // Находим элементы модалки
   const modal    = document.getElementById('gallery-modal');
   const modalImg = document.getElementById('gallery-modal-img');
 
-  // функции показа/скрытия модалки
+  // Показ и скрытие модалки
   function openModal(src) {
+    if (!modal || !modalImg) return;
     modalImg.src = src;
     modal.classList.remove('opacity-0', 'pointer-events-none');
     modalImg.classList.remove('scale-0');
   }
   function closeModal() {
+    if (!modal || !modalImg) return;
     modal.classList.add('opacity-0', 'pointer-events-none');
     modalImg.classList.add('scale-0');
   }
-  // закрытие по фону
-  if (modal) modal.addEventListener('click', closeModal);
+  // Закрываем по клику на фон (но не по самому изображению)
+  if (modal) {
+    modal.addEventListener('click', e => {
+      if (e.target === modal) closeModal();
+    });
+  }
 
-  // для каждого блока галереи
+  // Инициализируем каждый блок галереи-аккордеона
   document
     .querySelectorAll('.accordion-item[data-type="gallery"]')
     .forEach(item => {
@@ -42,23 +48,27 @@ export function initGalleryAccordion() {
       const panel  = item.querySelector('.accordion-panel');
       if (!header || !panel) return;
 
-      // скроем по умолчанию
+      // Скрываем содержимое по умолчанию
       panel.classList.add('hidden');
 
+      // Вешаем клики на миниатюры сразу
+      panel.querySelectorAll('.gallery-img').forEach(img => {
+        img.addEventListener('click', e => {
+          e.stopPropagation();      // чтобы не триггерить аккордеон
+          openModal(img.src);
+        });
+      });
+
+      // Логика открытия/закрытия аккордеона
       header.addEventListener('click', () => {
-        // toggle панели и стрелки
         const isOpen = !panel.classList.contains('hidden');
         panel.classList.toggle('hidden',  isOpen);
-        item.classList.toggle('open',    !isOpen);
+        item.classList.toggle('open',     !isOpen);
 
         if (!isOpen) {
-          // сразу покажем первое изображение
+          // При разворачивании сразу открываем первое изображение
           const first = panel.querySelector('.gallery-img');
-          first && openModal(first.src);
-          // повесим клики на все миниатюры
-          panel.querySelectorAll('.gallery-img').forEach(img =>
-            img.addEventListener('click', () => openModal(img.src))
-          );
+          if (first) openModal(first.src);
         }
       });
     });
