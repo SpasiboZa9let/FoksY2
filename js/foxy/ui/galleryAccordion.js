@@ -1,5 +1,4 @@
 // FoksY2/js/foxy/ui/galleryAccordion.js
-
 document.addEventListener('DOMContentLoaded', () => {
   const modal    = document.getElementById('gallery-modal');
   const modalImg = document.getElementById('gallery-modal-img');
@@ -19,14 +18,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const header = item.querySelector('.accordion-header');
     const panel  = item.querySelector('.accordion-panel');
 
+    // скрываем по умолчанию
+    panel.classList.add('hidden');
+
     header.addEventListener('click', () => {
       const opened = item.classList.toggle('open');
       panel.classList.toggle('hidden');
       if (opened) {
-        // сразу показываем первое изображение
         const firstImg = panel.querySelector('.gallery-img');
         if (firstImg) openModal(firstImg.src);
-        // вешаем клики на все миниатюры
         panel.querySelectorAll('.gallery-img').forEach(img =>
           img.addEventListener('click', () => openModal(img.src))
         );
@@ -34,6 +34,8 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // закрытие модалки по фону/клику
-  modal.addEventListener('click', closeModal);
+  // вешаем закрытие модалки только если есть элемент
+  if (modal) {
+    modal.addEventListener('click', closeModal);
+  }
 });
