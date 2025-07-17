@@ -1,30 +1,25 @@
-<section class="mt-10 mb-6">
-  <h2 class="font-semibold text-gray-900 mb-3 lux"
-      style="animation:fadeUp .8s forwards 1.2s;opacity:0;">
-    Галерея
-  </h2>
+<!-- Галерея как пункт аккордеона -->
+<div class="accordion-item" data-type="gallery">
+  <button class="accordion-header lux">
+    <span>Галерея работ</span>
+    <svg class="chevron" viewBox="0 0 20 20" fill="currentColor">
+      <path d="M6 8l4 4 4-4" />
+    </svg>
+  </button>
 
-  <div class="grid grid-cols-3 gap-2">
-    <img src="gallery/1.jpg" alt="Ногти 1"
-         class="gallery-img w-full h-24 object-cover rounded-xl shadow-sm" />
-    <img src="gallery/2.jpg" alt="Ногти 2"
-         class="gallery-img w-full h-24 object-cover rounded-xl shadow-sm" />
-    <img src="gallery/3.jpg" alt="Ногти 3"
-         class="gallery-img w-full h-24 object-cover rounded-xl shadow-sm" />
-    <img src="gallery/4.jpg" alt="Ногти 4"
-         class="gallery-img w-full h-24 object-cover rounded-xl shadow-sm" />
-    <img src="gallery/5.jpg" alt="Ногти 5"
-         class="gallery-img w-full h-24 object-cover rounded-xl shadow-sm" />
-    <img src="gallery/6.jpg" alt="Ногти 6"
-         class="gallery-img w-full h-24 object-cover rounded-xl shadow-sm" />
-    <img src="gallery/7.jpg" alt="Ногти 7"
-         class="gallery-img w-full h-24 object-cover rounded-xl shadow-sm" />
-    <img src="gallery/8.jpg" alt="Ногти 8"
-         class="gallery-img w-full h-24 object-cover rounded-xl shadow-sm" />
+  <div class="accordion-panel grid grid-cols-3 gap-2">
+    <img src="gallery/1.jpg" alt="Ногти 1" class="gallery-img w-full h-24 object-cover rounded-xl shadow-sm" />
+    <img src="gallery/2.jpg" alt="Ногти 2" class="gallery-img w-full h-24 object-cover rounded-xl shadow-sm" />
+    <img src="gallery/3.jpg" alt="Ногти 3" class="gallery-img w-full h-24 object-cover rounded-xl shadow-sm" />
+    <img src="gallery/4.jpg" alt="Ногти 4" class="gallery-img w-full h-24 object-cover rounded-xl shadow-sm" />
+    <img src="gallery/5.jpg" alt="Ногти 5" class="gallery-img w-full h-24 object-cover rounded-xl shadow-sm" />
+    <img src="gallery/6.jpg" alt="Ногти 6" class="gallery-img w-full h-24 object-cover rounded-xl shadow-sm" />
+    <img src="gallery/7.jpg" alt="Ногти 7" class="gallery-img w-full h-24 object-cover rounded-xl shadow-sm" />
+    <img src="gallery/8.jpg" alt="Ногти 8" class="gallery-img w-full h-24 object-cover rounded-xl shadow-sm" />
   </div>
-</section>
+</div>
 
-<!-- Модал галереи -->
+<!-- Модалка галереи (без изменений) -->
 <div id="gallery-modal"
      class="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50
             opacity-0 pointer-events-none transition-opacity duration-300">
