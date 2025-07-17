@@ -22,6 +22,9 @@ export function initPriceAccordion() {
 // 2) Новая функция галерея-аккордеона
 export function initGalleryAccordion() {
   console.log('[Accordion] initGalleryAccordion вызван');
+  console.log('[GalleryAccordion] старт');
+  console.log('items:', document.querySelectorAll('.accordion-item[data-type="gallery"]').length);
+
 
   const modal    = document.getElementById('gallery-modal');
   const modalImg = document.getElementById('gallery-modal-img');
