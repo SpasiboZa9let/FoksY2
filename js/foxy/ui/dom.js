@@ -1,138 +1,117 @@
-// dom.js — утилиты для работы с DOM (v3)
-//
-// * addMessage/addTypingMessage с welcome-режимом (исчезает через 3 с)
-// * Поддержка старого вызова addMessage(text, true)
-// ---------------------------------------------------
-
-const CHAT_ID = 'pseudo-chat';
-const REACTIONS_ID = 'pseudo-reactions';
-const $ = (id) => document.getElementById(id);
-
-/** Контейнеры */
-export const getChat = () => $(CHAT_ID);
-export const getReactions = () => $(REACTIONS_ID);
-
-/** Скролл к низу */
-export const scrollToBottom = () => {
-  const chat = getChat();
-  if (chat) requestAnimationFrame(() => (chat.scrollTop = chat.scrollHeight));
-};
+/**
+ * Возвращает контейнер для сообщений
+ */
+export function getChat() {
+  return document.getElementById("pseudo-chat");
+}
 
 /**
- * Добавляет сообщение
- * @param {string} text
- * @param {Object|boolean} [opts]
- * @param {boolean} [opts.html=false]
- * @param {boolean} [opts.fromUser=false]
- * @param {boolean} [opts.welcome=false]
- * @param {number|null} [opts.dismissAfter=null]
- * @returns {HTMLDivElement|null}
+ * Возвращает контейнер для кнопок-реакций
  */
-export function addMessage(text, opts = {}) {
-  if (typeof opts === 'boolean') opts = { html: opts };
+export function getReactions() {
+  return document.getElementById("pseudo-reactions");
+}
 
-  let {
-    html = false,
-    fromUser = false,
-    welcome = false,
-    dismissAfter = null,
-  } = opts;
-
+/**
+ * Прокручивает чат вниз
+ */
+export function scrollToBottom() {
   const chat = getChat();
-  if (!chat) return null;
+  if (chat) chat.scrollTop = chat.scrollHeight;
+}
 
-  const bubble = document.createElement('div');
-  bubble.className = `chat-bubble foxy-fade-in ${
-    fromUser ? 'from-user' : 'from-foxy'
-  }`;
+/**
+ * Добавляет в чат новое сообщение.
+ * @param {string} text — текст сообщения (или HTML, если isHTML=true)
+ * @param {boolean} [isHTML=false] — вставлять как HTML
+ * @param {boolean} [fromUser=false] — сообщение от пользователя
+ */
+export function addMessage(text, isHTML = false, fromUser = false) {
+  const chat = getChat();
+  if (!chat) return;
 
-  if (welcome) {
-    bubble.classList.add('welcome-message');
-    if (dismissAfter === null) dismissAfter = 3000;
+  const bubble = document.createElement("div");
+  bubble.className = `chat-bubble foxy-fade-in ${fromUser ? 'from-user' : 'from-foxy'}`;
+
+  if (!fromUser && text.includes('Фокси:')) {
+    bubble.classList.add("welcome-message");
   }
 
-  html ? (bubble.innerHTML = text) : (bubble.textContent = text);
+  if (isHTML) {
+    bubble.innerHTML = text;
+  } else {
+    bubble.textContent = text;
+  }
+
   chat.appendChild(bubble);
   scrollToBottom();
-
-  if (dismissAfter) setTimeout(() => bubble.remove(), dismissAfter);
-  return bubble;
 }
 
-/** Очистка реакций */
-export const clearButtons = () => {
-  const box = getReactions();
-  if (box) box.textContent = '';
-};
-
 /**
- * Рендер кнопок-реакций
- * @param {{text:string,callback:Function}[]} list
+ * Очищает контейнер с кнопками
  */
-export function renderReactions(list = []) {
-  const box = getReactions();
-  if (!box) return;
-  clearButtons();
-  list.forEach(({ text, callback }) => {
-    const btn = document.createElement('button');
-    btn.className = 'ai-btn';
-    btn.textContent = text;
-    btn.addEventListener('click', callback);
-    box.appendChild(btn);
-  });
+export function clearButtons() {
+  const reactions = getReactions();
+  if (!reactions) return;
+  reactions.innerHTML = "";
 }
 
-/** Полная очистка чата */
-export const clearChat = () => {
-  const chat = getChat();
-  if (chat) chat.textContent = '';
-};
+/**
+ * Отрисовывает кнопки-реакции
+ */
+export function renderReactions(options = []) {
+  const reactions = getReactions();
+  if (!reactions) return;
+  reactions.innerHTML = "";
+  for (const opt of options) {
+    const btn = document.createElement("button");
+    btn.className = "ai-btn";
+    btn.textContent = opt.text;
+    btn.addEventListener("click", opt.callback);
+    reactions.appendChild(btn);
+  }
+}
 
 /**
- * Сообщение с эффектом печати
- * @param {string} finalText
- * @param {number} [delay=500]
- * @param {Object|boolean} [opts]
- * @param {boolean} [opts.html=false]
- * @param {boolean} [opts.fromUser=false]
- * @param {boolean} [opts.welcome=false]
- * @param {number|null} [opts.dismissAfter=null]
- * @returns {HTMLDivElement|null}
+ * Полностью очищает чат
  */
-export function addTypingMessage(finalText, delay = 500, opts = {}) {
-  if (typeof opts === 'boolean') opts = { html: opts };
-
-  let {
-    html = false,
-    fromUser = false,
-    welcome = false,
-    dismissAfter = null,
-  } = opts;
-
+export function clearChat() {
   const chat = getChat();
-  if (!chat) return null;
+  if (!chat) return;
+  chat.innerHTML = "";
+}
 
-  const bubble = document.createElement('div');
-  bubble.className = `chat-bubble foxy-fade-in opacity-50 ${
-    fromUser ? 'from-user' : 'from-foxy'
-  }`;
-  bubble.textContent = 'Фокси печатает...';
+/**
+ * Добавляет сообщение с эффектом печати
+ * @param {string} text — финальный текст
+ * @param {number} delay — задержка в мс
+ * @param {boolean} [isHTML=false]
+ * @param {boolean} [fromUser=false]
+ */
+export function addTypingMessage(text, delay = 500, isHTML = false, fromUser = false) {
+  const chat = getChat();
+  if (!chat) return;
+
+  const bubble = document.createElement("div");
+  bubble.className = `chat-bubble foxy-fade-in opacity-50 ${fromUser ? 'from-user' : 'from-foxy'}`;
+  bubble.textContent = "Фокси печатает...";
 
   chat.appendChild(bubble);
   scrollToBottom();
 
   setTimeout(() => {
-    html ? (bubble.innerHTML = finalText) : (bubble.textContent = finalText);
-    bubble.classList.remove('opacity-50');
+    if (isHTML) {
+      bubble.innerHTML = text;
+    } else {
+      bubble.textContent = text;
+    }
 
-    if (welcome) {
-      bubble.classList.add('welcome-message');
-      if (dismissAfter === null) dismissAfter = 3000;
+    bubble.classList.remove("opacity-50");
+
+    if (!fromUser && text.includes('Фокси:')) {
+      bubble.classList.add("welcome-message");
     }
 
     scrollToBottom();
-    if (dismissAfter) setTimeout(() => bubble.remove(), dismissAfter);
   }, delay);
-
-  return bubble;
 }
