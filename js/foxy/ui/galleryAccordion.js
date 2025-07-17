@@ -21,6 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     header.addEventListener('click', () => {
       const opened = item.classList.toggle('open');
+      panel.classList.toggle('hidden');
       if (opened) {
         // сразу показываем первое изображение
         const firstImg = panel.querySelector('.gallery-img');
