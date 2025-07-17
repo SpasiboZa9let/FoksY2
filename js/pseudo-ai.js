@@ -1,54 +1,16 @@
 import { handleUserInput } from './foxy/handlers/mainHandler.js';
-import { addTypingMessage, addMessage, clearChat } from './foxy/ui/dom.js';
-import { emoji } from './foxy/core/services.js';
+import { addMessage, clearChat } from './foxy/ui/dom.js';
 import {
   setUserName,
   getLastIntent,
   setLastIntent
 } from './foxy/core/state.js';
+import { talkSuggestions, randomFrom } from './foxy/core/phrases.js';
 import {
-  randomGreeting,
-  suggestionsHTML,
-  helpIntro, talkSuggestions,
-  randomFrom
-} from './foxy/core/phrases.js';
-
-function showSuggestions(delay = 0) {
-  setTimeout(() => {
-    addTypingMessage(`<strong>${emoji()} Фокси:</strong> ${helpIntro()}`, 300, true);
-    addTypingMessage(suggestionsHTML, 600, true);
-
-    setTimeout(() => {
-      const sugg = document.querySelector('.foxy-suggestions');
-      if (!sugg) return;
-      const bubble = sugg.closest('.chat-bubble');
-      if (!bubble) return;
-      sugg.style.transition = 'opacity 0.5s ease';
-      sugg.style.opacity = '0';
-      setTimeout(() => bubble.remove(), 500);
-    }, 8000);
-  }, delay);
-}
-
-
-function initFoxyAfterName(name) {
-  const bubbleHTML = `<strong>${emoji()} Фокси:</strong> ${randomGreeting(name)}`;
-  addTypingMessage(bubbleHTML, 500, true);
-
-  // скрываем приветственную «плашку»
-  setTimeout(() => {
-    document.querySelector('.chat-bubble.welcome-message')?.remove();
-  }, 5500);
-
-  showSuggestions(2100);
-
-  // ➜ вывод случайной подсказки после приветствия
-  setTimeout(() => {
-    addMessage(randomFrom(talkSuggestions), true);
-  }, 6500);
-}
-
-
+  greetAskName,
+  greetByName,
+  greetHelpIntro
+} from './foxy/core/greeting.js';
 
 export function initFoxyChat() {
   lucide.createIcons();
@@ -56,11 +18,12 @@ export function initFoxyChat() {
 
   const name = localStorage.getItem('foxy_userName');
   if (!name || name.trim().length < 2) {
-    addTypingMessage('🦊 Привет! Как тебя зовут?', 500);
+    greetAskName();
     setLastIntent('askName');
   } else {
     setUserName(name);
-    initFoxyAfterName(name);
+    greetByName(name);
+    greetHelpIntro(2100);
   }
 
   const btn = document.getElementById("toggle-fullscreen");
@@ -111,7 +74,8 @@ export function initFoxyChat() {
       clearChat();
       input.value = '';
       setUserName(text);
-      initFoxyAfterName(text);
+      greetByName(text);
+      greetHelpIntro(2100);
     } else {
       handleUserInput(text);
       input.value = '';
@@ -142,7 +106,7 @@ export function initFoxyChat() {
     setLastIntent('');
     clearChat();
     input.value = '';
-    addTypingMessage('🦊 Данные сброшены. Привет! Как тебя зовут?', 300);
+    greetAskName();
     setLastIntent('askName');
   });
 
@@ -150,4 +114,9 @@ export function initFoxyChat() {
   abilitiesBtn?.addEventListener('click', () => {
     handleUserInput('что ты умеешь');
   });
+
+  // ➜ вывод случайной подсказки после приветствия
+  setTimeout(() => {
+    addMessage(randomFrom(talkSuggestions), true);
+  }, 6500);
 }
