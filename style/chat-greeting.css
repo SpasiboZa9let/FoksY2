@@ -1,0 +1,13 @@
+.chat-bubble.welcome-message {
+  align-self: center !important;
+  text-align: center !important;
+  background: #e0f2fe !important;
+  color: #0c4a6e !important;
+  font-weight: 600 !important;
+  display: block !important;
+  box-shadow:
+    0 0 6px rgba(0, 180, 255, 0.4),
+    0 0 10px rgba(0, 180, 255, 0.3),
+    0 0 14px rgba(0, 180, 255, 0.2) !important;
+  transition: all 0.3s ease;
+}
